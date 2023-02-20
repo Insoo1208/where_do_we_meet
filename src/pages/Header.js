@@ -34,18 +34,18 @@ const SubMenu = styled.li`
 `;
 
 function Header () {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
       <header>
-        <Wrapper>
-          <StyledLogo className="cursor-pointer">
+        <Wrapper className="cursor-pointer">
+          <StyledLogo onClick={() => { navigate('/'); }}>
             우리 어디서 만나?
           </StyledLogo>
           <StyledUl>
-            <SubMenu>로그인</SubMenu>
-            <SubMenu>회원가입</SubMenu>
+            <SubMenu onClick={() => { navigate('/signin'); }}>로그인</SubMenu>
+            <SubMenu onClick={() => { navigate('/signup'); }}>회원가입</SubMenu>
           </StyledUl>
         </Wrapper>
       </header>

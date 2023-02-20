@@ -6,6 +6,8 @@ import Header from "./pages/Header";
 import Main from "./pages/main/Main";
 import Board from "./pages/board/Board";
 import ErrorPage from "./pages/ErrorPage";
+import SignIn from "./pages/sign/SignIn";
+import SignUp from "./pages/sign/SignUp";
 
 const GlobalStyle = createGlobalStyle`
   /* Reset CSS */
@@ -35,6 +37,8 @@ function App() {
         <Route path="/" element={<Header />}>
           <Route index element={<Main />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path='*' element={<ErrorPage />} />
         </Route>
       </Routes>
