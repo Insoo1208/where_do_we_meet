@@ -1,4 +1,4 @@
-function MainMenu () {
+function SideMenu () {
   
   return (
     <div>
@@ -7,4 +7,4 @@ function MainMenu () {
   );
 }
 
-export default MainMenu;
+export default SideMenu;
