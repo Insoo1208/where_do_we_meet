@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import styled, { createGlobalStyle } from "styled-components";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import reset from "styled-reset";
+
+import Header from "./pages/Header";
+import Main from "./pages/Main";
+import Board from "./pages/Board";
+import ErrorPage from "./pages/ErrorPage";
+
+const GlobalStyle = createGlobalStyle`
+  /* Reset CSS */
+  ${reset}
+
+  /* Global Style */
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  * {
+    box-sizing: inherit;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+`;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <GlobalStyle />
+      <Routes>
+        <Route path="/" element={<Header />}>
+          <Route index element={<Main />} />
+          <Route path="/board" element={<Board />} />
+          <Route path='*' element={<ErrorPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
