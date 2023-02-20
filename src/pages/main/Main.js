@@ -1,11 +1,11 @@
-import MainMenu from "./MainMenu";
+import SideMenu from "./SideMenu";
 import Map from "./Map";
 
 function Main () {
   
   return (
     <div>
-      <MainMenu />
+      <SideMenu />
       <Map />
     </div>
   );
