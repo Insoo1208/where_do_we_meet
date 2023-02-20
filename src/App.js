@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reset from "styled-reset";
 
 import Header from "./pages/Header";
-import Main from "./pages/Main";
-import Board from "./pages/Board";
+import Main from "./pages/main/Main";
+import Board from "./pages/board/Board";
 import ErrorPage from "./pages/ErrorPage";
 
 const GlobalStyle = createGlobalStyle`

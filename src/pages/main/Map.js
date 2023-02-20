@@ -1,4 +1,4 @@
-function Main () {
+function Map () {
   
   return (
     <div>
@@ -7,4 +7,4 @@ function Main () {
   );
 }
 
-export default Main;
+export default Map;
