@@ -10,7 +10,7 @@ const Wrapper = styled.nav`
   align-items: center;
   background-color: #2f2f2f;
   color: #f2f2f2;
-  box-shadow: 0 4px 4px 0px #555;
+  /* box-shadow: 0 4px 4px 0px #555; */
 `;
 
 const StyledLogo = styled.div`
@@ -46,6 +46,7 @@ function Header () {
           <StyledUl>
             <SubMenu onClick={() => { navigate('/signin'); }}>로그인</SubMenu>
             <SubMenu onClick={() => { navigate('/signup'); }}>회원가입</SubMenu>
+            <SubMenu onClick={() => { navigate('/board'); }}>게시판</SubMenu>
           </StyledUl>
         </Wrapper>
       </header>
