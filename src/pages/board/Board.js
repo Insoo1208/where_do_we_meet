@@ -17,7 +17,7 @@ function Board () {
           <input type="text" />
           <button type="button"> 검색하기</button>
         </div>
-
+dd
       </Wrapper>
   );
 }
