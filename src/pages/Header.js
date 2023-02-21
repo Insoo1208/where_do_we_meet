@@ -46,10 +46,21 @@ function Header () {
           <StyledUl>
             <SubMenu onClick={() => { navigate('/signin'); }}>로그인</SubMenu>
             <SubMenu onClick={() => { navigate('/signup'); }}>회원가입</SubMenu>
+            <SubMenu onClick={() => { navigate('/board'); }}>게시판</SubMenu>
           </StyledUl>
         </Wrapper>
       </header>
       <Outlet />
+
+
+
+
+
+
+
+
+
+
     </>
   );
 }

@@ -1,9 +1,24 @@
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  
+`;
+
+
 function Board () {
   
   return (
-    <div>
-      
-    </div>
+      <Wrapper>
+        <div>
+
+        </div>
+
+        <div>
+          <input type="text" />
+          <button type="button"> 검색하기</button>
+        </div>
+
+      </Wrapper>
   );
 }
 
