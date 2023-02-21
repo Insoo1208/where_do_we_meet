@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight, MdSearch, MdClose } from "react-icons/md";
 import { useState } from "react";
 const SideMenuWrapper = styled.div`
   display: flex;
@@ -46,8 +46,28 @@ const MenuSlideButton = styled.div`
 
 
 const UserSearchEl = styled.div`
-  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 445px;
+  height: 148px;
   background-color: #c8b2d6;
+  padding: 30px;
+  
+  .userName {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background-color: #fff;
+    text-align: center;
+    line-height: 54px;
+  }
+
+  input {
+    width: 280px;
+    height: 46px;
+    border-radius: 4px;
+  }
 `;
 function SideMenu () {
   const [menuOpened, setMenuOpened] = useState(true);
@@ -64,7 +84,14 @@ function SideMenu () {
   return (
     <SideMenuWrapper menuOpened={menuOpened}>
       <MenuBg>
-        test
+        <UserSearchEl>
+          <div className="userName">나</div>
+          <div className="searchEl">
+            <MdSearch />
+            <input />
+            <MdClose />
+          </div>
+        </UserSearchEl>
       </MenuBg>
       {/* 콜백함수로 set함수값을 바꿔주는 이유는? 동기적으로 처리하기 위해 */}
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
