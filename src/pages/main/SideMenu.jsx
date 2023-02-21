@@ -47,7 +47,7 @@ const MenuSlideButton = styled.div`
 
 const UserSearchEl = styled.div`
   width: 100%;
-  
+  background-color: #c8b2d6;
 `;
 function SideMenu () {
   const [menuOpened, setMenuOpened] = useState(true);
@@ -66,8 +66,8 @@ function SideMenu () {
       <MenuBg>
         test
       </MenuBg>
+      {/* 콜백함수로 set함수값을 바꿔주는 이유는? 동기적으로 처리하기 위해 */}
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
-        {/* <MdChevronLeft /> */}
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
     </SideMenuWrapper>
