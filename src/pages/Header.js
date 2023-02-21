@@ -10,7 +10,7 @@ const Wrapper = styled.nav`
   align-items: center;
   background-color: #2f2f2f;
   color: #f2f2f2;
-  box-shadow: 0 4px 4px 0px #555;
+  // box-shadow: 0 4px 4px 0px #555;
 `;
 
 const StyledLogo = styled.div`
