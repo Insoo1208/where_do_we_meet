@@ -1,10 +1,20 @@
 import styled, { css } from "styled-components";
-import { MdChevronLeft } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { useState } from "react";
 const SideMenuWrapper = styled.div`
   display: flex;
   align-items: center;
   position: fixed;
   z-index: 10;
+  ${props => props.menuOpened
+    ? css`
+      transform: translateX(0px);
+    `
+    : css`
+      transform: translateX(-400px);
+    `
+  }
+  transition: transform .8s;
 `;
 const MenuBg = styled.div`
   // postion: relative;
@@ -28,7 +38,7 @@ const MenuSlideButton = styled.div`
   /* z-index: 10; */
   border-radius: 0 10px 10px 0;
   font-size: 1.5rem;
-  cursor: pointer;
+  cursor: pointer; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,16 +50,25 @@ const UserSearchEl = styled.div`
   
 `;
 function SideMenu () {
-  // const handleMemuSlide = (e) => {
-  //   // 눌렀을 때 메뉴가 왼쪽으로 사라짐
-  // };
+  const [menuOpened, setMenuOpened] = useState(true);
+
+
+    // <>
+    //   {/* <MiniBar /> */}
+    //   <Detail menuOpened={menuOpened}>
+    //     <MenuButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
+    //       {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
+    //     </MenuButton>
+    //   </Detail>
+    // </>
   return (
-    <SideMenuWrapper>
+    <SideMenuWrapper menuOpened={menuOpened}>
       <MenuBg>
         test
       </MenuBg>
-      <MenuSlideButton >
-        <MdChevronLeft />
+      <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
+        {/* <MdChevronLeft /> */}
+        {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
     </SideMenuWrapper>
   );
