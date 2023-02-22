@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reset from "styled-reset";
 
@@ -8,6 +8,8 @@ import Board from "./pages/board/Board";
 import ErrorPage from "./pages/ErrorPage";
 import SignIn from "./pages/sign/SignIn";
 import SignUp from "./pages/sign/SignUp";
+import FindId from "./pages/sign/FindId";
+import FindPw from "./pages/sign/FindPw";
 
 const GlobalStyle = createGlobalStyle`
   /* Reset CSS */
@@ -18,10 +20,16 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
   }
 
   * {
     box-sizing: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
   }
 
   .cursor-pointer {
@@ -34,10 +42,12 @@ function App() {
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="/" element={<Header />}>
+        <Route path="/" element={<Header />} >
           <Route index element={<Main />} />
           <Route path="/board" element={<Board />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/findid" element={<FindId />} />
+          <Route path="/findpw" element={<FindPw />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path='*' element={<ErrorPage />} />
         </Route>
