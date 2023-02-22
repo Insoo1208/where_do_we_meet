@@ -59,6 +59,16 @@ function Header () {
         </Wrapper>
       </header>
       <Outlet />
+
+
+
+
+
+
+
+
+
+
     </>
   );
 }
