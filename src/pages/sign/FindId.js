@@ -17,7 +17,9 @@ const Wrapper = styled.div`
     cursor: default;
   }
 
-  
+  p {
+    font-size: 14px;
+  }
 `;
 
 const InfoWrapper = styled.div`
@@ -53,7 +55,7 @@ function FindId () {
       alert(`고객님의 아이디는 ${target.id}입니다.`);
       navigate('/signin');
     } else {
-      alert('일치하는 아이디가 없습니다.');
+      alert('일치하는 정보가 없습니다.');
       setValue('');
     }
   };
@@ -67,8 +69,13 @@ function FindId () {
           <h2>아이디를 잊으셨나요?</h2>
           <h2>가입 할 때 사용한 이메일을 입력해주세요.</h2>
         </InfoWrapper>
-        <StyledInput type='text' value={value} onChange={e => setValue(e.target.value)}></StyledInput>
+        <label htmlFor="findID" />
+        <StyledInput type='text' id="findID" value={value} onChange={e => setValue(e.target.value)}
+          onKeyUp={e => { if(e.key === 'Enter' && value) handleFind(); }}
+          autoComplete="off"
+        ></StyledInput>
         <StyledButton onClick={handleFind}>찾기</StyledButton>
+        <p className="cursor-pointer" onClick={() => { navigate('/signin'); }}>돌아가기</p>
       </Wrapper>
     </section>
   );
