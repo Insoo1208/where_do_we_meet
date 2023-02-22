@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import data from "../../data/data.json";
+import data from "../../data.json";
 
 const Wrapper = styled.div`
   width: 500px;

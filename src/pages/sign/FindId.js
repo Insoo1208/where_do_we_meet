@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import data from "../../data/data.json";
+import data from "../../data.json";
 
 const Wrapper = styled.div`
   width: 500px;
