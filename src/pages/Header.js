@@ -1,4 +1,4 @@
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrapper = styled.nav`
@@ -10,7 +10,7 @@ const Wrapper = styled.nav`
   align-items: center;
   background-color: #2f2f2f;
   color: #f2f2f2;
-  // box-shadow: 0 4px 4px 0px #555;
+  /* box-shadow: 0 4px 4px 0px #555; */
 `;
 
 const StyledLogo = styled.div`
@@ -33,19 +33,28 @@ const SubMenu = styled.li`
   text-align: center;
 `;
 
+const StyledLink = styled(Link)`
+  padding: .5rem;
+`;
+
+const StyledNavLink = styled(NavLink)`
+  padding: .5rem;
+`;
+
 function Header () {
   const navigate = useNavigate();
 
   return (
     <>
       <header>
-        <Wrapper className="cursor-pointer">
-          <StyledLogo onClick={() => { navigate('/'); }}>
-            우리 어디서 만나?
+        <Wrapper>
+          <StyledLogo onClick={() => { navigate('/'); }}  className="cursor-pointer">
+            <StyledLink to='/'>우리 어디서 만나?</StyledLink>
           </StyledLogo>
           <StyledUl>
-            <SubMenu onClick={() => { navigate('/signin'); }}>로그인</SubMenu>
-            <SubMenu onClick={() => { navigate('/signup'); }}>회원가입</SubMenu>
+            <SubMenu><StyledNavLink to='/signin'>로그인</StyledNavLink></SubMenu>
+            <SubMenu><StyledNavLink to='/signup'>회원가입</StyledNavLink></SubMenu>
+            <SubMenu><StyledNavLink to='/board'>게시판</StyledNavLink></SubMenu>
           </StyledUl>
         </Wrapper>
       </header>
