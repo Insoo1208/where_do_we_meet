@@ -25,6 +25,11 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: inherit;
   }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   .cursor-pointer {
     cursor: pointer;
   }

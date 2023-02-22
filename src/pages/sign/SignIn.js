@@ -49,7 +49,6 @@ const SpanWrapper = styled.ul`
 const StyledLink = styled(Link)`
   padding: .5rem;
   color: black;
-  text-decoration: none;
 `;
 
 function SignIn() {
