@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
 import user01 from "../../images/user01.png";
 import Comment from "./Comment";
-import data from "../../data.json";
+import { useDispatch, useSelector } from "react-redux";
+import { increment } from "../../features/post/postSlice";
 
 
 const PostWarp = styled.li`
@@ -67,6 +68,9 @@ function PostListItem(props) {
 
   const [btn, setBtn] = useState(false);
 
+  const dispatch = useDispatch();
+
+
   const handleOpen = ()=> {
     setBtn(true);
   };
@@ -85,11 +89,11 @@ function PostListItem(props) {
           {post.content}
         </p>
 
-        { btn && <Comment data={post.comments} /> }
+        { btn && <Comment data={post.comments} postId={post.id} /> }
 
         <ul className="post-item-icon">                  
-          <li><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
-          <li><AiOutlineComment className="icon-comment"/><span>{post.comments.length}</span></li>
+          <li onClick={() => dispatch(increment(post.id))}><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
+          <li onClick={handleOpen}><AiOutlineComment className="icon-comment" /><span>{post.comments.length}</span></li>
         </ul>
         
       </div>

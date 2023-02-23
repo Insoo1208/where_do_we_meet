@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
 import user02 from "../../images/user02.png";
 import data from "../../data.json";
+import { useDispatch } from "react-redux";
+import { addComment } from "../../features/post/postSlice";
 
 
 
@@ -59,13 +61,28 @@ const CommentListItem = styled.li`
   }
 `;
 function Comment(props) {
-  const {data} = props;
-  console.log(data);
+  const [comment, setComment] = useState('');
+  const { data, postId } = props;
+  const dispatch = useDispatch();
+
+  const handleSubmit = () => {
+    dispatch(addComment({ id: postId, comment: {
+      id: "0x0102",
+      commentUserProfileImg: "src",
+      commentsUserNickname : "모니모니",
+      commentsUserId : "ttsss556",
+      comment: comment
+    }}));
+    setComment('');
+  };
 
   return (
     <CommentWarp>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
-      <CommentInput type="text" placeholder="댓글을 작성하세요." />
+      <CommentInput type="text" placeholder="댓글을 작성하세요."
+        value={comment} onChange={e => setComment(e.target.value)}
+        onKeyUp={ e => {if (e.key === 'Enter' && comment) handleSubmit();} }
+      />
       <ul>
         {data.map( (comment) => {
           return (
@@ -73,7 +90,7 @@ function Comment(props) {
               <img src={user02} className="comment-item-image"/>
               <div>
                 <p className="comment-item-name">{comment.commentsUserNickname} <span>{`@ ${comment.commentsUserId}`}</span></p>
-                <p className="comment-item-text">{comment.commnet}</p>
+                <p className="comment-item-text">{comment.comment}</p>
               </div>
             </CommentListItem>                   
           );

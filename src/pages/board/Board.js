@@ -4,10 +4,9 @@ import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSea
 import user01 from "../../images/user01.png";
 import user02 from "../../images/user02.png";
 import Comment from "./Comment";
-import data from "../../data.json";
 import PostListItem from "./PostListItem";
-
-
+import { useSelector } from "react-redux";
+import { selectPostList } from "../../features/post/postSlice";
 
 const Wrapper = styled.div`
   display: flex;
@@ -51,6 +50,7 @@ const PostList = styled.div`
 
 
 function Board () {  
+  const data = useSelector(selectPostList);
 
   return (
       <Wrapper>
@@ -64,7 +64,7 @@ function Board () {
           </Search>
 
           <PostList>
-            {data.PostData.map((post) => {
+            {data.map((post) => {
               return <PostListItem post={post} key={post.id}/> ;
             })}
           </PostList>
