@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
-import user01 from "../../images/user01.png";
 import user02 from "../../images/user02.png";
+import data from "../../data.json";
 
 
 
@@ -58,20 +58,27 @@ const CommentListItem = styled.li`
     color:#999;
   }
 `;
-
 function Comment(props) {
+  const {data} = props;
+  console.log(data);
+
   return (
     <CommentWarp>
-      <p className="comment-title">전체댓글 <span>16</span></p>  
+      <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
       <CommentInput type="text" placeholder="댓글을 작성하세요." />
       <ul>
-        <CommentListItem>
-          <img src={user02} className="comment-item-image"/>
-          <div>
-            <p className="comment-item-name">모니모니 <span>@ttsss556</span></p>
-            <p className="comment-item-text">라떼가 맛있습니다.</p>
-          </div>
-        </CommentListItem>
+        {data.map( (comment) => {
+          return (
+            <CommentListItem key={comment.id}>
+              <img src={user02} className="comment-item-image"/>
+              <div>
+                <p className="comment-item-name">{comment.commentsUserNickname} <span>{`@ ${comment.commentsUserId}`}</span></p>
+                <p className="comment-item-text">{comment.commnet}</p>
+              </div>
+            </CommentListItem>                   
+          );
+        })}
+        
       </ul>
     </CommentWarp>    
   );
