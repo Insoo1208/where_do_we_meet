@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IoEyeOff, IoEye } from "react-icons/io5";
 import data from "../../data.json";
+import { useDispatch } from "react-redux";
+import { userLogIn } from "../../features/user/userSlice";
 
 const Wrapper = styled.div`
   width: 500px;
@@ -73,6 +75,7 @@ function SignIn() {
 
   const pwInput = useRef();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleEyeClose = () => {
     pwInput.current.type = 'password';
@@ -84,9 +87,10 @@ function SignIn() {
   };
 
   const handleLogin = () => {
-    const checkId = data.userInfo.find(user => user.id === loginInfo.id);
-    if (checkId) {
-      if (checkId.password === loginInfo.pw) {
+    const checkedUser = data.userInfo.find(user => user.id === loginInfo.id);
+    if (checkedUser) {
+      if (checkedUser.password === loginInfo.pw) {
+        dispatch(userLogIn(checkedUser));
         navigate('/');
       } else {
         alert("아이디 혹은 패스워드가 올바르지 않습니다.");
