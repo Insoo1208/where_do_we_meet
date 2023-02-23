@@ -1,7 +1,6 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
-import user01 from "../../images/user01.png";
 import Comment from "./Comment";
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from "../../features/post/postSlice";
@@ -36,6 +35,17 @@ const PostWarp = styled.li`
     line-height: 1.3;
     margin-bottom: 40px;
     color:#898989;
+    ${ props => props.btn
+      ? css` `
+      : css`
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient: vertical;   
+      `
+    }
   }
   .post-item-icon {
     display: flex;
@@ -50,6 +60,9 @@ const PostWarp = styled.li`
     align-items: center;
 
   }  
+  .post-item-icon li span {
+    margin-left: 2px;
+  }
   .icon-like {
     color: #ff5858;
     font-size: 1.2rem;
@@ -81,11 +94,11 @@ function PostListItem(props) {
   const {post} = props;
 
   return (
-    <PostWarp>
-      <img src={user01} className="post-item-image"/>
+    <PostWarp btn={btn}>
+      <img src={post.userProfileImg} className="post-item-image"/>
       <div className="content-area">
         <p className="post-item-name">{post.userNickname} <span>{`@ ${post.userId}`}</span></p>
-        <p className="post-item-text">
+        <p className="post-item-text" onClick={handleOpen} >
           {post.content}
         </p>
 

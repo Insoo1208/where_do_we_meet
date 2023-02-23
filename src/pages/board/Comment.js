@@ -1,10 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
-import user02 from "../../images/user02.png";
-import data from "../../data.json";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addComment } from "../../features/post/postSlice";
+import { selectUser } from "../../features/user/userSlice";
 
 
 
@@ -15,10 +13,10 @@ const CommentWarp = styled.div`
   margin-bottom: 30px;
 
 .comment-title {
-  font-size: 16px; 
+  font-size: 15px; 
   margin-bottom: 10px;
   margin-left: 15px;
-  font-weight:bold;
+ 
 }
 .comment-title span {
   color: #19a0ff;
@@ -64,15 +62,30 @@ function Comment(props) {
   const [comment, setComment] = useState('');
   const { data, postId } = props;
   const dispatch = useDispatch();
+  const loggedInUser = useSelector(selectUser);
+
+  
 
   const handleSubmit = () => {
-    dispatch(addComment({ id: postId, comment: {
-      id: "0x0102",
-      commentUserProfileImg: "src",
-      commentsUserNickname : "모니모니",
-      commentsUserId : "ttsss556",
-      comment: comment
-    }}));
+    let commentArr;
+    if (loggedInUser) {
+      commentArr = {
+        id: data.length + 1,
+        commentUserProfileImg: data.userProfileImg,
+        commentsUserNickname : loggedInUser.nickname,
+        commentsUserId : loggedInUser.id,
+        comment
+      }
+    } else {
+      commentArr = {
+        id: data.length + 1,
+        commentUserProfileImg: "/images/user05.png",
+        commentsUserNickname : "익명",
+        commentsUserId : null,
+        comment
+      }
+    }
+    dispatch(addComment({ id: postId, comment: commentArr}));
     setComment('');
   };
 
@@ -87,9 +100,9 @@ function Comment(props) {
         {data.map( (comment) => {
           return (
             <CommentListItem key={comment.id}>
-              <img src={user02} className="comment-item-image"/>
+              <img src={comment.commentUserProfileImg} className="comment-item-image"/>
               <div>
-                <p className="comment-item-name">{comment.commentsUserNickname} <span>{`@ ${comment.commentsUserId}`}</span></p>
+                <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
                 <p className="comment-item-text">{comment.comment}</p>
               </div>
             </CommentListItem>                   

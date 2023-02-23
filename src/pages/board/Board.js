@@ -1,9 +1,6 @@
-import { useState } from "react";
 import styled from "styled-components";
-import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
-import user01 from "../../images/user01.png";
-import user02 from "../../images/user02.png";
-import Comment from "./Comment";
+import { AiOutlineSearch } from "react-icons/ai";
+
 import PostListItem from "./PostListItem";
 import { useSelector } from "react-redux";
 import { selectPostList } from "../../features/post/postSlice";
