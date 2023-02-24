@@ -103,18 +103,22 @@ function SignUp(props) {
         </div>
         <h2>ADDRESS</h2>
           <div className="zip-wrapper">
-            <label htmlFor="userAddress"/>
-            <StyledInput className="zip-code" type='text' id="userAddress" placeholder="우편번호" disabled={true} />
+            <label htmlFor="searchAddress"/>
+            <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} />
             <StyledButton >우편번호 검색</StyledButton>
           </div>
-          <label htmlFor="autoAddress"/>
-          <StyledInput id="autoAddress" placeholder="도로명 주소 입력" disabled={true}/>
+          <label htmlFor="userAddress"/>
+          <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true}/>
           <label htmlFor="detailAddress"/>
-          <StyledInput id="detailAddress" placeholder="상제 주소 입력" />
-        <h2>NICKNAME<span>(선택)</span></h2>
+          <StyledInput id="detailAddress" placeholder="상세 주소" />
         
+        <h2>NICKNAME<span>(선택)</span></h2>
         <label htmlFor="userNickname"/>
-        <StyledInput id="userNickname" placeholder="상제 주소 입력"/>
+        <StyledInput id="userNickname" placeholder="닉네임을 입력해 주세요"/>
+        
+        <h2>REFERRAL CODE<span>(선택)</span></h2>
+        <StyledInput id="userNickname" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정"/>
+        
         <StyledButton>가입하기</StyledButton>
       </Wrapper>
     </section>
