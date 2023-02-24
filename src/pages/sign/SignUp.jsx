@@ -87,7 +87,10 @@ const StyledLink = styled(Link)`
 function SignUp(props) {
   // useState
   const [openPostcode, setOpenPostcode] = useState(false);
-  const [postcodeValue, setpostcodeValue] = useState({});
+  const [postcodeValue, setpostcodeValue] = useState({
+    zonecode: '',
+    address: '' 
+  });
   
   // 우편번호 검색
   const handleClickZipBtn = () => {
@@ -95,10 +98,10 @@ function SignUp(props) {
     };
 
   const handleSelectAddress = (data) => {
-        setpostcodeValue({
-          zonecode: data.zonecode,
-          address: data.address
-          });
+    setpostcodeValue({
+      zonecode: data.zonecode,
+      address: data.address
+      });
     setOpenPostcode(!openPostcode);
   };
 
@@ -148,7 +151,7 @@ function SignUp(props) {
         <StyledInput id="userNickname" placeholder="닉네임을 입력해 주세요"/>
         
         <h2>REFERRAL CODE<span>(선택)</span></h2>
-        <StyledInput id="userNickname" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정"/>
+        <StyledInput id="recomenderNickname" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정"/>
         
         <StyledButton>가입하기</StyledButton>
       </Wrapper>
