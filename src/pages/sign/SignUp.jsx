@@ -22,24 +22,36 @@ const Wrapper = styled.div`
     font-weight: 100;
     padding-bottom: .625rem;
 
+    span {
+      font-size: 1rem;
+      line-height: 1rem;
+    }
   }
 
   .user-name {  
-    width: 100%;
+    /* width: 100%; */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* column-gap: 18px; */
-    input:first-child {
-      width: 25%;
+  
+    input.last-name {
+      margin-right: 1rem;
+      width: 70%;
     }
-    input:last-child{
-      width: 25%;
+    
+    button {
+
     }
+    
+  }
+  
+  .zip-wrapper {
+    display: flex;
   }
 
   .zip-code{
-    width: 30%;
+    margin-right: 1rem;
+    width: 70%;
   }
 `;
 
@@ -57,21 +69,6 @@ const StyledButton = styled.button`
   margin-bottom: 1rem;
 `;
 
-const SpanWrapper = styled.ul`
-  display: flex;
-  
-  li {
-    font-size: 14px;
-
-    &:last-child::before {
-      content: '';
-      display: inline-block;
-      width: 1px;
-      height: .6rem;
-      background-color: #2e2e2e;
-    }
-  }
-`;
 
 
 // // 아이디로 사용가능한지 검사
@@ -101,12 +98,23 @@ function SignUp(props) {
         <div className="user-name">
           <label htmlFor="userLastName"/>
           <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" />
-          <label htmlFor="userLastName"/>
-          <StyledInput className="first-name" type='text' id="userLastName" placeholder="이름을 입력해 주세요" />  
+          <label htmlFor="userFirstName"/>
+          <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" />  
         </div>
         <h2>ADDRESS</h2>
-        <label htmlFor="userAddress"/>
-        <StyledInput className="zip-code" type='text' id="userAddress" placeholder="우편번호" disabled={true} />
+          <div className="zip-wrapper">
+            <label htmlFor="userAddress"/>
+            <StyledInput className="zip-code" type='text' id="userAddress" placeholder="우편번호" disabled={true} />
+            <StyledButton >우편번호 검색</StyledButton>
+          </div>
+          <label htmlFor="autoAddress"/>
+          <StyledInput id="autoAddress" placeholder="도로명 주소 입력" disabled={true}/>
+          <label htmlFor="detailAddress"/>
+          <StyledInput id="detailAddress" placeholder="상제 주소 입력" />
+        <h2>NICKNAME<span>(선택)</span></h2>
+        
+        <label htmlFor="userNickname"/>
+        <StyledInput id="userNickname" placeholder="상제 주소 입력"/>
         <StyledButton>가입하기</StyledButton>
       </Wrapper>
     </section>
