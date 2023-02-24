@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment } from "../../features/post/postSlice";
 import { selectUser } from "../../features/user/userSlice";
+import { RiCloseFill } from "react-icons/ri";
 
 
 
@@ -105,6 +106,8 @@ function Comment(props) {
                 <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
                 <p className="comment-item-text">{comment.comment}</p>
               </div>
+
+              <RiCloseFill />
             </CommentListItem>                   
           );
         })}

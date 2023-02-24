@@ -1,12 +1,13 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
-import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineDown, AiOutlineUp, AiFillHeart } from "react-icons/ai";
 import Comment from "./Comment";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { increment } from "../../features/post/postSlice";
+import { FaRegTrashAlt, FaRegEdit, FaRegCommentDots } from "react-icons/fa";
 
 
-const PostWarp = styled.li`
+const PostWarp = styled.div`
   display: flex;  
   border-bottom:1px solid #f3f3f3;
   padding: 50px;
@@ -49,7 +50,6 @@ const PostWarp = styled.li`
   }
   .post-item-icon {
     display: flex;
-    justify-content: space-between;
     align-items: center;   
   } 
   .post-item-icon li{
@@ -58,40 +58,52 @@ const PostWarp = styled.li`
     display:flex ;
     justify-content: center;
     align-items: center;
-
   }  
   .post-item-icon li span {
     margin-left: 2px;
+    font-weight: 500;
   }
   .icon-like {
     color: #ff5858;
     font-size: 1.2rem;
   }
   .icon-comment {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    margin-left: 10px;
   }
-  svg {
-    font-size: 35px;
-    color: #5a5454;
+  .icon-edit {
+    font-size: 1.2rem;
+    margin-right: 5px;
+  }
+  .icon-trash{
+    font-size: 1.1rem;
+  }
+  .aarrow-icon {
+    font-size: 2.5rem;
   }
 `;
-
-
+const StyleDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 function PostListItem(props) {
-
+  const {post} = props;
   const [btn, setBtn] = useState(false);
 
-  const dispatch = useDispatch();
-
+  const dispatch = useDispatch();  
 
   const handleOpen = ()=> {
     setBtn(true);
   };
   const handleClose = ()=> {
     setBtn(false);
-  };
+  };  
+  const handleRemove = () => {
 
-  const {post} = props;
+};
+
+ 
 
   return (
     <PostWarp btn={btn}>
@@ -104,15 +116,24 @@ function PostListItem(props) {
 
         { btn && <Comment data={post.comments} postId={post.id} /> }
 
-        <ul className="post-item-icon">                  
-          <li onClick={() => dispatch(increment(post.id))}><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
-          <li onClick={handleOpen}><AiOutlineComment className="icon-comment" /><span>{post.comments.length}</span></li>
-        </ul>
-        
-      </div>
-      { btn ? <AiOutlineUp onClick={handleClose}/> : <AiOutlineDown onClick={handleOpen}/> }   
+        <StyleDiv>
+          <ul className="post-item-icon">       
+            <li onClick={() => dispatch(increment(post.id))}><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
+            <li onClick={handleOpen}><FaRegCommentDots className="icon-comment" /><span>{post.comments.length}</span></li>
+          </ul>
+          <ul className="post-item-icon">       
+            <li onClick={undefined}><FaRegEdit className="icon-edit"/><span> </span></li>
+            <li onClick={undefined}><FaRegTrashAlt className="icon-trash" onClick={{handleRemove}}/><span> </span></li>
+          </ul>
+        </StyleDiv>
+      </div>      
+
+      { btn ? <AiOutlineUp className="aarrow-icon" onClick={handleClose}/> : <AiOutlineDown className="aarrow-icon" onClick={handleOpen}/> }   
+
+      
     </PostWarp>    
   );
 }
 
 export default PostListItem;
+
