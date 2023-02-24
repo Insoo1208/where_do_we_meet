@@ -17,6 +17,9 @@ function Map (props) {
   const infowindow = new kakao.maps.InfoWindow({zIndex:1});
   let markers = [];
 
+
+  // https://apis.map.kakao.com/web/sample/multipleMarkerControl/
+  
   const setNewMap = async () => {
     const container = document.getElementById('map');
     const options = {
