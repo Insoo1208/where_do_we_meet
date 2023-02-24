@@ -87,6 +87,7 @@ const StyledLink = styled(Link)`
 function SignUp(props) {
   // useState
   const [openPostcode, setOpenPostcode] = useState(false);
+  const [postcodeValue, setpostcodeValue] = useState({});
   
   // 우편번호 검색
   const handleClickZipBtn = () => {
@@ -94,10 +95,10 @@ function SignUp(props) {
     };
 
   const handleSelectAddress = (data) => {
-    console.log(`
-              주소: ${data.address},
-              우편번호: ${data.zonecode}
-          `)
+        setpostcodeValue({
+          zonecode: data.zonecode,
+          address: data.address
+          });
     setOpenPostcode(!openPostcode);
   };
 
@@ -123,7 +124,7 @@ function SignUp(props) {
         <h2>ADDRESS</h2>
           <div className="zip-wrapper">
             <label htmlFor="searchAddress"/>
-            <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} />
+            <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={postcodeValue.zonecode}/>
             <StyledButton onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
             <br />
             
@@ -138,7 +139,7 @@ function SignUp(props) {
                   />
               }
           <label htmlFor="userAddress"/>
-          <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true}/>
+          <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address}/>
           <label htmlFor="detailAddress"/>
           <StyledInput id="detailAddress" placeholder="상세 주소" />
         
