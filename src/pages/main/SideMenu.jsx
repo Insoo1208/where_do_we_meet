@@ -146,9 +146,11 @@ const UserFastSearch = styled.div`
   }
 `;
 
-function SideMenu () {
+function SideMenu (props) {
   const [menuOpened, setMenuOpened] = useState(true);
-  const [myAddress, setMyAddress] = useState('');
+  const [adressValue, setAdressValue] = useState('');
+  const [friendAdressValue, setFriendAdressValue] = useState('');
+  const { myAddress, setMyAdress, friendAdress, setFriendAdress } = props;
 
   const handledInputFocused = () => {
     
@@ -170,13 +172,13 @@ function SideMenu () {
           <UserSearchArea>
             <div className="user-name">나</div>
             <InputArea>
-              <MdSearch onClick={ () => {return myAddress;}}/>
+              <MdSearch style={{ visibility: "hidden" }}/>
               <input
-                value={myAddress}
-                onChange={ e => setMyAddress(e.target.value) }
-                onKeyUp={ e => {if(e.key === "Enter" && myAddress) return;}}
+                value={adressValue}
+                onChange={ e => setAdressValue(e.target.value)}
+                onKeyUp={ e => {if(e.key === "Enter" && adressValue) setMyAdress(adressValue);}}
               />
-              <StyledMdClose $foucused={myAddress} onClick={() => setMyAddress('') }/>
+              <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
             </InputArea>
           </UserSearchArea>
           <UserSearchLine/> 
@@ -193,13 +195,13 @@ function SideMenu () {
           <UserSearchArea>
             <div className="user-name">친구</div>
             <InputArea>
-              <MdSearch onClick={ () => {return myAddress;}}/>
+              <MdSearch style={{ visibility: "hidden" }}/>
               <input
-                value={myAddress}
-                onChange={ e => setMyAddress(e.target.value) }
-                onKeyUp={ e => {if(e.key === "Enter" && myAddress) return;}}
+                value={friendAdressValue}
+                onChange={ e => setFriendAdressValue(e.target.value) }
+                onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) return;}}
               />
-              <StyledMdClose $foucused={myAddress} onClick={() => setMyAddress('') }/>
+              <StyledMdClose $foucused={friendAdressValue} onClick={() => setFriendAdressValue('') }/>
             </InputArea>
           </UserSearchArea>
           <UserSearchLine/> 
@@ -211,6 +213,8 @@ function SideMenu () {
             </ul>
           </UserFastSearch>
         </UserSearchWrapper>
+
+        <button type="button" onClick={ () => { setMyAdress(adressValue); }}> 약속장소 찾기 </button>
       </SideMenuBg>
       {/* 콜백함수로 set함수값을 바꿔주는 이유는? 동기적으로 처리하기 위해 */}
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>

@@ -8,9 +8,10 @@
     "email": "jincupia@gmail.com",
     "nickname": "Harena",
     "adress": "인천시 남동구 장아산로 128번길 22",
-    "detailAdredd": "105-601",
+    "detailAdress": "105-601",
     "friends": [
     ],
+    "즐겨찾기" : ["", ""],
     "authority": "admin",
     "point": 0
   }, {
@@ -21,7 +22,7 @@
     "email": "email1",
     "nickname": "nickname1",
     "adress": "adress1",
-    "detailAdredd": "detail1",
+    "detailAdress": "detail1",
     "friends": [
     ],
     "authority": "admin",
@@ -34,7 +35,7 @@
     "email": "email2",
     "nickname": "nickname2",
     "adress": "adress2",
-    "detailAdredd": "detail2",
+    "detailAdress": "detail2",
     "friends": [
     ],
     "authority": "admin",
@@ -47,7 +48,7 @@
     "email": "email3",
     "nickname": "nickname3",
     "adress": "adress3",
-    "detailAdredd": "detail3",
+    "detailAdress": "detail3",
     "friends": [
     ],
     "authority": "admin",

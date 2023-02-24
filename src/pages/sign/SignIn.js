@@ -107,12 +107,12 @@ function SignIn() {
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
         <h1>Sign In</h1>
-        <label htmlFor="signInId"/>
+        <label htmlFor="signInId" />
         <StyledInput type='text' id="signInId" placeholder="아이디를 입력하세요"
           value={loginInfo.id} onChange={e => setLoginInfo({...loginInfo, id: e.target.value})}
           autoComplete="off"
           />
-        <label htmlFor="signInPw"/>
+        <label htmlFor="signInPw" />
         <PwWrapper>
           <StyledInput type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
             value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
