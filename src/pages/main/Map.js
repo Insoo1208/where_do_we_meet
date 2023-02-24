@@ -11,36 +11,32 @@ const MapWrapper = styled.div`
 
 function Map (props) {
   const [map, setMap] = useState(null);
+  const [markers, setMarkers] = useState([]);
   const { myAdress, setMyAdress, friendAdress, setFriendAdress } = props;
   
   const ps = new kakao.maps.services.Places();
   const infowindow = new kakao.maps.InfoWindow({zIndex:1});
-  let markers = [];
-
 
   // https://apis.map.kakao.com/web/sample/multipleMarkerControl/
-  
-  const setNewMap = async () => {
+
+  // 마커유지 => 로컬 스토리지 이용
+  // bound 방법 생각
+
+  useEffect(() => {
     const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(33.450701, 126.570667),
       level: 3,
     };
     setMap(new kakao.maps.Map(container, options));
-  };
-
-  
-  useEffect(() => {
-    setNewMap();
   }, []);
   
   useEffect(() => {
-    for (let i = 0; i < markers.length; i++) markers[i].setMap(null);
-    // markers = [];
     if( myAdress && !friendAdress ) {
       ps.keywordSearch(myAdress, placesSearchCB, { category_group_code: 'CE7' });
     }
     setMyAdress('');
+    setFriendAdress('');
   }, [myAdress]);
   
   
@@ -49,7 +45,7 @@ function Map (props) {
       const bounds = new kakao.maps.LatLngBounds();
       
       for (let i = 0; i < data.length; i++) {
-        displayMarker(data[i]);
+        addMarker(data[i]);
         bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
       };
       
@@ -57,10 +53,9 @@ function Map (props) {
     }
   };
   
-  const displayMarker =  place => {
+  const addMarker =  place => {
     // 마커를 생성하고 지도에 표시합니다
-    var marker = new kakao.maps.Marker({
-      map: map,
+    const marker = new kakao.maps.Marker({
       position: new kakao.maps.LatLng(place.y, place.x)
     });
   
@@ -71,11 +66,21 @@ function Map (props) {
       infowindow.open(map, marker);
     });
 
-    markers.push(marker);
+    marker.setMap(map);
+
+    setMarkers(markers => markers.concat(marker));
+  };
+
+  const removeMarkers = () => {
+    for (let i = 0; i < markers.length; i++) markers[i].setMap(null);
+    setMarkers([]);
   };
 
   return (
-    <MapWrapper id="map" />
+    <>
+      <MapWrapper id="map" />
+      <button style={{ position: 'absolute', top: 95, right: 15, zIndex: 2 }} onClick={removeMarkers}>마커 지우기</button>
+    </>
     );
   }
   
