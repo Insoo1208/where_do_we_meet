@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
+import DaumPostcode from "react-daum-postcode";
+import { useState } from "react";
 
 const Wrapper = styled.div`
   width: 590px;
@@ -67,6 +69,7 @@ const StyledButton = styled.button`
   width: 100%;
   height: 58px;
   margin-bottom: 1rem;
+  cursor: pointer;
 `;
 
 
@@ -82,6 +85,22 @@ const StyledLink = styled(Link)`
   color: black;
 `;
 function SignUp(props) {
+  // useState
+  const [openPostcode, setOpenPostcode] = useState(false);
+  
+  // 우편번호 검색
+  const handleClickZipBtn = () => {
+      setOpenPostcode(openPostcode => !openPostcode);
+    };
+
+  const handleSelectAddress = (data) => {
+    console.log(`
+              주소: ${data.address},
+              우편번호: ${data.zonecode}
+          `)
+    setOpenPostcode(!openPostcode);
+  };
+
   return (
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
@@ -105,8 +124,19 @@ function SignUp(props) {
           <div className="zip-wrapper">
             <label htmlFor="searchAddress"/>
             <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} />
-            <StyledButton >우편번호 검색</StyledButton>
+            <StyledButton onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
+            <br />
+            
+            
           </div>
+              {
+                openPostcode&&
+                  <DaumPostcode
+                    onComplete={handleSelectAddress} 
+                    autoClose={false}
+                    defaultQuery='판교역로 235'
+                  />
+              }
           <label htmlFor="userAddress"/>
           <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true}/>
           <label htmlFor="detailAddress"/>
