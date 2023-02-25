@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const { kakao } = window;
+const kakaoApiKey = 'ffa89cfc78225aff2872d03ae1064df0';
 
 const MapWrapper = styled.div`
   width: 100%;
@@ -12,10 +13,14 @@ const MapWrapper = styled.div`
 function Map (props) {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [geodata, setGeodata] = useState({x: [], y: []});
   const { myAdress, setMyAdress, friendAdress, setFriendAdress } = props;
   
   const ps = new kakao.maps.services.Places();
+  const geocoder = new kakao.maps.services.Geocoder();
   const infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+  const geoX = [], geoY = [];
 
   // https://apis.map.kakao.com/web/sample/multipleMarkerControl/
 
@@ -32,12 +37,30 @@ function Map (props) {
   }, []);
   
   useEffect(() => {
-    if( myAdress && !friendAdress ) {
-      ps.keywordSearch(myAdress, placesSearchCB, { category_group_code: 'CE7' });
+    if ( myAdress && friendAdress ) {
+      geocoder.addressSearch(myAdress, geoCB);
+      geocoder.addressSearch(friendAdress, geoCB);
     }
-    setMyAdress('');
-    setFriendAdress('');
-  }, [myAdress]);
+    // if ( myAdress && !friendAdress ) {
+    //   ps.keywordSearch(myAdress, placesSearchCB, { category_group_code: 'CE7' });
+    // }
+    // setMyAdress('');
+    // setFriendAdress('');
+  }, [myAdress, friendAdress]);
+
+  useEffect(() => {
+    if (geodata.x.length >= 2 && geodata.y.length >= 2) {
+      console.log(geodata);
+      const newGeoX = (Number(geodata.x[0]) + Number(geodata.x[1])) / 2;
+      const newGeoY = (Number(geodata.y[0]) + Number(geodata.y[1])) / 2;
+      console.log(newGeoX, newGeoY);
+      geocoder.coord2RegionCode(newGeoX, newGeoY, (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          ps.keywordSearch(result[0].address_name, placesSearchCB, { category_group_code: 'CE7' });
+        };
+      });
+    }
+  }, [geodata]);
   
   
   const placesSearchCB = (data, status) => {
@@ -48,9 +71,36 @@ function Map (props) {
         addMarker(data[i]);
         bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
       };
-      
       map.setBounds(bounds);
     }
+  };
+
+  const geoCB = (result, status) => {
+    if (status === kakao.maps.services.Status.OK) {
+      getLatLng(result[0].address_name);
+    }
+  };
+
+  const getLatLng = async adress => {
+    // try {
+    //   const response =
+    //     await fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${adress}`,
+    //       { headers: { Authorization: `KakaoAK ${kakaoApiKey}` } }
+    //     );
+    //   const data = response => response.json();
+    //   console.log(data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+    fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${adress}`,
+      { headers: { Authorization: `KakaoAK ${kakaoApiKey}` } }
+    )
+      .then(response => response.json())
+      .then(data => {
+        geoX.push(data.documents[0].x);
+        geoY.push(data.documents[0].y);
+        setGeodata(geodata => ({ ...geodata, x: geoX, y: geoY } ));
+      });
   };
   
   const addMarker =  place => {

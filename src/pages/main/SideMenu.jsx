@@ -214,7 +214,7 @@ function SideMenu (props) {
           </UserFastSearch>
         </UserSearchWrapper>
 
-        <button type="button" onClick={ () => { setMyAdress(adressValue); }}> 약속장소 찾기 </button>
+        <button type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </button>
       </SideMenuBg>
       {/* 콜백함수로 set함수값을 바꿔주는 이유는? 동기적으로 처리하기 위해 */}
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
