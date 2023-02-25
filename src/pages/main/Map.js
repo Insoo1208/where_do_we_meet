@@ -64,6 +64,7 @@ function Map (props) {
   
   
   const placesSearchCB = (data, status) => {
+    if (data.length < 1) return alert('데이터가 존재하지 않습니다.');
     if (status === kakao.maps.services.Status.OK) {
       const bounds = new kakao.maps.LatLngBounds();
       
