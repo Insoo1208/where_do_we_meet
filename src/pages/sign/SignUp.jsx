@@ -89,6 +89,8 @@ function SignUp(props) {
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userPasswordCheck, setUserPasswordCheck] = useState('');
+  const [userLastName, setUserLastName] = useState('');
+  const [userFirstName, setUserFirstName] = useState('');
   const [openPostcode, setOpenPostcode] = useState(false);
   const [postcodeValue, setpostcodeValue] = useState({
     zonecode: '',
@@ -97,14 +99,30 @@ function SignUp(props) {
   const [inputType, setInputType] = useState('password');
   
   useEffect(() => {
+    // 비밀번호 재확인
     console.log(userPasswordCheck, '===',userPassword);
     if(userPasswordCheck === userPassword) {
       console.log(`비밀번호 재확인 완료!`);
     } else {
-
+      console.log(`비밀번호를 다시 확인해 주세요!`);
     }
   }, [userPasswordCheck]);
-
+  useEffect(() => {
+    //성확인
+    if(!nameCheck.test(userLastName)) {
+      console.log(`한글을 정확히 입력해 주세요`);
+    } else {
+      console.log(userLastName);
+    }
+  }, [userLastName]);
+  useEffect(() => {
+    //이름확인
+    if(!nameCheck.test(userFirstName)) {
+      console.log(`한글을 정확히 입력해 주세요`);
+    } else {
+      console.log(userFirstName);
+    }
+  }, [userFirstName]);
   // 우편번호 검색
   const handleClickZipBtn = () => {
       setOpenPostcode(openPostcode => !openPostcode);
@@ -131,6 +149,10 @@ function SignUp(props) {
   // } else {
   //   console.log(`영문 대소문자와 숫자를 이용하여 4~10자리의 아이디를 만들어 주세요.`);
   // }
+
+  // 이름 정규식 검사
+  const nameCheck = /^[가-힣]+$/;
+
 
   return (
     <section style={{ padding: '150px 0' }}>
@@ -183,9 +205,17 @@ function SignUp(props) {
         <h2>NAME</h2>
         <div className="user-name">
           <label htmlFor="userLastName"/>
-          <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" autoComplete="off" />
+          <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={userLastName} autoComplete="off"  
+          onChange={(e) => {
+            setUserLastName(e.target.value);
+          }}
+          />
           <label htmlFor="userFirstName"/>
-          <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" autoComplete="off" />  
+          <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={userFirstName} autoComplete="off"
+          onChange={(e) => {
+            setUserFirstName(e.target.value);
+          }}
+          />  
         </div>
         <h2>ADDRESS</h2>
           <div className="zip-wrapper">
@@ -205,11 +235,11 @@ function SignUp(props) {
                   />
               }
           <label htmlFor="userAddress"/>
-          <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address}/>
+          <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address} />
           <label htmlFor="detailAddress"/>
-          <StyledInput id="detailAddress" placeholder="상세 주소" />
+          <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off"/>
         
-        <h2>NICKNAME<span>(선택)</span></h2>
+        <h2>NICKNAME</h2>
         <label htmlFor="userNickname"/>
         <StyledInput id="userNickname" placeholder="닉네임을 입력해 주세요"/>
         
