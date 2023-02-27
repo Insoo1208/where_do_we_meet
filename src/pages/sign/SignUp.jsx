@@ -146,30 +146,30 @@ function SignUp(props) {
         <h2>ID</h2>
         <label htmlFor="signUnId"/>
         <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={userId} autoComplete="off" required
-        onChange={(e) => {
-          setUserId(e.target.value)
-        }}
-        onBlur={() => {
-          console.log(idCheck.test(userId));
-          if(idCheck.test(userId)) {
-          console.log(`올바른 아이디를 입력했습니다.`);
-        } else {
-          console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
-        }}}
+          onChange={(e) => {
+            setUserId(e.target.value)
+          }}
+          onBlur={() => {
+            console.log(idCheck.test(userId));
+            if(idCheck.test(userId)) {
+            console.log(`올바른 아이디를 입력했습니다.`);
+          } else {
+            console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
+          }}}
         />
         <h2>PASSWORD</h2>
         <label htmlFor="signUpPw"/>
         <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요."  value={userPassword} autoComplete="off"
-        onChange={(e) => {
-          setUserPassword(e.target.value)
-        }}
-        onBlur={() => {
-          console.log(passwordCheck.test(userPassword));
-          if(passwordCheck.test(userPassword)) {
-          console.log(`올바른 비밀번호를 입력했습니다.`);
-        } else {
-          console.log(`반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요.`);
-        }}}
+          onChange={(e) => {
+            setUserPassword(e.target.value)
+          }}
+          onBlur={() => {
+            console.log(passwordCheck.test(userPassword));
+            if(passwordCheck.test(userPassword)) {
+            console.log(`올바른 비밀번호를 입력했습니다.`);
+          } else {
+            console.log(`반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요.`);
+          }}}
         />
         <button
           type="button"
@@ -183,37 +183,37 @@ function SignUp(props) {
         >toggle</button>
         <label htmlFor="signUpPwCheck"/>
         <StyledInput type='password' id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={userPasswordCheck} autoComplete="off"
-        onChange={(e) => {
-          setUserPasswordCheck(e.target.value);
-        }}
+          onChange={(e) => {
+            setUserPasswordCheck(e.target.value);
+          }}
         />
         <h2>NAME</h2>
         <div className="user-name">
           <label htmlFor="userLastName"/>
           <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={userLastName} autoComplete="off"  
-          onChange={(e) => {
-            setUserLastName(e.target.value);
-          }}
-          onBlur={() => {
-            if(!nameCheck.test(userFirstName)) {
-              console.log(`한글을 정확히 입력해 주세요`);
-            } else {
-              console.log(userFirstName);
-            }
-          }}
+            onChange={(e) => {
+              setUserLastName(e.target.value);
+            }}
+            onBlur={() => {
+              if(!nameCheck.test(userFirstName)) {
+                console.log(`한글을 정확히 입력해 주세요`);
+              } else {
+                console.log(userFirstName);
+              }
+            }}
           />
           <label htmlFor="userFirstName"/>
           <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={userFirstName} autoComplete="off"
-          onChange={(e) => {
-            setUserFirstName(e.target.value);
-          }}
-          onBlur={() => {
-            if(!nameCheck.test(userFirstName)) {
-              console.log(`한글을 정확히 입력해 주세요`);
-            } else {
-              console.log(userFirstName);
-            }
-          }}
+            onChange={(e) => {
+              setUserFirstName(e.target.value);
+            }}
+            onBlur={() => {
+              if(!nameCheck.test(userFirstName)) {
+                console.log(`한글을 정확히 입력해 주세요`);
+              } else {
+                console.log(userFirstName);
+              }
+            }}
           />  
         </div>
         <h2>ADDRESS</h2>
@@ -245,7 +245,16 @@ function SignUp(props) {
         <h2>REFERRAL CODE<span>(선택)</span></h2>
         <StyledInput id="recomenderNickname" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정"/>
         
-        <StyledButton>가입하기</StyledButton>
+        <StyledButton
+          onClick={()=>{
+            if(userId && userPassword && userLastName && userFirstName && postcodeValue) {
+              console.log(`회원가입 완료!`);
+            } else {
+              // 확인이 안되어있는 필수값들이 전부 빨갛게 라인 표시됨
+              console.log(`필수입력값을 확인해 주세요!`);
+            }
+          }}
+        >가입하기</StyledButton>
       </Wrapper>
     </section>
 
