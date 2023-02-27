@@ -1,0 +1,57 @@
+{
+  "userInfo" : [
+  {
+    "firstName": "Insoo", 
+    "lastName": "Jeon", 
+    "id": "insoo",
+    "password": "insoo123456!",
+    "email": "jincupia@gmail.com",
+    "nickname": "Harena",
+    "adress": "인천시 남동구 장아산로 128번길 22",
+    "detailAdress": "105-601",
+    "friends": [
+    ],
+    "authority": "admin",
+    "point": 0
+  }, {
+    "firstName": "Kyuhyun", 
+    "lastName": "Yang", 
+    "id": "id1",
+    "password": "pw1",
+    "email": "email1",
+    "nickname": "nickname1",
+    "adress": "adress1",
+    "detailAdress": "detail1",
+    "friends": [
+    ],
+    "authority": "admin",
+    "point": 0
+  }, {
+    "firstName": "JaeKyung", 
+    "lastName": "Cha", 
+    "id": "id2",
+    "password": "pw2",
+    "email": "email2",
+    "nickname": "nickname2",
+    "adress": "adress2",
+    "detailAdress": "detail2",
+    "friends": [
+    ],
+    "authority": "admin",
+    "point": 0
+  }, {
+    "firstName": "JaeHoon", 
+    "lastName": "Lee", 
+    "id": "id3",
+    "password": "pw3",
+    "email": "email3",
+    "nickname": "nickname3",
+    "adress": "adress3",
+    "detailAdress": "detail3",
+    "friends": [
+    ],
+    "authority": "admin",
+    "point": 0
+  }
+]
+}

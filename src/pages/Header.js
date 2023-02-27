@@ -1,5 +1,7 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet, Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { selectUser, userLogOut } from '../features/user/userSlice';
 
 const Wrapper = styled.nav`
   width: 100%;
@@ -43,6 +45,8 @@ const StyledNavLink = styled(NavLink)`
 
 function Header () {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   return (
     <>
@@ -52,8 +56,18 @@ function Header () {
             <StyledLink to='/'>우리 어디서 만나?</StyledLink>
           </StyledLogo>
           <StyledUl>
-            <SubMenu><StyledNavLink to='/signin'>로그인</StyledNavLink></SubMenu>
-            <SubMenu><StyledNavLink to='/signup'>회원가입</StyledNavLink></SubMenu>
+            { user
+              ? 
+              <>
+                <p>{user.nickname}님 환영합니다.</p>
+                <SubMenu><StyledNavLink to='/'>내 정보</StyledNavLink></SubMenu>
+                <SubMenu><StyledNavLink onClick={() => dispatch(userLogOut())}>로그아웃</StyledNavLink></SubMenu>
+              </>
+              :
+              <>
+                <SubMenu><StyledNavLink to='/signin'>로그인</StyledNavLink></SubMenu>
+                <SubMenu><StyledNavLink to='/signup'>회원가입</StyledNavLink></SubMenu>
+              </>}
             <SubMenu><StyledNavLink to='/board'>게시판</StyledNavLink></SubMenu>
           </StyledUl>
         </Wrapper>
