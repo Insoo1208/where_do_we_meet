@@ -107,22 +107,22 @@ function SignUp(props) {
       console.log(`비밀번호를 다시 확인해 주세요!`);
     }
   }, [userPasswordCheck]);
-  useEffect(() => {
-    //성확인
-    if(!nameCheck.test(userLastName)) {
-      console.log(`한글을 정확히 입력해 주세요`);
-    } else {
-      console.log(userLastName);
-    }
-  }, [userLastName]);
-  useEffect(() => {
-    //이름확인
-    if(!nameCheck.test(userFirstName)) {
-      console.log(`한글을 정확히 입력해 주세요`);
-    } else {
-      console.log(userFirstName);
-    }
-  }, [userFirstName]);
+  // useEffect(() => {
+  //   //성확인
+  //   if(!nameCheck.test(userLastName)) {
+  //     console.log(`한글을 정확히 입력해 주세요`);
+  //   } else {
+  //     console.log(userLastName);
+  //   }
+  // }, [userLastName]);
+  // useEffect(() => {
+  //   //이름확인
+  //   if(!nameCheck.test(userFirstName)) {
+  //     console.log(`한글을 정확히 입력해 주세요`);
+  //   } else {
+  //     console.log(userFirstName);
+  //   }
+  // }, [userFirstName]);
   // 우편번호 검색
   const handleClickZipBtn = () => {
       setOpenPostcode(openPostcode => !openPostcode);
@@ -209,11 +209,25 @@ function SignUp(props) {
           onChange={(e) => {
             setUserLastName(e.target.value);
           }}
+          onBlur={() => {
+            if(!nameCheck.test(userFirstName)) {
+              console.log(`한글을 정확히 입력해 주세요`);
+            } else {
+              console.log(userFirstName);
+            }
+          }}
           />
           <label htmlFor="userFirstName"/>
           <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={userFirstName} autoComplete="off"
           onChange={(e) => {
             setUserFirstName(e.target.value);
+          }}
+          onBlur={() => {
+            if(!nameCheck.test(userFirstName)) {
+              console.log(`한글을 정확히 입력해 주세요`);
+            } else {
+              console.log(userFirstName);
+            }
           }}
           />  
         </div>
