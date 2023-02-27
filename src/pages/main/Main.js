@@ -1,15 +1,16 @@
 import SideMenu from "./SideMenu";
 import Map from "./Map";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Main () {
   const [myAdress, setMyAdress] = useState('');
   const [friendAdress, setFriendAdress] = useState('');
+  const [searchData, setSearchData] = useState([]);
 
   return (
     <div>
-      <SideMenu myAdress={myAdress} setMyAdress={setMyAdress} friendAdress={friendAdress} setFriendAdress={setFriendAdress} />
-      <Map myAdress={myAdress} setMyAdress={setMyAdress} friendAdress={friendAdress} setFriendAdress={setFriendAdress} />
+      <SideMenu setMyAdress={setMyAdress} setFriendAdress={setFriendAdress} searchData={searchData} />
+      <Map myAdress={myAdress} friendAdress={friendAdress} setSearchData={setSearchData}/>
     </div>
   );
 }

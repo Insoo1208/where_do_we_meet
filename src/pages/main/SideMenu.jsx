@@ -118,7 +118,7 @@ const StyledMdClose = styled(MdClose)`
 
 const UserSearchLine = styled.div`
   width: 100%;
-  height: .125rem;
+  height: 2px;
   margin: calc((150px - (54px + 48px) - 16px * 2) / 2) 0 ;
   background-color: #d9d9d9;
 `; 
@@ -150,13 +150,12 @@ function SideMenu (props) {
   const [menuOpened, setMenuOpened] = useState(true);
   const [adressValue, setAdressValue] = useState('');
   const [friendAdressValue, setFriendAdressValue] = useState('');
-  const { myAddress, setMyAdress, friendAdress, setFriendAdress } = props;
+  const { setMyAdress, setFriendAdress, searchData } = props;
 
   const handledInputFocused = () => {
     
   };
   
-
     // <>
     //   {/* <MiniBar /> */}
     //   <Detail menuOpened={menuOpened}>
@@ -181,7 +180,7 @@ function SideMenu (props) {
               <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
             </InputArea>
           </UserSearchArea>
-          <UserSearchLine/> 
+          <UserSearchLine/>
           <UserFastSearch>
             <ul>
               <li>집</li>
@@ -213,14 +212,25 @@ function SideMenu (props) {
             </ul>
           </UserFastSearch>
         </UserSearchWrapper>
-
         <button type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </button>
+        <ul style={{ maxHeight: 'calc(100vh - 304px - 24px - 75px)', overflowY: 'auto' }}>
+          {searchData && 
+            searchData.map((data, index) => (
+              <li key={data.id} style={{ margin: '1rem' }}>
+                <h4>{index + 1}</h4>
+                <h1>{data.place_name}</h1>
+                <h2>{data.road_address_name}</h2>
+                <h2>{data.address_name}</h2>
+                <h3>{data.phone}</h3>
+              </li>
+            ))
+          }
+        </ul>
       </SideMenuBg>
       {/* 콜백함수로 set함수값을 바꿔주는 이유는? 동기적으로 처리하기 위해 */}
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
-      
     </SideMenuWrapper>
   );
 }
