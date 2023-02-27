@@ -151,6 +151,12 @@ function SideMenu (props) {
   const [adressValue, setAdressValue] = useState('');
   const [friendAdressValue, setFriendAdressValue] = useState('');
   const { setMyAdress, setFriendAdress, searchData } = props;
+  const [showMyDropdown, setShowMyDropdown] = useState(false);
+  const [showFriendDropdown, setFriendDropdown] = useState(false);
+
+  const handleDetailSearch = () => {
+    
+  };
 
   const handledInputFocused = () => {
     
@@ -171,7 +177,7 @@ function SideMenu (props) {
           <UserSearchArea>
             <div className="user-name">나</div>
             <InputArea>
-              <MdSearch style={{ visibility: "hidden" }}/>
+              <MdSearch/>
               <input
                 value={adressValue}
                 onChange={ e => setAdressValue(e.target.value)}
@@ -194,7 +200,7 @@ function SideMenu (props) {
           <UserSearchArea>
             <div className="user-name">친구</div>
             <InputArea>
-              <MdSearch style={{ visibility: "hidden" }}/>
+              <MdSearch />
               <input
                 value={friendAdressValue}
                 onChange={ e => setFriendAdressValue(e.target.value) }
