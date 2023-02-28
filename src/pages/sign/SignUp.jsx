@@ -149,19 +149,23 @@ function SignUp(props) {
   });
   const [inputType, setInputType] = useState('password');
   
-  const [passwordCheckResult, setPasswordCheckResult] = useState(null);
+  const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
   useEffect(() => {
     // 비밀번호 재확인
     console.log(userPasswordCheck, '===',userPassword);
-    if(userPasswordCheck === userPassword) {
+    if (!userPasswordCheck) {
+      return;
+    }
+
+    if((userPasswordCheck === userPassword) && userPasswordCheck) {
       console.log(`비밀번호 재확인 완료!`);
       setPasswordCheckResult(true)
     } else {
       console.log(`비밀번호를 다시 확인해 주세요!`);
-      setPasswordCheckResult(null)
+      setPasswordCheckResult(false)
     }
-  }, [userPasswordCheck]);
+  }, [userPasswordCheck, userPassword]);
   
   // 우편번호 검색
   const handleClickZipBtn = () => {
@@ -265,19 +269,23 @@ function SignUp(props) {
         <div className="input-check">
           <label htmlFor="signUpPwCheck"/>
           <StyledInput type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={userPasswordCheck} autoComplete="off"
-            onChange={(e) => {
+            onChange = {(e) => {
               setUserPasswordCheck(e.target.value);
             }}
+
+            onBlur= {(e) => {
+              
+            }}
           />
-          { passwordCheckResult
+          { passwordCheckResult && passwordCheck.test(userPassword)
               ? <CheckedBox style={{color: 'green'}}/>
               : <CheckBoxBlank />
           }
-          {
-            !passwordCheckResult &&
-              <Error>비밀번호를 다시 확인해 주세요!</Error> 
-          }
         </div>
+        {
+          !passwordCheckResult && userPasswordCheck && 
+            <Error>비밀번호를 다시 확인해 주세요!</Error> 
+        }
         <h2>NAME</h2>
         <div className="user-name">
           <label htmlFor="userLastName"/>
