@@ -1,7 +1,14 @@
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import userData from "../../data.json";
+import { MdCheckBoxOutlineBlank as CheckBoxBlank, MdCheckBox as CheckedBox  } from "react-icons/md";
+import { IoMdEye as Eye, IoMdEyeOff as EyeOff } from "react-icons/io";
+
+// 서버에서 받아온 데이터 가정(import로 자동 파싱)
+console.log(userData);
+
 
 const Wrapper = styled.div`
   width: 590px;
@@ -11,6 +18,22 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 16px;
   background-color: #ffccaa;
+
+  div.input-check {
+    background-color: skyblue;
+    position: relative;
+    svg { 
+      position: absolute;
+      right:.625rem;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      font-size: 30px;
+      border: 1px;
+      color: #acacac
+    }
+  }
+  
   h1 {
     text-align: center;
     font-size: 40px;
@@ -23,10 +46,34 @@ const Wrapper = styled.div`
     font-size: 28px;
     font-weight: 100;
     padding-bottom: .625rem;
+    margin-top: .875rem;
+    position: relative;
 
     span {
       font-size: 1rem;
       line-height: 1rem;
+    }
+
+    button {
+      position: absolute;
+      right: .625rem;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      width: 1.875rem;
+      height: 1.875rem;
+      background: inherit ; 
+      border:none; 
+      box-shadow:none; 
+      padding: 0; 
+      overflow:visible; 
+      &:focus {
+        border: none;
+      }
+      cursor:pointer;
+      svg {
+        font-size: 1.25rem;
+      }
     }
   }
 
@@ -42,7 +89,7 @@ const Wrapper = styled.div`
     }
     
     button {
-
+      
     }
     
   }
@@ -72,18 +119,22 @@ const StyledButton = styled.button`
   cursor: pointer;
 `;
 
-
-
-// // 아이디로 사용가능한지 검사
-
-// const id = 'abc123';
-
-// // 알파벳 대소문자 또는 숫자로 시작하고 끝나며 4~10자리인지 검사한다.
-// /^[A-Za-z0-9]{4,10}/.test(id);
 const StyledLink = styled(Link)`
   padding: .5rem;
   color: black;
 `;
+
+const Error = styled.div`
+  color: red;
+  font-size: .6875rem;
+`;
+
+const Pass = styled.div`
+  color: green;
+  font-size: .6875rem;
+`;
+
+
 function SignUp(props) {
   // useState
   const [userId, setUserId] = useState('');
@@ -98,13 +149,17 @@ function SignUp(props) {
   });
   const [inputType, setInputType] = useState('password');
   
+  const [passwordCheckResult, setPasswordCheckResult] = useState(null);
+
   useEffect(() => {
     // 비밀번호 재확인
     console.log(userPasswordCheck, '===',userPassword);
     if(userPasswordCheck === userPassword) {
       console.log(`비밀번호 재확인 완료!`);
+      setPasswordCheckResult(true)
     } else {
       console.log(`비밀번호를 다시 확인해 주세요!`);
+      setPasswordCheckResult(null)
     }
   }, [userPasswordCheck]);
   
@@ -122,71 +177,107 @@ function SignUp(props) {
   };
 
   // 아이디 정규식 검사
-  const idCheck = /^[a-z0-9]{6,10}/;
+  const idCheck = /^[a-z0-9]{6,10}/; // 영어 소문자와 숫자 6~10자리
   // 비밀번호 정규식 검사
   // const passwordCheck =  /[A-Za-z0-9!@#$%^&*]{12}/g;
   const passwordCheck =  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/ ; //최소 8 자, 하나 이상의 문자, 하나의 숫자 및 하나의 특수 문자 정규식
   // const passwordCheck =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/ ;  //입력은 대소문자특문 가능하고 반드시 조합해야되는건 영문숫자만 조합 
 
-  // const inputIdCheck = document.getElementById('signUpId').onblur(idCheck.test(userId));
-  // if(inputIdCheck) {
-  //   console.log(`올바른 아이디를 입력했습니다.`);
-  // } else {
-  //   console.log(`영문 대소문자와 숫자를 이용하여 4~10자리의 아이디를 만들어 주세요.`);
-  // }
-
   // 이름 정규식 검사
   const nameCheck = /^[가-힣]+$/;
 
-
+  // id 중복검사
+  
+  const { userInfo } = userData;
+  console.log(userInfo);
+  const idDuplicationCheck = userInfo.find((user) => {
+    return user.id === userId ;
+  });
+  console.log(idDuplicationCheck);
+  
+  
   return (
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
         <h1>Sign Up</h1>
         <h2>ID</h2>
-        <label htmlFor="signUnId"/>
-        <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={userId} autoComplete="off" required
-          onChange={(e) => {
-            setUserId(e.target.value)
-          }}
-          onBlur={() => {
-            console.log(idCheck.test(userId));
-            if(idCheck.test(userId)) {
-            console.log(`올바른 아이디를 입력했습니다.`);
-          } else {
-            console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
-          }}}
-        />
-        <h2>PASSWORD</h2>
-        <label htmlFor="signUpPw"/>
-        <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요."  value={userPassword} autoComplete="off"
-          onChange={(e) => {
-            setUserPassword(e.target.value)
-          }}
-          onBlur={() => {
-            console.log(passwordCheck.test(userPassword));
-            if(passwordCheck.test(userPassword)) {
-            console.log(`올바른 비밀번호를 입력했습니다.`);
-          } else {
-            console.log(`반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요.`);
-          }}}
-        />
-        <button
-          type="button"
-          onClick={() => {
-            if(inputType !== 'text') {
-              setInputType('text');
+        <div className="input-check">
+          <label htmlFor="signUnId"/>
+          <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={userId} autoComplete="off" spellCheck="false"
+            onChange={(e) => {
+              setUserId(e.target.value)
+            }}
+            onBlur={() => {
+              console.log(idCheck.test(userId));
+              if(idCheck.test(userId)) {
+              console.log(`올바른 아이디를 입력했습니다.`);
             } else {
-              setInputType('password')
+              console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
+            }}}
+          />
+          { idCheck.test(userId) 
+            ? <CheckedBox style={{color: 'green'}}/>
+            : <CheckBoxBlank />
+          }
+        </div>
+        { 
+          idDuplicationCheck &&
+            <Error>아이디가 중복되었습니다.</Error>
+        }
+        <h2>PASSWORD
+          <button
+                type="button"
+                onClick={() => {
+                  if(inputType !== 'text') {
+                    setInputType('text');
+                  } else {
+                    setInputType('password')
+                  }
+                }}
+              >
+                {
+                  inputType !== 'text' 
+                    ? <EyeOff />
+                    : <Eye />
+                }
+          </button>
+        </h2>
+        <div className="input-check">
+          <label htmlFor="signUpPw"/>
+          <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요."  value={userPassword} autoComplete="off"
+            onChange={(e) => {
+              setUserPassword(e.target.value)
+            }}
+            onBlur={() => {
+              console.log(passwordCheck.test(userPassword));
+              if(passwordCheck.test(userPassword)) {
+              console.log(`올바른 비밀번호를 입력했습니다.`);
+            } else {
+              console.log(`반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요.`);
+            }}}
+            />
+            { passwordCheck.test(userPassword) 
+              ? <CheckedBox style={{color: 'green'}}/>
+              : <CheckBoxBlank />
             }
-          }}
-        >toggle</button>
-        <label htmlFor="signUpPwCheck"/>
-        <StyledInput type='password' id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={userPasswordCheck} autoComplete="off"
-          onChange={(e) => {
-            setUserPasswordCheck(e.target.value);
-          }}
-        />
+        </div>
+            
+        <div className="input-check">
+          <label htmlFor="signUpPwCheck"/>
+          <StyledInput type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={userPasswordCheck} autoComplete="off"
+            onChange={(e) => {
+              setUserPasswordCheck(e.target.value);
+            }}
+          />
+          { passwordCheckResult
+              ? <CheckedBox style={{color: 'green'}}/>
+              : <CheckBoxBlank />
+          }
+          {
+            !passwordCheckResult &&
+              <Error>비밀번호를 다시 확인해 주세요!</Error> 
+          }
+        </div>
         <h2>NAME</h2>
         <div className="user-name">
           <label htmlFor="userLastName"/>
@@ -250,7 +341,7 @@ function SignUp(props) {
             if(userId && userPassword && userLastName && userFirstName && postcodeValue) {
               console.log(`회원가입 완료!`);
             } else {
-              // 확인이 안되어있는 필수값들이 전부 빨갛게 라인 표시됨
+              // 확인이 안되어있는 필수값들이 전부 빨갛게 라인 표시되어야 함
               console.log(`필수입력값을 확인해 주세요!`);
             }
           }}
