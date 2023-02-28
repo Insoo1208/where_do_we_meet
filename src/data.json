@@ -1,30 +1,57 @@
 {
-  "userInfo" : [{
+  "userInfo" : [
+  {
     "firstName": "Insoo", 
     "lastName": "Jeon", 
     "id": "insoo",
     "password": "insoo123456!",
     "email": "jincupia@gmail.com",
-    "nickname": "Insoo",
+    "nickname": "Harena",
     "adress": "인천시 남동구 장아산로 128번길 22",
-    "detailAdredd": "105-601",
+    "detailAdress": "105-601",
     "friends": [
     ],
     "authority": "admin",
     "point": 0
-  }],
-  "PostData": [{
-    "id": "0x01",
-    "userProfileImg": "src",
-    "userNickname": "규니규니",
-    "userId": "ygh424",
-    "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    "comments": [{
-      "commentUserProfileImg": "src",
-      "commentsUserNickname" : "모니모니",
-      "commentsUserId" : "ttsss556",
-      "commnet": "라떼가 맛있습니다."
-    }],
-    "like": 100
-  }]
+  }, {
+    "firstName": "Kyuhyun", 
+    "lastName": "Yang", 
+    "id": "id1",
+    "password": "pw1",
+    "email": "email1",
+    "nickname": "nickname1",
+    "adress": "adress1",
+    "detailAdress": "detail1",
+    "friends": [
+    ],
+    "authority": "admin",
+    "point": 0
+  }, {
+    "firstName": "JaeKyung", 
+    "lastName": "Cha", 
+    "id": "id2",
+    "password": "pw2",
+    "email": "email2",
+    "nickname": "nickname2",
+    "adress": "adress2",
+    "detailAdress": "detail2",
+    "friends": [
+    ],
+    "authority": "admin",
+    "point": 0
+  }, {
+    "firstName": "JaeHoon", 
+    "lastName": "Lee", 
+    "id": "id3",
+    "password": "pw3",
+    "email": "email3",
+    "nickname": "nickname3",
+    "adress": "adress3",
+    "detailAdress": "detail3",
+    "friends": [
+    ],
+    "authority": "admin",
+    "point": 0
+  }
+]
 }

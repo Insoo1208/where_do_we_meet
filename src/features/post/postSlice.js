@@ -121,11 +121,12 @@ const postSlice = createSlice({
             return post.id === id;
           });                    
           break;
-      
+          
         default:
           console.error("에러입니다.");
           break;
       }
+
       targetPost.comments.push(comment);
     }
   }
