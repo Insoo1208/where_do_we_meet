@@ -1,6 +1,9 @@
 import styled, { css } from "styled-components";
 import { MdChevronLeft, MdChevronRight, MdSearch, MdClose } from "react-icons/md";
 import { useState } from "react";
+
+const { kakao } = window;
+
 const SideMenuWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -80,6 +83,7 @@ const UserSearchArea = styled.div`
   `;
 
 const InputArea = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -150,12 +154,34 @@ function SideMenu (props) {
   const [menuOpened, setMenuOpened] = useState(true);
   const [adressValue, setAdressValue] = useState('');
   const [friendAdressValue, setFriendAdressValue] = useState('');
-  const { setMyAdress, setFriendAdress, searchData } = props;
+  const [contentsValue, setContentsValue] = useState('');
   const [showMyDropdown, setShowMyDropdown] = useState(false);
-  const [showFriendDropdown, setFriendDropdown] = useState(false);
+  const [showFriendDropdown, setShowFriendDropdown] = useState(false);
+  const [detailAdress, setDetailAdress] = useState([]);
+  
+  const { setMyAdress, setFriendAdress, setContentsSearch, searchData } = props;
 
-  const handleDetailSearch = () => {
-    
+  const geocoder = new kakao.maps.services.Geocoder();
+
+
+
+  const handleDetailSearch = async adress => {
+    try {
+      const detail = await geocoder.addressSearch(adress, (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          setDetailAdress(result.reduce((acc, cur) => {
+            acc.push(cur.address_name);
+            return acc;
+          }, []));
+        } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+          setDetailAdress(['검색 결과가 없습니다.']);
+        } else if (status === kakao.maps.services.Status.ERROR) {
+          setDetailAdress(['검색 중 오류가 발생했습니다.']);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handledInputFocused = () => {
@@ -177,13 +203,44 @@ function SideMenu (props) {
           <UserSearchArea>
             <div className="user-name">나</div>
             <InputArea>
-              <MdSearch/>
+              <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowMyDropdown(true); }} />
               <input
                 value={adressValue}
                 onChange={ e => setAdressValue(e.target.value)}
-                onKeyUp={ e => {if(e.key === "Enter" && adressValue) setMyAdress(adressValue);}}
+                onKeyUp={ e => {if(e.key === "Enter" && adressValue) { handleDetailSearch(adressValue); setShowMyDropdown(true); }}}
+                spellcheck="false"
+                autoComplete="off"
               />
               <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
+              {showMyDropdown && 
+                <ul style={{
+                  position: "absolute",
+                  top: 55,
+                  left: 30,
+                  zIndex: 2,
+                  backgroundColor: "white",
+                  border: "2px solid black",
+                  borderRadius: 8,
+                  width: 250,
+                  height: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center"
+                }}>
+                  <li className="cursor-pointer" style={{ width: "100%", padding: ".5rem 2rem 0 0", textAlign: "right" }}
+                    onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}
+                  >X</li>
+                  {detailAdress.map((address, idx) => 
+                    <li key={idx} className="text-ellipsis cursor-pointer" style={{ padding: ".5rem" }}
+                      onClick={() => {
+                        setAdressValue(detailAdress[idx]);
+                        setDetailAdress([]);
+                        setShowMyDropdown(false);
+                      }}
+                    >{address}</li>
+                    )}
+                </ul>
+              }
             </InputArea>
           </UserSearchArea>
           <UserSearchLine/>
@@ -200,12 +257,43 @@ function SideMenu (props) {
           <UserSearchArea>
             <div className="user-name">친구</div>
             <InputArea>
-              <MdSearch />
+              <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowFriendDropdown(true); }}/>
               <input
                 value={friendAdressValue}
                 onChange={ e => setFriendAdressValue(e.target.value) }
-                onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) return;}}
+                onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) { handleDetailSearch(friendAdressValue); setShowFriendDropdown(true); };}}
+                spellcheck="false"
+                autoComplete="off"
               />
+              {showFriendDropdown && 
+                <ul style={{
+                  position: "absolute",
+                  top: 55,
+                  left: 30,
+                  zIndex: 2,
+                  backgroundColor: "white",
+                  border: "2px solid black",
+                  borderRadius: 8,
+                  width: 250,
+                  height: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center"
+                }}>
+                  <li className="cursor-pointer" style={{ width: "100%", padding: ".5rem 2rem 0 0", textAlign: "right" }}
+                    onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}
+                  >X</li>
+                  {detailAdress.map((address, idx) => 
+                    <li key={idx} className="text-ellipsis cursor-pointer" style={{ padding: ".5rem" }}
+                      onClick={() => {
+                        setFriendAdressValue(detailAdress[idx]);
+                        setDetailAdress([]);
+                        setShowFriendDropdown(false);
+                      }}
+                    >{address}</li>
+                    )}
+                </ul>
+              }
               <StyledMdClose $foucused={friendAdressValue} onClick={() => setFriendAdressValue('') }/>
             </InputArea>
           </UserSearchArea>
@@ -237,6 +325,35 @@ function SideMenu (props) {
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
+      <div style={{
+        position: "absolute",
+        top: 16,
+        left: "calc(100% + 1rem)",
+        width: 350,
+        height: 40,
+        backgroundColor: "white",
+        border: "2px solid black",
+        borderRadius: 20,
+        padding: ".125rem 15px",
+        display: "flex",
+        alignItems: "center",
+        justifyContents: "center",
+      }}>
+        <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
+        <label htmlFor="content-search"/>
+        <input id="content-search" style={{
+          flex: 1,
+          border: "none",
+          outline: "none",
+          paddingLeft: "1rem"
+        }}
+          placeholder="검색 할 키워드를 입력해주세요."
+          value={contentsValue} onChange={e => setContentsValue(e.target.value)}
+          onKeyUp={ e => {if(e.key === "Enter" && contentsValue) setContentsSearch(contentsValue);}}
+          spellcheck="false"
+          autoComplete="off"
+        />
+      </div>
     </SideMenuWrapper>
   );
 }
