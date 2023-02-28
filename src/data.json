@@ -10,7 +10,7 @@
     "userProfileImg": "/images/user01.png",
     "adress": "인천시 남동구 장아산로 128번길 22",
     "detailAdress": "105-601",
-    "favorites": [{"title": "집", "adress": "인천시 남동구 장아산로 128번길 22"}],
+    "favorites": [{"title": "집", "adress": "인천시 남동구 서창동"}],
     "friends": [
       "id1", "id2", "id3"
     ],
@@ -26,7 +26,7 @@
     "userProfileImg": "/images/user02.png",
     "adress": "adress1",
     "detailAdress": "detail1",
-    "favorites": [{"title": "집", "adress": "인천시 남동구 장아산로 128번길 22"}],
+    "favorites": [{"title": "집2", "adress": "인천시 서구 경서동"}],
     "friends": [
     ],
     "authority": "admin",
@@ -41,7 +41,7 @@
     "userProfileImg": "/images/user03.png",
     "adress": "adress2",
     "detailAdress": "detail2",
-    "favorites": [{"title": "집", "adress": "인천시 남동구 장아산로 128번길 22"}],
+    "favorites": [{"title": "집3", "adress": "인천시 중구 인현동"}],
     "friends": [
     ],
     "authority": "admin",
@@ -56,7 +56,7 @@
     "userProfileImg": "/images/user04.png",
     "adress": "adress3",
     "detailAdress": "detail3",
-    "favorites": [{"title": "집", "adress": "인천시 남동구 장아산로 128번길 22"}],
+    "favorites": [{"title": "집4", "adress": "인천시 연수구 송도동"}],
     "friends": [
     ],
     "authority": "admin",

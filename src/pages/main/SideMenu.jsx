@@ -1,8 +1,10 @@
 import styled, { css } from "styled-components";
 import { MdChevronLeft, MdChevronRight, MdSearch, MdClose } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
+
+import data from "../../data.json";
 
 const { kakao } = window;
 
@@ -168,11 +170,17 @@ function SideMenu (props) {
   const [showMyDropdown, setShowMyDropdown] = useState(false);
   const [showFriendDropdown, setShowFriendDropdown] = useState(false);
   const [showFirendListDropdown, setShowFirendListDropdown] = useState(false);
-  console.log(showFirendListDropdown);
 
   const [detailAdress, setDetailAdress] = useState([]);
+  const [friendDetailAdress, setFriendDetailAdress] = useState([]);
 
   const [selectedFriend, setSelectedFriend] = useState('');
+
+  useEffect(() => {
+    if(selectedFriend) {
+      setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
+    }
+  }, [selectedFriend]);
 
 
   const user = useSelector(selectUser);
@@ -292,11 +300,12 @@ function SideMenu (props) {
                   alignItems: "center"
                 }}>
                   <li className="cursor-pointer" style={{ width: "100%", padding: ".5rem 2rem 0 0", textAlign: "right" }}
-                      onClick={() => setShowFirendListDropdown(false)}
+                      onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}
                     >X</li>
                   {user && user.friends.map((friend, idx) => 
                     <li key={idx} className="text-ellipsis cursor-pointer" style={{ padding: ".5rem" }}
-                      onClick={() => {
+                      onClick={e => {
+                        e.stopPropagation();
                         setSelectedFriend(friend);
                         setShowFirendListDropdown(false);
                       }}>{friend}
@@ -351,9 +360,9 @@ function SideMenu (props) {
               <UserSearchLine/>
               <UserFastSearch>
                 <ul>
-                  {/* {selectedFriend.favorites.map((fav, idx) => 
-                    <li key={idx} onClick={() => setAdressValue(fav.adress)}>{fav.title}</li>
-                  )} */}
+                  {friendDetailAdress.map((fav, idx) => 
+                    <li key={idx} onClick={() => setFriendAdressValue(fav.adress)}>{fav.title}</li>
+                  )}
                 </ul>
               </UserFastSearch>
             </>
