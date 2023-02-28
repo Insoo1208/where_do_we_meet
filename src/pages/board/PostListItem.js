@@ -121,7 +121,7 @@ function PostListItem(props) {
           </ul>
           <ul className="post-item-icon">       
             <li onClick={undefined}><FaRegEdit className="icon-edit"/><span> </span></li>
-            <li onClick={undefined}><FaRegTrashAlt className="icon-trash" onClick={{handleRemove}}/><span> </span></li>
+            <li onClick={undefined}><FaRegTrashAlt className="icon-trash" onClick={handleRemove}/><span> </span></li>
           </ul>
         </StyleDiv>
       </div>      
