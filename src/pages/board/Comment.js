@@ -17,10 +17,10 @@ const CommentWarp = styled.div`
   font-size: 15px; 
   margin-bottom: 10px;
   margin-left: 15px;
- 
 }
 .comment-title span {
   color: #19a0ff;
+  font-weight:bold;
 }
 `;
 const CommentInput = styled.input`
@@ -61,11 +61,9 @@ const CommentListItem = styled.li`
 `;
 function Comment(props) {
   const [comment, setComment] = useState('');
-  const { data, postId } = props;
+  const { data, postId, listName } = props;
   const dispatch = useDispatch();
   const loggedInUser = useSelector(selectUser);
-
-  
 
   const handleSubmit = () => {
     let commentArr;
@@ -86,7 +84,7 @@ function Comment(props) {
         comment
       }
     }
-    dispatch(addComment({ id: postId, comment: commentArr}));
+    dispatch(addComment({ id: postId, comment: commentArr, listName}));
     setComment('');
   };
 
@@ -107,7 +105,7 @@ function Comment(props) {
                 <p className="comment-item-text">{comment.comment}</p>
               </div>
 
-              <RiCloseFill />
+              {/* <RiCloseFill /> */}
             </CommentListItem>                   
           );
         })}

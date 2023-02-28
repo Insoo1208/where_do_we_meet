@@ -88,7 +88,7 @@ const StyleDiv = styled.div`
   justify-content: space-between;
 `;
 function PostListItem(props) {
-  const {post} = props;
+  const {post, listName} = props;
   const [btn, setBtn] = useState(false);
 
   const dispatch = useDispatch();  
@@ -100,10 +100,8 @@ function PostListItem(props) {
     setBtn(false);
   };  
   const handleRemove = () => {
-
-};
-
- 
+    
+  };
 
   return (
     <PostWarp btn={btn}>
@@ -114,11 +112,11 @@ function PostListItem(props) {
           {post.content}
         </p>
 
-        { btn && <Comment data={post.comments} postId={post.id} /> }
+        { btn && <Comment data={post.comments} postId={post.id} listName={listName} /> }
 
         <StyleDiv>
           <ul className="post-item-icon">       
-            <li onClick={() => dispatch(increment(post.id))}><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
+            <li onClick={() => dispatch(increment({id: post.id, listName }))}><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
             <li onClick={handleOpen}><FaRegCommentDots className="icon-comment" /><span>{post.comments.length}</span></li>
           </ul>
           <ul className="post-item-icon">       

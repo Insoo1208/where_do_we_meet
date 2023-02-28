@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Menu from "./Menu";
-import Contents from "./Content";
-import PostWrite from "./PostWrite";
+import { Outlet } from "react-router-dom";
 
 const Wrapper = styled.div`
   min-height: 860px;
@@ -12,13 +11,10 @@ const Wrapper = styled.div`
 function Board () {  
 
   return (
-      <Wrapper>
-        <Menu />
-        <Contents />
-
-        {/* 게시물 작성하기*/}
-        {/* <PostWrite />  */}
-      </Wrapper>
+    <Wrapper>
+      <Menu />
+      <Outlet />
+    </Wrapper>
   );
 }
 

@@ -4,7 +4,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import PostListItem from "./PostListItem";
 import { AiFillPlusSquare } from "react-icons/ai";
 import { useSelector } from 'react-redux';
-import { selectReview } from '../../features/post/postSlice';
+import { selectNotice } from '../../features/post/postSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
@@ -21,6 +21,7 @@ const Wrapper = styled.div`
     letter-spacing: -2px;
   }
 `;
+
 const StyleDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -69,13 +70,14 @@ const PostList = styled.div`
   border:1px solid #efefef;
 `;
 
-function Contents(props) {
-  const data = useSelector(selectReview);
+function Notice(props) {
+  const data = useSelector(selectNotice);
   const navigate = useNavigate();
 
   return (
     <Wrapper>
-      <h3>카페리뷰</h3>
+      <h3>공지사항</h3>
+
       <StyleDiv>
         <AiFillPlusSquare className="writeIcon cursor-pointer" onClick={() => {navigate("/board/post-write"); }}/>
         <Search>
@@ -86,11 +88,11 @@ function Contents(props) {
 
       <PostList>
         {data.map((post) => {
-          return <PostListItem post={post} key={post.id} listName={"review`"}/> ;
+          return <PostListItem post={post} key={post.id} listName={"notice"}/> ;
         })}
       </PostList>
     </Wrapper>
   );
 }
 
-export default Contents;
+export default Notice;
