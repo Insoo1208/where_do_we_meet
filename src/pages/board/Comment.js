@@ -1,8 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { AiOutlineComment, AiOutlineDown, AiOutlineUp, AiFillHeart, AiOutlineSearch } from "react-icons/ai";
-import user01 from "../../images/user01.png";
-import user02 from "../../images/user02.png";
+import { useDispatch, useSelector } from "react-redux";
+import { addComment } from "../../features/post/postSlice";
+import { selectUser } from "../../features/user/userSlice";
+import { RiCloseFill } from "react-icons/ri";
 
 
 
@@ -13,13 +14,13 @@ const CommentWarp = styled.div`
   margin-bottom: 30px;
 
 .comment-title {
-  font-size: 16px; 
+  font-size: 15px; 
   margin-bottom: 10px;
   margin-left: 15px;
-  font-weight:bold;
 }
 .comment-title span {
   color: #19a0ff;
+  font-weight:bold;
 }
 `;
 const CommentInput = styled.input`
@@ -58,20 +59,57 @@ const CommentListItem = styled.li`
     color:#999;
   }
 `;
-
 function Comment(props) {
+  const [comment, setComment] = useState('');
+  const { data, postId, listName } = props;
+  const dispatch = useDispatch();
+  const loggedInUser = useSelector(selectUser);
+
+  const handleSubmit = () => {
+    let commentArr;
+    if (loggedInUser) {
+      commentArr = {
+        id: data.length + 1,
+        commentUserProfileImg: data.userProfileImg,
+        commentsUserNickname : loggedInUser.nickname,
+        commentsUserId : loggedInUser.id,
+        comment
+      }
+    } else {
+      commentArr = {
+        id: data.length + 1,
+        commentUserProfileImg: "/images/user05.png",
+        commentsUserNickname : "익명",
+        commentsUserId : null,
+        comment
+      }
+    }
+    dispatch(addComment({ id: postId, comment: commentArr, listName}));
+    setComment('');
+  };
+
   return (
     <CommentWarp>
-      <p className="comment-title">전체댓글 <span>16</span></p>  
-      <CommentInput type="text" placeholder="댓글을 작성하세요." />
+      <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
+      <CommentInput type="text" placeholder="댓글을 작성하세요."
+        value={comment} onChange={e => setComment(e.target.value)}
+        onKeyUp={ e => {if (e.key === 'Enter' && comment) handleSubmit();} }
+      />
       <ul>
-        <CommentListItem>
-          <img src={user02} className="comment-item-image"/>
-          <div>
-            <p className="comment-item-name">모니모니 <span>@ttsss556</span></p>
-            <p className="comment-item-text">라떼가 맛있습니다.</p>
-          </div>
-        </CommentListItem>
+        {data.map( (comment) => {
+          return (
+            <CommentListItem key={comment.id}>
+              <img src={comment.commentUserProfileImg} className="comment-item-image"/>
+              <div>
+                <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
+                <p className="comment-item-text">{comment.comment}</p>
+              </div>
+
+              {/* <RiCloseFill /> */}
+            </CommentListItem>                   
+          );
+        })}
+        
       </ul>
     </CommentWarp>    
   );
