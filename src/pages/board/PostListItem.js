@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { AiOutlineDown, AiOutlineUp, AiFillHeart } from "react-icons/ai";
 import Comment from "./Comment";
 import { useDispatch } from "react-redux";
-import { increment } from "../../features/post/postSlice";
+import { increment, remove, removePost } from "../../features/post/postSlice";
 import { FaRegTrashAlt, FaRegEdit, FaRegCommentDots } from "react-icons/fa";
 
 
@@ -17,6 +17,7 @@ const PostWarp = styled.div`
     height: 45px;
   }
   .content-area{
+    flex: 1;
     margin: 5px 0 0 10px;
   }
   .post-item-name {
@@ -79,7 +80,8 @@ const PostWarp = styled.div`
     font-size: 1.1rem;
   }
   .aarrow-icon {
-    font-size: 2.5rem;
+    /* font-size: 2.5rem; */
+    font-size: 1rem;
   }
 `;
 const StyleDiv = styled.div`
@@ -99,15 +101,12 @@ function PostListItem(props) {
   const handleClose = ()=> {
     setBtn(false);
   };  
-  const handleRemove = () => {
-    
-  };
 
   return (
     <PostWarp btn={btn}>
       <img src={post.userProfileImg} className="post-item-image"/>
       <div className="content-area">
-        <p className="post-item-name">{post.userNickname} <span>{`@ ${post.userId}`}</span></p>
+        <p className="post-item-name">{post.userNickname} <span>{ post.userId && `@${post.userId}`}</span></p>
         <p className="post-item-text" onClick={handleOpen} >
           {post.content}
         </p>
@@ -121,7 +120,7 @@ function PostListItem(props) {
           </ul>
           <ul className="post-item-icon">       
             <li onClick={undefined}><FaRegEdit className="icon-edit"/><span> </span></li>
-            <li onClick={undefined}><FaRegTrashAlt className="icon-trash" onClick={{handleRemove}}/><span> </span></li>
+            <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /><span> </span></li>
           </ul>
         </StyleDiv>
       </div>      

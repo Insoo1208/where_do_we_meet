@@ -82,7 +82,7 @@ function Notice(props) {
         <AiFillPlusSquare className="writeIcon cursor-pointer" onClick={() => {navigate("/board/post-write"); }}/>
         <Search>
           <AiOutlineSearch className="search-icon"/>
-          <SearchInput type="text" placeholder="게시물 검색" />
+          <SearchInput type="text" placeholder="게시물 검색" spellCheck="false" autoComplete="off" />
         </Search>
       </StyleDiv>
 

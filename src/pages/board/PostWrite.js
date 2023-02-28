@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../../features/user/userSlice';
+import { addPost } from '../../features/post/postSlice';
 
 
 const Wrapper = styled.div`
@@ -50,8 +53,6 @@ const RadioWrap = styled.div`
     margin-right: 5px;
     letter-spacing: -0.8px;
   }
-
-
 `;
 const BtnWrap = styled.div`
   display:flex;
@@ -75,35 +76,61 @@ const StyleButton = styled.button`
     letter-spacing: -1px;
   `;
 
-
 function PostWrite(props) {
   const navigate = useNavigate();
+  const [radioValue, setRadioValue] = useState('');
+  const [postValue, setPostValue] = useState('');
+  const dispatch = useDispatch();
+  const loggedInUser = useSelector(selectUser);
+
+  const handleSubmit = () => {
+    if(!postValue) {
+      alert('게시판 목록을 선택해주세요.');
+    } else {
+      let postTextObj;
+      if (loggedInUser) {
+        postTextObj = {
+          postUserProfileImg: "/images/user01.png",
+          postUserNickname : loggedInUser.nickname,
+          postUserId : loggedInUser.id,
+          postValue        
+        }
+      } else {
+        postTextObj = {
+          postUserProfileImg: "/images/user05.png",
+          postUserNickname : "익명",
+          postUserId : null,
+          postValue
+        }
+      }
+      dispatch(addPost({ radioValue, postTextObj }));
+      setPostValue('');
+      if (radioValue === 'review') navigate('/board')
+      else navigate(`/board/${radioValue}`);
+
+    }
+  };
+  
   return (
     <Wrapper>
       <Write>
-        <h3 className="main-title">게시물 작성하기</h3>       
-        
-        <p className="post-title">내용 입력</p>
-      
-        <StyleTextarea type="text" placeholder="게시물 내용을 작성하세요." ></StyleTextarea>
+        <h3 className="main-title">게시물 작성하기</h3>               
+        <p className="post-title">내용 입력</p>      
+        <StyleTextarea type="text" placeholder="게시물 내용을 작성하세요." value={postValue} onChange={(e) => {setPostValue(e.target.value)} } spellCheck="false" autoComplete="off" />
         <RadioWrap>
-          <input type="radio" id="review" name="postwrite" value="review" />
+          <input type="radio" id="review" name="postwrite" value="review" onChange={(e) => {setRadioValue(e.target.value);} }/>
           <label htmlFor="review">카페리뷰</label>
-          <input type="radio" id="free" name="postwrite" value="free" />
+          <input type="radio" id="free" name="postwrite" value="free" onChange={(e) => {setRadioValue(e.target.value);} }/>
           <label htmlFor="free">자유게시판</label>
-          <input type="radio" id="notice" name="postwrite" value="notice" />
+          <input type="radio" id="notice" name="postwrite" value="notice" onChange={(e) => {setRadioValue(e.target.value);} } />
           <label htmlFor="notice">공지사항</label>
         </RadioWrap>
         <BtnWrap>
           <StyleButton className="cursor-pointer" type="button" onClick={() => {navigate("/board");}}>취소</StyleButton>
-          <StyleButton className="conpim-btn cursor-pointer" type="button">완료</StyleButton>
+          <StyleButton className="conpim-btn cursor-pointer" type="button" onClick={handleSubmit}>완료</StyleButton>
         </BtnWrap>
-      </Write>
-    
-
-
-    </Wrapper>
-    
+      </Write>    
+    </Wrapper>    
   );
 }
 

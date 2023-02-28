@@ -3,7 +3,7 @@ import { createSlice, current } from "@reduxjs/toolkit";
 const initialState = {
   review: [
     {
-      id: "0x01",
+      id: "0x1",
       userProfileImg: "/images/user02.png",
       userNickname: "규니규니",
       userId: "ygh424",
@@ -17,12 +17,12 @@ const initialState = {
         comment: "라떼가 맛있습니다."
         }
       ],
-      like: 100
+      like: 0
     }
   ],
   notice: [
     {
-      id: "0x01",
+      id: "0x1",
       userProfileImg: "/images/user02.png",
       userNickname: "규니규니",
       userId: "ygh424",
@@ -36,12 +36,12 @@ const initialState = {
         comment: "라떼가 맛있습니다."
         }
       ],
-      like: 100
+      like: 0
     }
   ],
   free: [
     {
-      id: "0x01",
+      id: "0x1",
       userProfileImg: "/images/user02.png",
       userNickname: "규니규니",
       userId: "ygh424",
@@ -55,7 +55,7 @@ const initialState = {
         comment: "라떼가 맛있습니다."
         }
       ],
-      like: 100
+      like: 0
     }
   ]
 };
@@ -64,8 +64,53 @@ const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    addPost: (state, action) => {
+    addPost: (state, { payload : { radioValue: listName, postTextObj: { postUserProfileImg, postUserNickname, postUserId, postValue } } }) => {
+      let postObj;
+      console.log(listName);
+      switch (listName) {
+        case "review":
+          postObj = {
+            id: `0x${(state.review.length + 1).toString(16)}`,
+            userProfileImg: postUserProfileImg,
+            userNickname: postUserNickname,
+            userId: postUserId,
+            content: postValue,
+            comments: [],
+            like: 0
+          };
+          state.review.push(postObj);    
+          break;
+
+        case "notice":
+          postObj = {
+            id: `0x${(state.notice.length + 1).toString(16)}`,
+            userProfileImg: postUserProfileImg,
+            userNickname: postUserNickname,
+            userId: postUserId,
+            content: postValue,
+            comments: [],
+            like: 0
+          };
+          state.notice.push(postObj);    
+          break;
+
+        case "free":
+          postObj = {
+            id: `0x${(state.free.length + 1).toString(16)}`,
+            userProfileImg: postUserProfileImg,
+            userNickname: postUserNickname,
+            userId: postUserId,
+            content: postValue,
+            comments: [],
+            like: 0
+          };
+          state.free.push(postObj);    
+          break;
       
+        default:
+          console.error("에러입니다.");
+          break;
+      }
     },
     increment: (state, {payload : { listName, id}}) => { 
       // const targetPost = state.review.find((post) => {
@@ -83,8 +128,7 @@ const postSlice = createSlice({
         case "notice":
           targetPost = state.notice.find((post) => {
             return post.id === id;          
-          });  
-        
+          });          
           break;
         case "free":
           targetPost = state.free.find((post) => {
@@ -97,6 +141,30 @@ const postSlice = createSlice({
           break;
       }
       targetPost.like++;
+    },
+    removePost: (state, {payload : { listName, id}}) => { 
+      let targetPost;
+
+      switch (listName) {
+        case "review":
+          targetPost = state.review.findIndex((post) => post.id === id);
+          state.review.splice(targetPost, 1);            
+          break;
+
+        case "notice":
+          targetPost = state.notice.findIndex((post) => post.id === id);
+          state.notice.splice(targetPost, 1);
+          break;
+
+        case "free":
+          targetPost = state.free.findIndex((post) => post.id === id);
+          state.free.splice(targetPost, 1);
+          break;
+      
+        default:
+          console.error("에러입니다.");
+          break;
+      }
     },
     addComment: (state, { payload : { id, comment, listName } }) => {
       // const targetPost = state.review.find((post) => {
@@ -126,13 +194,33 @@ const postSlice = createSlice({
           console.error("에러입니다.");
           break;
       }
-
       targetPost.comments.push(comment);
+    },
+    removeComment:(state, { payload : id, listName }) => {
+      let targetPost;
+      switch (listName) {
+        case "review":
+          targetPost = state.review.findIndex((post) => post.id === id);
+          state.review.splice(targetPost, 1);         
+          break;
+        case "notice":
+          targetPost = state.review.findIndex((post) => post.id === id);
+          state.review.splice(targetPost, 1);                        
+          break;
+        case "free":
+          targetPost = state.review.findIndex((post) => post.id === id);
+          state.review.splice(targetPost, 1);                       
+          break;
+          
+        default:
+          console.error("에러입니다.");
+          break;
+      }
     }
   }
 });
 
-export const { addPost, increment, addComment } = postSlice.actions;
+export const { addPost, increment, addComment, removePost, removeComment } = postSlice.actions;
 export const selectReview = state => state.post.review;
 export const selectNotice = state => state.post.notice;
 export const selectFree = state => state.post.free;

@@ -69,7 +69,7 @@ const PostList = styled.div`
   border:1px solid #efefef;
 `;
 
-function Contents(props) {
+function Review(props) {
   const data = useSelector(selectReview);
   const navigate = useNavigate();
 
@@ -80,17 +80,17 @@ function Contents(props) {
         <AiFillPlusSquare className="writeIcon cursor-pointer" onClick={() => {navigate("/board/post-write"); }}/>
         <Search>
           <AiOutlineSearch className="search-icon"/>
-          <SearchInput type="text" placeholder="게시물 검색" />
+          <SearchInput type="text" placeholder="게시물 검색" spellCheck="false" autoComplete="off" />
         </Search>
       </StyleDiv>
 
       <PostList>
         {data.map((post) => {
-          return <PostListItem post={post} key={post.id} listName={"review`"}/> ;
+          return <PostListItem post={post} key={post.id} listName={"review"}/> ;
         })}
       </PostList>
     </Wrapper>
   );
 }
 
-export default Contents;
+export default Review;
