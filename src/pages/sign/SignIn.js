@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: ${props => props.theme.gray700};
 
   h1 {
     font-size: 30px;
@@ -39,12 +40,28 @@ const StyledInput = styled.input`
   width: 100%;
   height: 45px;
   margin-bottom: 1rem;
-  `;
+  border: 1px solid ${props => props.theme.main};
+  border-radius: 8px;
+  
+  :focus{
+    outline: none;
+    border: 2px solid ${props => props.theme.mainDark};
+  }
+`;
 
 const StyledButton = styled.button`
   width: 100%;
   height: 45px;
   margin-bottom: 1rem;
+  color: ${props => props.theme.gray200};
+  background-color: ${props => props.theme.main};
+  border: none;
+  border-radius: 8px;
+
+  :hover {
+    background-color: ${props => props.theme.mainLight};
+    color: ${props => props.theme.mainDark};
+  }
 `;
 
 const SpanWrapper = styled.ul`
@@ -65,7 +82,6 @@ const SpanWrapper = styled.ul`
 
 const StyledLink = styled(Link)`
   padding: .5rem;
-  color: black;
 `;
 
 

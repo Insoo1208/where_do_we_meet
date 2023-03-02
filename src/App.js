@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { ThemeProvider } from 'styled-components';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reset from "styled-reset";
 
@@ -15,6 +16,26 @@ import PostWrite from "./pages/board/PostWrite";
 import Notice from "./pages/board/Notice";
 import FreeBoard from "./pages/board/FreeBoard";
 
+const theme = {
+  gray100: '#f1f1f1',
+  gray200: '#eee',
+  gray300: '#ccc',
+  gray400: '#aaa',
+  gray500: '#999',
+  gray600: '#777',
+  gray700: '#555',
+  gray800: '#333',
+  gray900: '#111',
+
+  background: '#eaeaea',
+  main: '#7FC7E3',
+  mainLight: '#c0d6df',
+  mainDark: '#4f6d7a',
+  accent: '#e8dab2',
+  accentDark: '#dd6e42',
+
+};  
+
 const GlobalStyle = createGlobalStyle`
   /* Reset CSS */
   ${reset}
@@ -25,6 +46,8 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: 'Noto Sans KR', sans-serif;
+    background-color: #eaeaea;
+    color: #333;
   }
 
   * {
@@ -50,23 +73,25 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <BrowserRouter>
-      <GlobalStyle />
-      <Routes>
-        <Route path="/" element={<Header />} >
-          <Route index element={<Main />} />
-          <Route path="/board" element={<Board />} >
-            <Route index element={<Contents />} /> 
-            <Route path="/board/notice" element={<Notice />} />
-            <Route path="/board/free-board" element={<FreeBoard />} />
-            <Route path="/board/post-write" element={<PostWrite />} />
-          </Route>          
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/findid" element={<FindId />} />
-          <Route path="/findpw" element={<FindPw />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path='*' element={<ErrorPage />} />
-        </Route>
-      </Routes>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Routes>
+          <Route path="/" element={<Header />} >
+            <Route index element={<Main />} />
+            <Route path="/board" element={<Board />} >
+              <Route index element={<Contents />} /> 
+              <Route path="/board/notice" element={<Notice />} />
+              <Route path="/board/free-board" element={<FreeBoard />} />
+              <Route path="/board/post-write" element={<PostWrite />} />
+            </Route>          
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/findid" element={<FindId />} />
+            <Route path="/findpw" element={<FindPw />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path='*' element={<ErrorPage />} />
+          </Route>
+        </Routes>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

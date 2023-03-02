@@ -25,36 +25,31 @@ const SideMenuWrapper = styled.div`
 `;
 
 const SideMenuBg = styled.div`
-  // postion: relative;
-  // left: 0;
-  // top: 0;
   width: 450px;
   height: calc(100vh - 75px);
-  background-color: #d9d9d9;
-
-  /* z-index: 10; */
+  background-color: ${props => props.theme.mainLight};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: .75rem;
+  padding: .5rem;
 `;
 
 const UserSearchWrapper = styled.div`
-  background-color: #c8b2d6;
-  /* height: 152px; */
-  padding: 1rem 1.25rem ;
+  width: 100%;
+  background-color: ${props => props.theme.main};
+  padding: 1rem 1.25rem;
+  border-radius: .5rem;
 
   :nth-child(even) {
-    background-color: #efcc88;
+    background-color: ${props => props.theme.accent};
   }
 `;
 
 const MenuSlideButton = styled.div`
-  // postion: absolute;
-  // right: -20px;
-  // top: 50%;
-  // bottom: 50%;
-  // margin: auto;
   width: 24px;
   height: 50px;
-  background-color: #d9d9d9;
-  /* z-index: 10; */
+  background-color: ${props => props.theme.mainLight};
   border-radius: 0 10px 10px 0;
   font-size: 1.5rem;
   cursor: pointer; 
@@ -70,8 +65,6 @@ const UserSearchArea = styled.div`
   align-items: center;
   width: 100%;
   height: 54px;
-  /* background-color: #c8c8c8; */
-
   
   .user-name {
     position: relative;
@@ -79,12 +72,11 @@ const UserSearchArea = styled.div`
     height: 3.375rem;
     border-radius: 50%;
     background-color: #fff;
-    text-align: center;
-    line-height: 54px;
-    font-size: 1rem;
     font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-
   `;
 
 const InputArea = styled.div`
@@ -93,9 +85,10 @@ const InputArea = styled.div`
   justify-content: space-evenly;
   align-items: center;
   background-color: #fff;
-  border: .125rem solid #c39cdb ;
+  border: .125rem solid ${props => props.theme.mainDark} ;
   border-radius: .25rem;
   padding: .25rem;
+
   svg {
     font-size: 1.6rem;
     cursor: pointer;
@@ -110,18 +103,10 @@ const InputArea = styled.div`
   }
 `;
 
-// const StyledMdSearch = styled(MdSearch)`
-//   font-size: 2rem;
-// `;
-
 const StyledMdClose = styled(MdClose)`
   ${props => props.$foucused
-      ? css`
-        visibility: visible;
-      `
-      : css`
-        visibility: hidden;
-      `
+      ? css`visibility: visible;`
+      : css`visibility: hidden;`
   }
 `;
 
@@ -129,13 +114,12 @@ const UserSearchLine = styled.div`
   width: 100%;
   height: 2px;
   margin: calc((150px - (54px + 48px) - 16px * 2) / 2) 0 ;
-  background-color: #d9d9d9;
+  background-color: ${props => props.theme.mainDark};
 `; 
 
 const UserFastSearch = styled.div`
   width: 100%;
   height: 48px;
-  /* background-color: yellow; */
   
   ul {
     height: inherit;
@@ -155,9 +139,88 @@ const UserFastSearch = styled.div`
   }
 `;
 
-const DetailListWrapper = styled.div`
-  max-height: ${props => props.user ? "calc(100vh - 304px - 24px - 75px)" : "calc(100vh - 172px - 24px - 75px)"};
+const DetailListWrapper = styled.ul`
+  flex: 1;
+  width: 100%;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  li {
+    width: 90%;
+    background-color: ${props => props.theme.accent};
+    padding: .5rem;
+    border-radius: .5rem;
+
+    h1 {
+      font-size: 1.25rem;
+      padding-bottom: .75rem;
+      color: ${props => props.theme.accentDark};
+    }
+
+    h2 {
+      padding-bottom: .5rem;
+    }
+
+    h3 {
+      font-size: .8rem;
+      font-weight: 300;
+      color: ${props => props.theme.gray600};
+    }
+
+    h4 {
+      padding-bottom: .5rem;
+    }
+  }
+`;
+
+const DropDown = styled.ul`
+  position: absolute;
+  top: 3.5rem;
+  left: 1.5rem;
+  z-index: 12;
+  background-color: white;
+  border: 2px solid ${props => props.theme.mainDark};
+  border-radius: .5rem;
+  width: 250px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  li {
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    font-size: 1rem;
+    padding: .5rem;
+  }
+
+  li.close {
+    text-align: right;
+
+    svg {
+      font-size: 1rem;
+    }
+  }
+`;
+
+const FindButton = styled.button`
+  width: 80%;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  background-color: ${props => props.theme.main};
+  color: ${props => props.theme.mainDark};
+  border: none;
+  border-radius: .5rem;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${props => props.theme.accent};
+    color: ${props => props.theme.accentDark};
+  }
 `;
 
 function SideMenu (props) {
@@ -205,18 +268,6 @@ function SideMenu (props) {
     }
   };
 
-  const handledInputFocused = () => {
-    
-  };
-  
-    // <>
-    //   {/* <MiniBar /> */}
-    //   <Detail menuOpened={menuOpened}>
-    //     <MenuButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
-    //       {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
-    //     </MenuButton>
-    //   </Detail>
-    // </>
   return (
     <SideMenuWrapper menuOpened={menuOpened}>
       <SideMenuBg>
@@ -224,35 +275,21 @@ function SideMenu (props) {
           <UserSearchArea>
             <div style={{ cursor: "default" }} className="user-name">나</div>
             <InputArea>
-              <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowMyDropdown(true); }} />
+              <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }} />
               <input
                 value={adressValue}
                 onChange={ e => setAdressValue(e.target.value)}
-                onKeyUp={ e => {if(e.key === "Enter" && adressValue) { handleDetailSearch(adressValue); setShowMyDropdown(true); }}}
+                onKeyUp={ e => {if(e.key === "Enter" && adressValue) { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }}}
                 spellCheck="false"
                 autoComplete="off"
+                placeholder="주소를 입력해주세요."
               />
               <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
               {showMyDropdown && 
-                <ul style={{  
-                  position: "absolute",
-                  top: 55,
-                  left: 30,
-                  zIndex: 2,
-                  backgroundColor: "white",
-                  border: "2px solid black",
-                  borderRadius: 8,
-                  width: 250,
-                  height: "auto",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center"
-                }}>
-                  <li className="cursor-pointer" style={{ width: "100%", padding: ".5rem 2rem 0 0", textAlign: "right" }}
-                    onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}
-                  >X</li>
+                <DropDown>
+                  <li className="cursor-pointer close" onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}><MdClose /></li>
                   {detailAdress.map((address, idx) => 
-                    <li key={idx} className="text-ellipsis cursor-pointer" style={{ padding: ".5rem" }}
+                    <li key={idx} className="text-ellipsis cursor-pointer"
                       onClick={() => {
                         setAdressValue(detailAdress[idx]);
                         setDetailAdress([]);
@@ -260,7 +297,7 @@ function SideMenu (props) {
                       }}
                     >{address}</li>
                     )}
-                </ul>
+                </DropDown>
               }
             </InputArea>
           </UserSearchArea>
@@ -281,66 +318,37 @@ function SideMenu (props) {
         <UserSearchWrapper>
           <UserSearchArea>
             <div className="user-name cursor-pointer" onClick={() => { if (user) setShowFirendListDropdown(true); }}>
-              { selectedFriend || '상대' }
+              { (user && selectedFriend) || '상대' }
               { showFirendListDropdown &&
-                <ul style={{
-                  position: "absolute",
-                  top: 65,
-                  left: 0,
-                  zIndex: 2,
-                  backgroundColor: "white",
-                  border: "2px solid black",
-                  borderRadius: 8,
-                  width: 150,
-                  height: "auto",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center"
-                }}>
-                  <li className="cursor-pointer" style={{ width: "100%", padding: ".5rem 2rem 0 0", textAlign: "right" }}
-                      onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}
-                    >X</li>
+                <DropDown>
+                  <li className="cursor-pointer close" onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}><MdClose /></li>
+                  <li className="cursor-pointer" onClick={e => {e.stopPropagation(); setSelectedFriend(''); setShowFirendListDropdown(false); }}>초기화</li>
                   {user && user.friends.map((friend, idx) => 
-                    <li key={idx} className="text-ellipsis cursor-pointer" style={{ padding: ".5rem" }}
+                    <li key={idx} className="text-ellipsis cursor-pointer"
                       onClick={e => {
                         e.stopPropagation();
                         setSelectedFriend(friend);
                         setShowFirendListDropdown(false);
-                      }}>{friend}
-                    </li>
+                      }}>{friend}</li>
                   )}
-                </ul>
+                </DropDown>
               }
             </div>
             <InputArea>
-              <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowFriendDropdown(true); }}/>
+              <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); }}/>
               <input
                 value={friendAdressValue}
                 onChange={ e => setFriendAdressValue(e.target.value) }
-                onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) { handleDetailSearch(friendAdressValue); setShowFriendDropdown(true); };}}
+                onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); };}}
                 spellCheck="false"
                 autoComplete="off"
+                placeholder="주소를 입력해주세요."
               />
               {showFriendDropdown && 
-                <ul style={{
-                  position: "absolute",
-                  top: 55,
-                  left: 30,
-                  zIndex: 2,
-                  backgroundColor: "white",
-                  border: "2px solid black",
-                  borderRadius: 8,
-                  width: 250,
-                  height: "auto",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center"
-                }}>
-                  <li className="cursor-pointer" style={{ width: "100%", padding: ".5rem 2rem 0 0", textAlign: "right" }}
-                    onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}
-                  >X</li>
+                <DropDown>
+                  <li className="cursor-pointer close" onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}><MdClose /></li>
                   {detailAdress.map((address, idx) => 
-                    <li key={idx} className="text-ellipsis cursor-pointer" style={{ padding: ".5rem" }}
+                    <li key={idx} className="text-ellipsis cursor-pointer"
                       onClick={() => {
                         setFriendAdressValue(detailAdress[idx]);
                         setDetailAdress([]);
@@ -348,7 +356,7 @@ function SideMenu (props) {
                       }}
                     >{address}</li>
                     )}
-                </ul>
+                </DropDown>
               }
               <StyledMdClose $foucused={friendAdressValue} onClick={() => setFriendAdressValue('') }/>
             </InputArea>
@@ -366,12 +374,12 @@ function SideMenu (props) {
             </>
           }
         </UserSearchWrapper>
-        <button type="button" style={{ width: "100%" }} onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </button>
+        <FindButton type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </FindButton>
         <DetailListWrapper user={user}>
           {searchData && 
             searchData.map((data, index) => (
               <li key={data.id} style={{ margin: '1rem' }}>
-                <h4>{index + 1}</h4>
+                <h4>{index + 1}.</h4>
                 <h1>{data.place_name}</h1>
                 <h2>{data.road_address_name}</h2>
                 <h2>{data.address_name}</h2>

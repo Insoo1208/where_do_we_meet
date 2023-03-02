@@ -170,10 +170,7 @@ function Map (props) {
   };
 
   return (
-    <>
       <MapWrapper id="map" />
-      <button style={{ position: 'absolute', top: 95, right: 15, zIndex: 2 }} onClick={removeMarkers}>마커 지우기</button>
-    </>
     );
   }
   
