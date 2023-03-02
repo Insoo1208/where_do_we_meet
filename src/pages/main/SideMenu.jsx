@@ -177,9 +177,7 @@ function SideMenu (props) {
   const [selectedFriend, setSelectedFriend] = useState('');
 
   useEffect(() => {
-    if(selectedFriend) {
-      setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
-    }
+    if(selectedFriend) setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
   }, [selectedFriend]);
 
 
@@ -236,7 +234,7 @@ function SideMenu (props) {
               />
               <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
               {showMyDropdown && 
-                <ul style={{
+                <ul style={{  
                   position: "absolute",
                   top: 55,
                   left: 30,
@@ -409,7 +407,7 @@ function SideMenu (props) {
           outline: "none",
           paddingLeft: "1rem"
         }}
-          placeholder="검색 할 키워드를 입력해주세요."
+          placeholder="검색할 키워드를 입력해주세요."
           value={contentsValue} onChange={e => setContentsValue(e.target.value)}
           onKeyUp={ e => {if(e.key === "Enter" && contentsValue) setContentsSearch(contentsValue);}}
           spellCheck="false"
