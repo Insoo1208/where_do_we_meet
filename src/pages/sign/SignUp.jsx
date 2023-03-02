@@ -7,7 +7,7 @@ import { MdCheckBoxOutlineBlank as CheckBoxBlank, MdCheckBox as CheckedBox  } fr
 import { IoMdEye as Eye, IoMdEyeOff as EyeOff } from "react-icons/io";
 
 // 서버에서 받아온 데이터 가정(import로 자동 파싱)
-console.log(userData);
+// console.log(userData);
 
 
 const Wrapper = styled.div`
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   background-color: #ffccaa;
 
   div.input-check {
-    background-color: skyblue;
+    /* background-color: skyblue; */
     position: relative;
     svg { 
       position: absolute;
@@ -82,7 +82,10 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
+    
+    input {
+      margin: 0;
+    }
     input.last-name {
       margin-right: 1rem;
       width: 70%;
@@ -127,6 +130,7 @@ const StyledLink = styled(Link)`
 const Error = styled.div`
   color: red;
   font-size: .6875rem;
+  margin-bottom: 1rem;
 `;
 
 const Pass = styled.div`
@@ -137,6 +141,7 @@ const Pass = styled.div`
 
 function SignUp(props) {
   // useState
+  const [userEmail, setUserEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [userPasswordCheck, setUserPasswordCheck] = useState('');
@@ -145,15 +150,19 @@ function SignUp(props) {
   const [openPostcode, setOpenPostcode] = useState(false);
   const [postcodeValue, setpostcodeValue] = useState({
     zonecode: '',
-    address: '' 
+    address: '',
   });
+  const [detailAddress, setDetailAddress] = useState('');
+  const [postcodeCheck, setPostcodeCheck] = useState(false);
+  const [userNickname, setUserNickname] = useState('');
+  const [recomenderId, setRecomenderId] = useState('');
   const [inputType, setInputType] = useState('password');
   
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
   useEffect(() => {
     // 비밀번호 재확인
-    console.log(userPasswordCheck, '===',userPassword);
+    // console.log(userPasswordCheck, '===',userPassword);
     if (!userPasswordCheck) {
       return;
     }
@@ -180,6 +189,9 @@ function SignUp(props) {
     setOpenPostcode(!openPostcode);
   };
 
+  // 이메일 정규식 검사
+  const emailCheck = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+
   // 아이디 정규식 검사
   const idCheck = /^[a-z0-9]{6,10}/; // 영어 소문자와 숫자 6~10자리
   // 비밀번호 정규식 검사
@@ -190,20 +202,72 @@ function SignUp(props) {
   // 이름 정규식 검사
   const nameCheck = /^[가-힣]+$/;
 
-  // id 중복검사
+  // 상세주소 정규식 검사
+  const detailAddressCheck = /^([0-9가-힣]){1,}$/ ; // 최소 1자 이상의 숫자와 한글 가능 
+
+  // 닉네임 정규식 검사
+  const nicknameCheck = /^([a-zA-Z0-9가-힣]){2,10}$/ ; // 최소 2자~10자이하의 영문 대소문자 숫자 한글 가능
   
+
+  // 유저데이터
   const { userInfo } = userData;
-  console.log(userInfo);
+  // console.log(userInfo);
+
+  // email 중복검사
+  const emailDuplicationCheck = userInfo.find((user) => {
+    return user.email === userEmail ; 
+  });
+
+  // id 중복검사
   const idDuplicationCheck = userInfo.find((user) => {
     return user.id === userId ;
   });
-  console.log(idDuplicationCheck);
+  // console.log(idDuplicationCheck);
+  
+  // 추천회원 검사
+  const recoenderIdCheck = userInfo.find((user) => {
+    return user.id === recomenderId;
+  });
   
   
   return (
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
         <h1>Sign Up</h1>
+        <h2>E-MAIL</h2>
+        {/* 
+          이메일 유효성검사
+          1. 이메일 양식에 유효한 input 데이터인지 확인 [O]
+          2. 이미 가입한 이메일인지 확인 [O]
+          ----------------------
+          3. 유효한 이메일인지 확인 [추후확인]
+        */}
+        
+        <div className="input-check">
+          <label htmlFor="signUpEmail"/>
+          <StyledInput type="email" id="signUpEmail" placeholder="abc123@email.com" value={userEmail} autoComplete="off" spellCheck="false"
+          onChange={(e) => {
+            setUserEmail(e.target.value)
+            console.log(emailCheck.test(userEmail));
+          }}
+          onBlur={() => {
+            console.log(emailCheck.test(userEmail));
+            if(emailCheck.test(userEmail)) {
+            console.log(`올바른 이메일을 입력했습니다.`);
+          } else {
+            console.log(`이메일 양식을 확인해 주세요.`);
+          }}}
+          />
+          { 
+            emailCheck.test(userEmail) && !emailDuplicationCheck
+            ? <CheckedBox style={{color: 'green'}}/>
+            : <CheckBoxBlank />
+          }
+        </div>
+        {
+          emailDuplicationCheck &&
+          <Error>이미 가입한 이메일 입니다.</Error>
+        }
         <h2>ID</h2>
         <div className="input-check">
           <label htmlFor="signUnId"/>
@@ -219,7 +283,7 @@ function SignUp(props) {
               console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
             }}}
           />
-          { idCheck.test(userId) 
+          { idCheck.test(userId) && !idDuplicationCheck
             ? <CheckedBox style={{color: 'green'}}/>
             : <CheckBoxBlank />
           }
@@ -287,34 +351,48 @@ function SignUp(props) {
             <Error>비밀번호를 다시 확인해 주세요!</Error> 
         }
         <h2>NAME</h2>
-        <div className="user-name">
-          <label htmlFor="userLastName"/>
-          <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={userLastName} autoComplete="off"  
-            onChange={(e) => {
-              setUserLastName(e.target.value);
-            }}
-            onBlur={() => {
-              if(!nameCheck.test(userFirstName)) {
-                console.log(`한글을 정확히 입력해 주세요`);
-              } else {
-                console.log(userFirstName);
-              }
-            }}
-          />
-          <label htmlFor="userFirstName"/>
-          <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={userFirstName} autoComplete="off"
-            onChange={(e) => {
-              setUserFirstName(e.target.value);
-            }}
-            onBlur={() => {
-              if(!nameCheck.test(userFirstName)) {
-                console.log(`한글을 정확히 입력해 주세요`);
-              } else {
-                console.log(userFirstName);
-              }
-            }}
-          />  
+        <div className="input-check" style={{ marginBottom: '1rem' }}>
+          <div className="user-name" >
+            <label htmlFor="userLastName" style={{display:'none'}} />
+            <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={userLastName} autoComplete="off"  
+              onChange={(e) => {
+                setUserLastName(e.target.value);
+              }}
+              onBlur={() => {
+                if(!nameCheck.test(userLastName)) {
+                  console.log(`성을 정확히 입력해 주세요`);
+                } else {
+                  console.log(userLastName);
+                }
+              }}
+            />
+            <label htmlFor="userFirstName" style={{display:'none'}}/>
+            <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={userFirstName} autoComplete="off"
+              onChange={(e) => {
+                setUserFirstName(e.target.value);
+              }}
+              onBlur={() => {
+                if(!nameCheck.test(userFirstName)) {
+                  console.log(`이름을 정확히 입력해 주세요`);
+                } else {
+                  console.log(userFirstName);
+                }
+              }}
+            />
+          { nameCheck.test(userLastName) && nameCheck.test(userFirstName)
+                ? <CheckedBox style={{color: 'green'}}/>
+                : <CheckBoxBlank />
+          }
+          </div>
         </div>
+        {
+          !nameCheck.test(userLastName) && userLastName &&
+          <Error>성을 정확히 입력해 주세요</Error> 
+        }
+        {
+          !nameCheck.test(userFirstName) && userFirstName &&
+          <Error>이름을 정확히 입력해 주세요</Error> 
+        }
         <h2>ADDRESS</h2>
           <div className="zip-wrapper">
             <label htmlFor="searchAddress"/>
@@ -332,22 +410,49 @@ function SignUp(props) {
                     defaultQuery='판교역로 235'
                   />
               }
-          <label htmlFor="userAddress"/>
-          <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address} />
-          <label htmlFor="detailAddress"/>
-          <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off"/>
-        
+        <label htmlFor="userAddress"/>
+        <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address} />
+        <label htmlFor="detailAddress"/>
+        <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off" value={detailAddress}
+          onChange={(e) => setDetailAddress(e.target.value)} 
+        />
+        {/*
+          !detailAddress &&
+          <Error>상세 주소를 입력해 주세요</Error>
+            */}
+
         <h2>NICKNAME</h2>
-        <label htmlFor="userNickname"/>
-        <StyledInput id="userNickname" placeholder="닉네임을 입력해 주세요"/>
+        <div className="input-check">
+          <label htmlFor="userNickname"/>
+          <StyledInput id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={userNickname}
+            onChange={(e) => setUserNickname(e.target.value)}
+          />
+          { nicknameCheck.test(userNickname)
+            ? <CheckedBox style={{color: 'green'}}/>
+            : <CheckBoxBlank />
+          }
+        </div>
+        {
+          !nicknameCheck.test(userNickname) && userNickname &&
+          <Error>닉네임은 한글, 영문, 숫자만 가능하며 2-10자리 입니다.</Error>
+        }
         
         <h2>REFERRAL CODE<span>(선택)</span></h2>
-        <StyledInput id="recomenderNickname" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정"/>
+        <label htmlFor="recomenderId"></label>
+        <StyledInput id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={recomenderId}
+          onChange={(e) => setRecomenderId(e.target.value)}
+        />
+        {
+          !recoenderIdCheck && recomenderId &&
+          <Error>없는 ID 입니다</Error>
+        }
         
         <StyledButton
           onClick={()=>{
-            if(userId && userPassword && userLastName && userFirstName && postcodeValue) {
+            if(userId && userPassword && userLastName && userFirstName && postcodeValue && detailAddress) {
               console.log(`회원가입 완료!`);
+              console.log(recomenderId.point);
+              // recomenderId.point += 1000; 
             } else {
               // 확인이 안되어있는 필수값들이 전부 빨갛게 라인 표시되어야 함
               console.log(`필수입력값을 확인해 주세요!`);
