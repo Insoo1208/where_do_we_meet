@@ -128,11 +128,37 @@ const postSlice = createSlice({
       }
 
       targetPost.comments.push(comment);
+    },
+    editContent: (state, { payload: { id, listName, editedcontent } }) => {
+      let targetPost;
+      switch (listName) {
+        case "review":
+          targetPost = state.review.find((post) => {
+            return post.id === id;
+          });                    
+          break;
+        case "notice":
+          targetPost = state.notice.find((post) => {
+            return post.id === id;
+          });                    
+          break;
+        case "free":
+          targetPost = state.free.find((post) => {
+            return post.id === id;
+          });
+          break;
+          
+        default:
+          console.error("에러입니다.");
+          break;
+      }
+
+      targetPost.content = editedcontent;
     }
   }
 });
 
-export const { addPost, increment, addComment } = postSlice.actions;
+export const { addPost, increment, addComment, editContent } = postSlice.actions;
 export const selectReview = state => state.post.review;
 export const selectNotice = state => state.post.notice;
 export const selectFree = state => state.post.free;

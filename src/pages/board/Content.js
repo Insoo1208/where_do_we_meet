@@ -86,7 +86,7 @@ function Contents(props) {
 
       <PostList>
         {data.map((post) => {
-          return <PostListItem post={post} key={post.id} listName={"review`"}/> ;
+          return <PostListItem post={post} key={post.id} listName={"review"}/> ;
         })}
       </PostList>
     </Wrapper>

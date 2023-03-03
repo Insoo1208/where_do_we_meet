@@ -10,11 +10,8 @@ const Wrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* background-color: #131E22; */
-  /* color: #f2f2f2; */
-  background-color: ${props => props.theme.mainDark};
+  background-color: ${props => props.theme.main};
   color: ${props => props.theme.gray200}
-  /* box-shadow: 0 4px 4px 0px #555; */
 `;
 
 const StyledLogo = styled.div`

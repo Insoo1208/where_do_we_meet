@@ -27,13 +27,12 @@ const theme = {
   gray800: '#333',
   gray900: '#111',
 
-  background: '#eaeaea',
-  main: '#7FC7E3',
-  mainLight: '#c0d6df',
+  background: '#e5e5e5',
+  main: '#4663ac',
+  mainLight: '#e1f1fd',
   mainDark: '#4f6d7a',
   accent: '#e8dab2',
   accentDark: '#dd6e42',
-
 };  
 
 const GlobalStyle = createGlobalStyle`
@@ -46,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: #eaeaea;
+    background-color: #e5e5e5;
     color: #333;
   }
 

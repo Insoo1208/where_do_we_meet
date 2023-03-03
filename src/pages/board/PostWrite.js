@@ -85,7 +85,7 @@ function PostWrite(props) {
         
         <p className="post-title">내용 입력</p>
       
-        <StyleTextarea type="text" placeholder="게시물 내용을 작성하세요." ></StyleTextarea>
+        <StyleTextarea type="text" placeholder="게시물 내용을 작성하세요." />
         <RadioWrap>
           <input type="radio" id="review" name="postwrite" value="review" />
           <label htmlFor="review">카페리뷰</label>

@@ -1,6 +1,6 @@
 /* global kakao */
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const { kakao } = window;
@@ -18,7 +18,10 @@ function Map (props) {
   const [markers, setMarkers] = useState([]);
   // 위도, 경도 담을 객체
   const [geodata, setGeodata] = useState({x: [], y: []});
-
+  
+  // 지도를 나타낼 div
+  const mapRef = useRef();
+  
   // 내 주소, 친구 주소, 컨텐츠 검색,  검색 결과
   const { myAdress, friendAdress, contentsSearch, setSearchData } = props;
   
@@ -31,12 +34,11 @@ function Map (props) {
 
   // 페이지가 렌더링 되었을 때 지도 생성 함수
   useEffect(() => {
-    const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(37.452337443959, 126.69960367814),
       level: 3,
     };
-    setMap(new kakao.maps.Map(container, options));
+    setMap(new kakao.maps.Map(mapRef.current, options));
   }, []);
   
   // 나의 주소, 친구 주소 모두 들어왔을 때 주소 검색해주는 함수
@@ -98,6 +100,7 @@ function Map (props) {
   // 주소 키워드로 정확한 주소명 검색하는 API의 콜백함수
   const geoCB = (result, status) => {
     if (status === kakao.maps.services.Status.OK) {
+      return result[0].address_name;
       getLatLng(result[0].address_name);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       return alert('검색 결과가 없습니다.');
@@ -170,7 +173,7 @@ function Map (props) {
   };
 
   return (
-      <MapWrapper id="map" />
+      <MapWrapper ref={mapRef} />
     );
   }
   

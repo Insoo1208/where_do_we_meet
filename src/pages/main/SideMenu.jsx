@@ -86,7 +86,7 @@ const InputArea = styled.div`
   align-items: center;
   background-color: #fff;
   border: .125rem solid ${props => props.theme.mainDark} ;
-  border-radius: .25rem;
+  border-radius: .5rem;
   padding: .25rem;
 
   svg {
@@ -97,7 +97,6 @@ const InputArea = styled.div`
   input {
     width: 240px;
     height: 40px;
-    border-radius: 4px;
     border: none;
     outline: none;
   }
@@ -113,7 +112,8 @@ const StyledMdClose = styled(MdClose)`
 const UserSearchLine = styled.div`
   width: 100%;
   height: 2px;
-  margin: calc((150px - (54px + 48px) - 16px * 2) / 2) 0 ;
+  /* margin: calc((150px - (54px + 48px) - 16px * 2) / 2) 0 ; */
+  margin: .5rem 0 ;
   background-color: ${props => props.theme.mainDark};
 `; 
 
@@ -180,7 +180,7 @@ const DropDown = styled.ul`
   top: 3.5rem;
   left: 1.5rem;
   z-index: 12;
-  background-color: white;
+  background-color: #fff;
   border: 2px solid ${props => props.theme.mainDark};
   border-radius: .5rem;
   width: 250px;
@@ -221,6 +221,21 @@ const FindButton = styled.button`
     background-color: ${props => props.theme.accent};
     color: ${props => props.theme.accentDark};
   }
+`;
+
+const ContentsSearch = styled.div`
+  position: absolute;
+  top: 16px;
+  left: calc(100% + 1rem);
+  width: 350px;
+  height: 40px;
+  background-color: #fff;
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: .125rem 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 function SideMenu (props) {
@@ -391,20 +406,7 @@ function SideMenu (props) {
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
-      <div style={{
-        position: "absolute",
-        top: 16,
-        left: "calc(100% + 1rem)",
-        width: 350,
-        height: 40,
-        backgroundColor: "white",
-        border: "2px solid black",
-        borderRadius: 20,
-        padding: ".125rem 15px",
-        display: "flex",
-        alignItems: "center",
-        justifyContents: "center",
-      }}>
+      <ContentsSearch>
         <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
         <label htmlFor="content-search"/>
         <input id="content-search" style={{
@@ -419,7 +421,7 @@ function SideMenu (props) {
           spellCheck="false"
           autoComplete="off"
         />
-      </div>
+      </ContentsSearch>
     </SideMenuWrapper>
   );
 }
