@@ -243,7 +243,6 @@ function SideMenu (props) {
     if(selectedFriend) setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
   }, [selectedFriend]);
 
-
   const user = useSelector(selectUser);
   const { setMyAdress, setFriendAdress, setContentsSearch, searchData } = props;
 
@@ -389,7 +388,6 @@ function SideMenu (props) {
           }
         </DetailListWrapper>
       </SideMenuBg>
-      {/* 콜백함수로 set함수값을 바꿔주는 이유는? 동기적으로 처리하기 위해 */}
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
