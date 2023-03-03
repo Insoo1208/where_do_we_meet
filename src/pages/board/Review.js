@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import PostListItem from "./PostListItem";
@@ -35,6 +35,7 @@ const StyleDiv = styled.div`
     width: 64px;
     height: 64px;
     margin-right: 15px;
+    color:#1f44a0;
   }
 `;
 const Search = styled.div`
@@ -47,6 +48,7 @@ const Search = styled.div`
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
+  border: 1px solid #ebebeb;
   
   .search-icon {
     font-size: 1.5rem;
@@ -70,8 +72,25 @@ const PostList = styled.div`
 `;
 
 function Review(props) {
+  const [searchValue, setSearchValue] = useState('');
+  const [postData, setPostData] = useState([]);
+
   const data = useSelector(selectReview);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setPostData(data);
+  }, [data]);
+
+  const handleSearch = () => {
+    if (searchValue === '') return setPostData([...data]);
+    const searchData = data.filter(post => post.content.toLowerCase().includes(searchValue.toLowerCase()));
+    if (searchData.length < 1) {
+      return alert('검색 결과가 없습니다.');
+    } else {
+      setPostData(searchData);
+    }
+  }
 
   return (
     <Wrapper>
@@ -79,13 +98,15 @@ function Review(props) {
       <StyleDiv>
         <AiFillPlusSquare className="writeIcon cursor-pointer" onClick={() => {navigate("/board/post-write"); }}/>
         <Search>
-          <AiOutlineSearch className="search-icon"/>
-          <SearchInput type="text" placeholder="게시물 검색" spellCheck="false" autoComplete="off" />
+          <AiOutlineSearch className="search-icon" onClick={handleSearch}/>
+          <SearchInput type="text" placeholder="게시물 검색" value={searchValue} onChange={e => setSearchValue(e.target.value)}
+            onKeyUp={ e => {if (e.key === "Enter") handleSearch();}}
+          />
         </Search>
       </StyleDiv>
 
       <PostList>
-        {data.map((post) => {
+        {postData.map((post) => {
           return <PostListItem post={post} key={post.id} listName={"review"}/> ;
         })}
       </PostList>

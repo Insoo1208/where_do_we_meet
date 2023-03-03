@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { AiOutlineDown, AiOutlineUp, AiFillHeart } from "react-icons/ai";
 import Comment from "./Comment";
 import { useDispatch } from "react-redux";
-import { increment, remove, removePost } from "../../features/post/postSlice";
+import { editContent, increment, removePost } from "../../features/post/postSlice";
 import { FaRegTrashAlt, FaRegEdit, FaRegCommentDots } from "react-icons/fa";
 
 
@@ -12,6 +12,7 @@ const PostWarp = styled.div`
   border-bottom:1px solid #f3f3f3;
   padding: 50px;
 
+
   .post-item-image {
     width: 45px;
     height: 45px;
@@ -19,6 +20,7 @@ const PostWarp = styled.div`
   .content-area{
     flex: 1;
     margin: 5px 0 0 10px;
+    position: relative;
   }
   .post-item-name {
     font-size: 16px;
@@ -33,6 +35,7 @@ const PostWarp = styled.div`
     margin-left: 5px;
   }
   .post-item-text {
+
     font-size: 14px;
     line-height: 1.3;
     margin-bottom: 40px;
@@ -84,14 +87,51 @@ const PostWarp = styled.div`
     font-size: 1rem;
   }
 `;
+const StyleTextarea = styled.textarea`
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid #e3e3e3;
+  outline: none;
+  padding: 20px;
+  font-size: 15px;
+  color: #4e4e4e;
+  resize: none;
+  background: #fbfbfb;
+  font-family: inherit;
+  border-radius: 5px;
+  margin-bottom: 10px;
+`;
+const StyleButton = styled.button`
+background: #333;
+    padding: 5px 10px;
+    color: #fff;
+    border: none;
+    letter-spacing: -1px;
+    border-radius: 5px;
+    display: block;
+    position: absolute;
+    right: 0;
+`;
 const StyleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  
 `;
 function PostListItem(props) {
   const {post, listName} = props;
   const [btn, setBtn] = useState(false);
+  const [editContents, setEditContents] = useState(false);
+  const [contentsValue, setContentsValue] = useState('');
+  
+  const handleEdit = () => {
+    setEditContents(true);
+  }
+  const handleSubmit = () => {
+    console.log(listName);
+    dispatch(editContent({ id: post.id, listName, editedcontent: contentsValue }));
+    setEditContents(false);
+  }
 
   const dispatch = useDispatch();  
 
@@ -108,7 +148,15 @@ function PostListItem(props) {
       <div className="content-area">
         <p className="post-item-name">{post.userNickname} <span>{ post.userId && `@${post.userId}`}</span></p>
         <p className="post-item-text" onClick={handleOpen} >
-          {post.content}
+          {editContents
+            ? (
+              <>
+                <label htmlFor="edit-textarea" />
+                <StyleTextarea id="edit-textarea" value={contentsValue} onChange={e => setContentsValue(e.target.value)} spellCheck="false" autoComplete="off" />
+                <StyleButton onClick={handleSubmit} className="cursor-pointer">확인</StyleButton>
+              </>
+            )
+            : post.content}
         </p>
 
         { btn && <Comment data={post.comments} postId={post.id} listName={listName} /> }
@@ -119,8 +167,8 @@ function PostListItem(props) {
             <li onClick={handleOpen}><FaRegCommentDots className="icon-comment" /><span>{post.comments.length}</span></li>
           </ul>
           <ul className="post-item-icon">       
-            <li onClick={undefined}><FaRegEdit className="icon-edit"/><span> </span></li>
-            <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /><span> </span></li>
+            <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
+            <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /> </li>
           </ul>
         </StyleDiv>
       </div>      

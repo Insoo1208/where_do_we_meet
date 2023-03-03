@@ -66,7 +66,6 @@ const postSlice = createSlice({
   reducers: {
     addPost: (state, { payload : { radioValue: listName, postTextObj: { postUserProfileImg, postUserNickname, postUserId, postValue } } }) => {
       let postObj;
-      console.log(listName);
       switch (listName) {
         case "review":
           postObj = {
@@ -204,23 +203,49 @@ const postSlice = createSlice({
           state.review.splice(targetPost, 1);         
           break;
         case "notice":
-          targetPost = state.review.findIndex((post) => post.id === id);
-          state.review.splice(targetPost, 1);                        
+          targetPost = state.notice.findIndex((post) => post.id === id);
+          state.notice.splice(targetPost, 1);                        
           break;
         case "free":
-          targetPost = state.review.findIndex((post) => post.id === id);
-          state.review.splice(targetPost, 1);                       
+          targetPost = state.free.findIndex((post) => post.id === id);
+          state.free.splice(targetPost, 1);                       
           break;
           
         default:
           console.error("에러입니다.");
           break;
       }
+    },
+    editContent: (state, { payload: { id, listName, editedcontent } }) => {
+      let targetPost;
+      switch (listName) {
+        case "review":
+          targetPost = state.review.find((post) => {
+            return post.id === id;
+          });                    
+          break;
+        case "notice":
+          targetPost = state.notice.find((post) => {
+            return post.id === id;
+          });                    
+          break;
+        case "free":
+          targetPost = state.free.find((post) => {
+            return post.id === id;
+          });
+          break;
+          
+        default:
+          console.error("에러입니다.");
+          break;
+      }
+
+      targetPost.content = editedcontent;
     }
   }
 });
 
-export const { addPost, increment, addComment, removePost, removeComment } = postSlice.actions;
+export const { addPost, increment, addComment, removePost, removeComment, editContent } = postSlice.actions;
 export const selectReview = state => state.post.review;
 export const selectNotice = state => state.post.notice;
 export const selectFree = state => state.post.free;

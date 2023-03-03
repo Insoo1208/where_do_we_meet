@@ -18,13 +18,13 @@ const Write =styled.div`
 
   .main-title {
     font-size: 26px;
-      border-bottom: 1px solid #dfdfdf;
-      padding-bottom: 15px;
-      margin-bottom: 50px;
-      font-weight: 600;
-      letter-spacing: -1px;
-      color: #333;
-      letter-spacing: -2px;
+    border-bottom: 1px solid #dfdfdf;
+    padding-bottom: 15px;
+    margin-bottom: 50px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    color: #333;
+    letter-spacing: -2px;
   }
   .post-title{
     font-size: 18px;
@@ -34,18 +34,18 @@ const Write =styled.div`
   }
 `;
 const StyleTextarea = styled.textarea`
-    width: 100%;
-    min-height: 430px;
-    border: 1px solid #e3e3e3;
-    outline: none;
-    padding: 20px;
-    font-size: 15px;
-    color: #4e4e4e;
-    resize: none;
-    background: #fbfbfb;
-    font-family: inherit;
-    border-radius: 5px;
-    margin-bottom: 10px;
+  width: 100%;
+  min-height: 430px;
+  border: 1px solid #e3e3e3;
+  outline: none;
+  padding: 20px;
+  font-size: 15px;
+  color: #4e4e4e;
+  resize: none;
+  background: #fbfbfb;
+  font-family: inherit;
+  border-radius: 5px;
+  margin-bottom: 10px;
 `;
 const RadioWrap = styled.div`
 
@@ -84,9 +84,9 @@ function PostWrite(props) {
   const loggedInUser = useSelector(selectUser);
 
   const handleSubmit = () => {
-    if(!postValue) {
+    if(!radioValue) {
       alert('게시판 목록을 선택해주세요.');
-    } else {
+    } else if (postValue) {
       let postTextObj;
       if (loggedInUser) {
         postTextObj = {
@@ -107,8 +107,7 @@ function PostWrite(props) {
       setPostValue('');
       if (radioValue === 'review') navigate('/board')
       else navigate(`/board/${radioValue}`);
-
-    }
+    } else if (!postValue) alert('게시물 내용을 입력해주세요.');
   };
   
   return (

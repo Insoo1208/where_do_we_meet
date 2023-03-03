@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   margin-left: 15px;
 }
 .comment-title span {
-  color: #19a0ff;
+  color: #1f44a0 ;
   font-weight:bold;
 }
 `;
@@ -97,10 +97,14 @@ function Comment(props) {
   return (
     <Wrapper>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
-      <CommentInput type="text" placeholder="댓글을 작성하세요."
-        value={comment} onChange={e => setComment(e.target.value)}
+      <CommentInput 
+        type="text" 
+        placeholder="댓글을 작성하세요."
+        value={comment} 
+        onChange={e => setComment(e.target.value)}
         onKeyUp={ e => {if (e.key === 'Enter' && comment) handleSubmit();} }
-        spellCheck="false" autoComplete="off"
+        spellCheck="false" 
+        autoComplete="off"
       />
       <ul>
         {data.map( (comment) => {
@@ -119,8 +123,7 @@ function Comment(props) {
                   <p className="comment-item-text">{comment.comment}</p>
                 </div>
               </CommentListItem>
-              <RiCloseFill className="cursor-pointer" onClick={() => dispatch(({id: comment.id, listName }))}/>
-         
+              <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({id: comment.id, listName }))}/>
             </CommentWarp>                   
           );
         })}
