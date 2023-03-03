@@ -27,8 +27,8 @@ const theme = {
   gray800: '#333',
   gray900: '#111',
 
-  background: '#e5e5e5',
-  main: '#4663ac',
+  background: '#f9f9f9',
+  main: '#1f44a0',
   mainLight: '#e1f1fd',
   mainDark: '#4f6d7a',
   accent: '#e8dab2',
