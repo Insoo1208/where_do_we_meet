@@ -208,13 +208,14 @@ const DropDown = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: .5rem;
 
   li {
     width: 100%;
-    text-align: center;
     height: 100%;
     font-size: 1rem;
-    padding: .5rem;
+    padding-left: 1.5rem;
+    padding-bottom: 1rem;
   }
 
   li.close {
