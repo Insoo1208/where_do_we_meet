@@ -15,11 +15,15 @@ const Wrapper = styled.nav`
 `;
 
 const StyledLogo = styled.div`
-  width: 150px;
+  width: auto;
   height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .logo {
+    font-size: 1.5rem;
+  }
 `;
 
 const StyledUl = styled.ul`
@@ -52,7 +56,7 @@ function Header () {
       <header>
         <Wrapper>
           <StyledLogo onClick={() => { navigate('/'); }}  className="cursor-pointer">
-            <StyledLink to='/'>우리 어디서 만나?</StyledLink>
+            <StyledLink className='logo' to='/'>우리 어디서 만나?</StyledLink>
           </StyledLogo>
           <StyledUl>
             { user

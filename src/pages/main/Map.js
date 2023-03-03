@@ -160,7 +160,7 @@ function Map (props) {
 
   // 인포 윈도우 생성 함수
   const displayInfowindow = (marker, title) => {
-    var content = '<div class ="text-ellipsis" style="padding:5px;z-index:1;">' + title + '</div>';
+    var content = '<div class ="text-ellipsis" style="padding:.5rem;z-index:1;font-size:.75rem;text-align:center">' + title + '</div>';
 
     infowindow.setContent(content);
     infowindow.open(map, marker);

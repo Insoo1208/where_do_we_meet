@@ -35,6 +35,7 @@ const StyleDiv = styled.div`
     width: 64px;
     height: 64px;
     margin-right: 15px;
+    color: ${props => props.theme.main};
   }
 `;
 const Search = styled.div`

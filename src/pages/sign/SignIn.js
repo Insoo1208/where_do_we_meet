@@ -42,11 +42,6 @@ const StyledInput = styled.input`
   margin-bottom: 1rem;
   border: 1px solid ${props => props.theme.main};
   border-radius: 8px;
-  
-  :focus{
-    outline: none;
-    border: 2px solid ${props => props.theme.mainDark};
-  }
 `;
 
 const StyledButton = styled.button`
@@ -57,10 +52,10 @@ const StyledButton = styled.button`
   background-color: ${props => props.theme.main};
   border: none;
   border-radius: 8px;
+  cursor: pointer;
 
-  :hover {
+  &.signUp {
     background-color: ${props => props.theme.mainLight};
-    color: ${props => props.theme.mainDark};
   }
 `;
 
@@ -138,8 +133,8 @@ function SignIn() {
           />
           {eyeOpen ? <IoEye onClick={handleEyeClose}/> : <IoEyeOff onClick={handleEyeOpen} /> }
         </PwWrapper>
-        <StyledButton onClick={handleLogin}>로그인</StyledButton>
-        <StyledButton onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>
+        <StyledButton className="signIn" onClick={handleLogin}>로그인</StyledButton>
+        <StyledButton className="signUp" onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>
         <SpanWrapper>
           <li><StyledLink to="/findid">아이디 찾기</StyledLink></li>
           <li><StyledLink to="/findpw">비밀번호 찾기</StyledLink></li>

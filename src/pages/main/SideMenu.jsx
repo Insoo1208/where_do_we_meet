@@ -27,40 +27,45 @@ const SideMenuWrapper = styled.div`
 const SideMenuBg = styled.div`
   width: 450px;
   height: calc(100vh - 75px);
-  background-color: ${props => props.theme.mainLight};
+  /* background-color: ${props => props.theme.mainLight}; */
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: .75rem;
-  padding: .5rem;
+  padding: .5rem 1.25rem;
+  box-shadow: 0 4px 7px 2px ${props => props.theme.gray600};
 `;
 
 const UserSearchWrapper = styled.div`
   width: 100%;
-  background-color: ${props => props.theme.main};
-  padding: 1rem 1.25rem;
+  /* background-color: ${props => props.theme.main}; */
+  padding: 1rem 0;
   border-radius: .5rem;
 
-  :nth-child(even) {
+  /* :nth-child(even) {
     background-color: ${props => props.theme.accent};
-  }
+  } */
 `;
 
 const MenuSlideButton = styled.div`
   width: 24px;
   height: 50px;
-  background-color: ${props => props.theme.mainLight};
+  /* background-color: ${props => props.theme.mainLight}; */
+  background-color: #fff;
   border-radius: 0 10px 10px 0;
   font-size: 1.5rem;
   cursor: pointer; 
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 4px 0 7px -2px ${props => props.theme.gray600};
 `;
 
 
 const UserSearchArea = styled.div`
   display: flex;
+  column-gap: 1.5rem;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -71,7 +76,9 @@ const UserSearchArea = styled.div`
     width: 3.375rem;
     height: 3.375rem;
     border-radius: 50%;
-    background-color: #fff;
+    /* background-color: #fff; */
+    background-color: ${props => props.theme.main};
+    color: ${props => props.theme.gray200};
     font-weight: 700;
     display: flex;
     justify-content: center;
@@ -81,11 +88,12 @@ const UserSearchArea = styled.div`
 
 const InputArea = styled.div`
   position: relative;
+  flex: 1;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   background-color: #fff;
-  border: .125rem solid ${props => props.theme.mainDark} ;
+  border: .125rem solid ${props => props.theme.main} ;
   border-radius: .5rem;
   padding: .25rem;
 
@@ -114,7 +122,7 @@ const UserSearchLine = styled.div`
   height: 2px;
   /* margin: calc((150px - (54px + 48px) - 16px * 2) / 2) 0 ; */
   margin: .5rem 0 ;
-  background-color: ${props => props.theme.mainDark};
+  background-color: ${props => props.theme.main};
 `; 
 
 const UserFastSearch = styled.div`
@@ -130,7 +138,8 @@ const UserFastSearch = styled.div`
 
   li {
     border-radius: 1.5rem;
-    background-color: #fff;
+    background-color: ${props => props.theme.mainLight};
+    color: ${props => props.theme.gray200};
     padding: .875rem;
     cursor: pointer;
   }
@@ -149,18 +158,24 @@ const DetailListWrapper = styled.ul`
 
   li {
     width: 90%;
-    background-color: ${props => props.theme.accent};
-    padding: .5rem;
-    border-radius: .5rem;
+    /* background-color: ${props => props.theme.accent}; */
+    background-color: #fff;
+    /* border: 2px solid ${props => props.theme.main}; */
+    padding: 1.5rem;
+    /* border-radius: .5rem; */
+    margin: 0 !important;
 
     h1 {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
+      font-weight: 700;
       padding-bottom: .75rem;
-      color: ${props => props.theme.accentDark};
+      color: ${props => props.theme.main};
     }
 
     h2 {
+      font-size: .9rem;
       padding-bottom: .5rem;
+      color: ${props => props.theme.gray800};
     }
 
     h3 {
@@ -173,6 +188,10 @@ const DetailListWrapper = styled.ul`
       padding-bottom: .5rem;
     }
   }
+
+  li + li {
+    border-top: 1.5px solid ${props => props.theme.gray300};
+  }
 `;
 
 const DropDown = styled.ul`
@@ -182,6 +201,7 @@ const DropDown = styled.ul`
   z-index: 12;
   background-color: #fff;
   border: 2px solid ${props => props.theme.mainDark};
+  color: ${props => props.theme.gray700};
   border-radius: .5rem;
   width: 250px;
   height: auto;
@@ -207,20 +227,15 @@ const DropDown = styled.ul`
 `;
 
 const FindButton = styled.button`
-  width: 80%;
+  width: 100%;
   height: 2.5rem;
   font-size: 1.25rem;
   font-weight: 700;
   background-color: ${props => props.theme.main};
-  color: ${props => props.theme.mainDark};
+  color: ${props => props.theme.gray200};
   border: none;
   border-radius: .5rem;
   cursor: pointer;
-
-  :hover {
-    background-color: ${props => props.theme.accent};
-    color: ${props => props.theme.accentDark};
-  }
 `;
 
 const ContentsSearch = styled.div`
@@ -230,12 +245,18 @@ const ContentsSearch = styled.div`
   width: 350px;
   height: 40px;
   background-color: #fff;
-  border: 2px solid black;
+  border: 2px solid ${props => props.theme.main};
   border-radius: 20px;
   padding: .125rem 15px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  svg {
+    color: ${props => props.theme.main};
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
 `;
 
 function SideMenu (props) {
@@ -392,9 +413,8 @@ function SideMenu (props) {
         <DetailListWrapper user={user}>
           {searchData && 
             searchData.map((data, index) => (
-              <li key={data.id} style={{ margin: '1rem' }}>
-                <h4>{index + 1}.</h4>
-                <h1>{data.place_name}</h1>
+              <li key={index} style={{ margin: '1rem' }}>
+                <h1>{index + 1}. {data.place_name}</h1>
                 <h2>{data.road_address_name}</h2>
                 <h2>{data.address_name}</h2>
                 <h3>{data.phone}</h3>
