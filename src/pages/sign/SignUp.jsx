@@ -277,7 +277,7 @@ function SignUp(props) {
   const nameCheck = /^[가-힣]+$/;
 
   // 상세주소 정규식 검사
-  const detailAddressCheck = /([ㄱ-ㅎ|ㅏ-ㅣ]){1,}$/ ; // 온전하지않은 한글만 아니면 다 괜찮게
+  const detailAddressCheck = /.*[ㄱ-ㅎ|ㅏ-ㅣ]+.*/ ; // 온전하지않은 한글만 아니면 다 괜찮게
 
   // 닉네임 정규식 검사
   const nicknameCheck = /^([a-zA-Z0-9가-힣]){2,10}$/ ; // 최소 2자~10자이하의 영문 대소문자 숫자 한글 가능
