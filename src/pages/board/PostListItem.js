@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { AiOutlineDown, AiOutlineUp, AiFillHeart } from "react-icons/ai";
 import Comment from "./Comment";
 import { useDispatch } from "react-redux";
-import { increment } from "../../features/post/postSlice";
+import { increment, editContent } from "../../features/post/postSlice";
 import { FaRegTrashAlt, FaRegEdit, FaRegCommentDots } from "react-icons/fa";
 
 
@@ -88,13 +88,16 @@ const StyleDiv = styled.div`
   justify-content: space-between;
 `;
 function PostListItem(props) {
-  const {post, listName} = props;
+  const { post, listName } = props;
   const [btn, setBtn] = useState(false);
+  const [editContents, setEditContents] = useState(false);
+  const [contentsValue, setContentsValue] = useState('');
 
   const dispatch = useDispatch();  
 
   const handleOpen = ()=> {
     setBtn(true);
+    setContentsValue(post.content);
   };
   const handleClose = ()=> {
     setBtn(false);
@@ -103,13 +106,33 @@ function PostListItem(props) {
     
   };
 
+  const handleEdit = () => {
+    setEditContents(true);
+  }
+
+  const handleSubmit = () => {
+    console.log(listName);
+    dispatch(editContent({ id: post.id, listName, editedcontent: contentsValue }));
+    setEditContents(false);
+  }
+
+
   return (
     <PostWarp btn={btn}>
       <img src={post.userProfileImg} className="post-item-image"/>
       <div className="content-area">
         <p className="post-item-name">{post.userNickname} <span>{`@ ${post.userId}`}</span></p>
         <p className="post-item-text" onClick={handleOpen} >
-          {post.content}
+          {/* eidt 상태가 true이면 input창과 확인버튼 / false이면 post.content */}
+          {editContents
+            ? (
+              <>
+                <label htmlFor="edit-textarea" />
+                <textarea id="edit-textarea" value={contentsValue} onChange={e => setContentsValue(e.target.value)}/>
+                <button onClick={handleSubmit}>확인</button>
+              </>
+            )
+            : post.content}
         </p>
 
         { btn && <Comment data={post.comments} postId={post.id} listName={listName} /> }
@@ -120,8 +143,8 @@ function PostListItem(props) {
             <li onClick={handleOpen}><FaRegCommentDots className="icon-comment" /><span>{post.comments.length}</span></li>
           </ul>
           <ul className="post-item-icon">       
-            <li onClick={undefined}><FaRegEdit className="icon-edit"/><span> </span></li>
-            <li onClick={undefined}><FaRegTrashAlt className="icon-trash" onClick={handleRemove}/><span> </span></li>
+            <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
+            <li onClick={undefined}><FaRegTrashAlt className="icon-trash" onClick={handleRemove}/></li>
           </ul>
         </StyleDiv>
       </div>      

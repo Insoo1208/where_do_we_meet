@@ -9,7 +9,7 @@ function Main () {
   const [searchData, setSearchData] = useState([]);
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <SideMenu setMyAdress={setMyAdress} setFriendAdress={setFriendAdress} setContentsSearch={setContentsSearch} searchData={searchData} />
       <Map myAdress={myAdress} friendAdress={friendAdress} contentsSearch={contentsSearch} setSearchData={setSearchData}/>
     </div>

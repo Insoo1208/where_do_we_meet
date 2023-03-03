@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: ${props => props.theme.gray700};
 
   h1 {
     font-size: 30px;
@@ -39,12 +40,23 @@ const StyledInput = styled.input`
   width: 100%;
   height: 45px;
   margin-bottom: 1rem;
-  `;
+  border: 1px solid ${props => props.theme.main};
+  border-radius: 8px;
+`;
 
 const StyledButton = styled.button`
   width: 100%;
   height: 45px;
   margin-bottom: 1rem;
+  color: ${props => props.theme.gray200};
+  background-color: ${props => props.theme.main};
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &.signUp {
+    background-color: ${props => props.theme.mainLight};
+  }
 `;
 
 const SpanWrapper = styled.ul`
@@ -65,7 +77,6 @@ const SpanWrapper = styled.ul`
 
 const StyledLink = styled(Link)`
   padding: .5rem;
-  color: black;
 `;
 
 
@@ -122,8 +133,8 @@ function SignIn() {
           />
           {eyeOpen ? <IoEye onClick={handleEyeClose}/> : <IoEyeOff onClick={handleEyeOpen} /> }
         </PwWrapper>
-        <StyledButton onClick={handleLogin}>로그인</StyledButton>
-        <StyledButton onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>
+        <StyledButton className="signIn" onClick={handleLogin}>로그인</StyledButton>
+        <StyledButton className="signUp" onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>
         <SpanWrapper>
           <li><StyledLink to="/findid">아이디 찾기</StyledLink></li>
           <li><StyledLink to="/findpw">비밀번호 찾기</StyledLink></li>
