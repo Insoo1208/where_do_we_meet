@@ -1,11 +1,14 @@
 import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
 import { useCallback, useEffect, useState } from "react";
-import userData from "../../data.json";
 import { MdCheckBoxOutlineBlank as CheckBoxBlank, MdCheckBox as CheckedBox  } from "react-icons/md";
 import { IoMdEye as Eye, IoMdEyeOff as EyeOff } from "react-icons/io";
+import  CenterModal  from "../../components/CenterModal";
 
+
+import userData from "../../data.json";
+import { Alert } from "bootstrap";
 // 서버에서 받아온 데이터 가정(import로 자동 파싱)
 // console.log(userData);
 
@@ -20,7 +23,7 @@ const Wrapper = styled.div`
   background-color: #ffccaa;
 
   div.input-check {
-    /* background-color: skyblue; */
+    background-color: skyblue;
     position: relative;
     svg { 
       position: absolute;
@@ -138,6 +141,48 @@ const Pass = styled.div`
   font-size: .6875rem;
 `;
 
+// 모달 CSS
+
+const MenuButton = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    color: gray;
+  }
+`;
+
+const CloseButton = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  &:hover {
+    color: black;
+  }
+`;
+
+const MenuContainer = styled.div`
+  width: 50%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  /* right: -500px; */
+  right: -100%;
+  /* right: -100vw; */
+  background-color: gray;
+
+  transition: 0.5s;
+  ${props => props.showMenu && 
+    css`
+      right: 0;
+    `}
+`;
+
+
+
 
 function SignUp(props) {
   // useState
@@ -159,6 +204,24 @@ function SignUp(props) {
   const [inputType, setInputType] = useState('password');
   
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
+
+  const [showModal, setShowModal] = useState(false); // 모달
+  const handleClose = () => setShowModal(false); // 닫기
+  const handleOpen = () => setShowModal(true); // 열기
+
+  const navigate = useNavigate();
+
+  const signUpCheck = [
+    { title: "email", check: false },
+    { title: "id", check: false },
+    { title: "password", check: false },
+    { title: "password2", check: false },
+    { title: "address", check: false },
+    { title: "detailaddress", check: true},
+    { title: "name", check: false },
+    { title: "nickname", check: false },
+    { title: "recomender", check: true}
+  ];
 
   useEffect(() => {
     // 비밀번호 재확인
@@ -252,8 +315,9 @@ function SignUp(props) {
           }}
           onBlur={() => {
             console.log(emailCheck.test(userEmail));
-            if(emailCheck.test(userEmail)) {
+            if(emailCheck.test(userEmail) && !emailDuplicationCheck) {
             console.log(`올바른 이메일을 입력했습니다.`);
+            signUpCheck.find( data => data.title === 'email').check = true;
           } else {
             console.log(`이메일 양식을 확인해 주세요.`);
           }}}
@@ -277,8 +341,8 @@ function SignUp(props) {
             }}
             onBlur={() => {
               console.log(idCheck.test(userId));
-              if(idCheck.test(userId)) {
-              console.log(`올바른 아이디를 입력했습니다.`);
+              if(idCheck.test(userId) && !idDuplicationCheck) {
+              signUpCheck.find(check => check.title === 'id').check = true;
             } else {
               console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
             }}}
@@ -449,16 +513,50 @@ function SignUp(props) {
         
         <StyledButton
           onClick={()=>{
-            if(userId && userPassword && userLastName && userFirstName && postcodeValue && detailAddress) {
-              console.log(`회원가입 완료!`);
-              console.log(recomenderId.point);
-              // recomenderId.point += 1000; 
+
+            if (signUpCheck.find(data => data.check === false)) {
+              console.log('실패');
             } else {
-              // 확인이 안되어있는 필수값들이 전부 빨갛게 라인 표시되어야 함
-              console.log(`필수입력값을 확인해 주세요!`);
+              console.log('성공');
             }
+
+  
+            // if(
+            //   (userEmail && emailCheck.test(userEmail) && !emailDuplicationCheck) && 
+            //   (idCheck.test(userId) && !idDuplicationCheck) && 
+            //   (passwordCheckResult && passwordCheck.test(userPassword)) && (!passwordCheckResult && userPasswordCheck) && 
+            //   (userLastName && userFirstName) && (nameCheck.test(userLastName) && nameCheck.test(userFirstName)) &&
+            //   postcodeValue && 
+            //   detailAddress &&
+            //   nicknameCheck.test(userNickname)              
+            //   ) {
+            //   console.log(`회원가입 완료!`);
+            //   console.log(recomenderId.point);
+            //   // recomenderId.point += 1000; 
+              
+              
+            // } else {
+            //   // 확인이 안되어있는 필수값들이 전부 빨갛게 라인 표시되어야 함
+            //   console.log(`필수입력값을 확인해 주세요!`);
+            //   alert(`필수 입력값을 확인해 주세요`);
+              
+            // }
           }}
         >가입하기</StyledButton>
+
+        <CenterModal
+        title="회원가입 알림"
+        size="small"
+        cancelText="확인" // 메인페이지로 이동
+        confirmText="로그인 화면" // 로그인페이지로 이동
+        onCancel={() => {
+          setShowModal(false);
+        }}
+        onConfirm={undefined}
+        visible={showModal}
+      >
+        회원가입을 축하드립니다!
+      </CenterModal>
       </Wrapper>
     </section>
 
