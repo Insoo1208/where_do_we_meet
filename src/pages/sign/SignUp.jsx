@@ -8,7 +8,6 @@ import  CenterModal  from "../../components/CenterModal";
 
 
 import userData from "../../data.json";
-import { Alert } from "bootstrap";
 // 서버에서 받아온 데이터 가정(import로 자동 파싱)
 // console.log(userData);
 
@@ -218,7 +217,8 @@ function SignUp(props) {
     { title: "password2", check: false },
     { title: "address", check: false },
     { title: "detailaddress", check: true},
-    { title: "name", check: false },
+    { title: "lastname", check: false },
+    { title: "firstname", check: false },
     { title: "nickname", check: false },
     { title: "recomender", check: true}
   ];
@@ -266,7 +266,7 @@ function SignUp(props) {
   const nameCheck = /^[가-힣]+$/;
 
   // 상세주소 정규식 검사
-  const detailAddressCheck = /^([0-9가-힣]){1,}$/ ; // 최소 1자 이상의 숫자와 한글 가능 
+  const detailAddressCheck = /([ㄱ-ㅎ|ㅏ-ㅣ]){1,}$/ ; // 온전하지않은 한글만 아니면 다 괜찮게
 
   // 닉네임 정규식 검사
   const nicknameCheck = /^([a-zA-Z0-9가-힣]){2,10}$/ ; // 최소 2자~10자이하의 영문 대소문자 숫자 한글 가능
@@ -342,7 +342,7 @@ function SignUp(props) {
             onBlur={() => {
               console.log(idCheck.test(userId));
               if(idCheck.test(userId) && !idDuplicationCheck) {
-              signUpCheck.find(check => check.title === 'id').check = true;
+              signUpCheck.find(data => data.title === 'id').check = true;
             } else {
               console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
             }}}
@@ -384,6 +384,7 @@ function SignUp(props) {
               console.log(passwordCheck.test(userPassword));
               if(passwordCheck.test(userPassword)) {
               console.log(`올바른 비밀번호를 입력했습니다.`);
+              signUpCheck.find(data => data.title === 'password').check = true;
             } else {
               console.log(`반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요.`);
             }}}
@@ -401,8 +402,12 @@ function SignUp(props) {
               setUserPasswordCheck(e.target.value);
             }}
 
-            onBlur= {(e) => {
-              
+            onBlur= {() => {
+              if(passwordCheckResult && passwordCheck.test(userPassword)) {
+                signUpCheck.find(data => data.title === 'password2').check = true;
+              } else {
+                console.log(`비밀번호를 다시 확인해 주세요!`);
+              }
             }}
           />
           { passwordCheckResult && passwordCheck.test(userPassword)
@@ -425,7 +430,8 @@ function SignUp(props) {
               onBlur={() => {
                 if(!nameCheck.test(userLastName)) {
                   console.log(`성을 정확히 입력해 주세요`);
-                } else {
+                } else if( nameCheck.test(userLastName) ) {
+                  signUpCheck.find(data => data.title === 'lastname').check = true;
                   console.log(userLastName);
                 }
               }}
@@ -438,7 +444,8 @@ function SignUp(props) {
               onBlur={() => {
                 if(!nameCheck.test(userFirstName)) {
                   console.log(`이름을 정확히 입력해 주세요`);
-                } else {
+                } else if (nameCheck.test(userFirstName)) {
+                  signUpCheck.find(data => data.title === 'firstname').check = true;
                   console.log(userFirstName);
                 }
               }}
@@ -478,12 +485,24 @@ function SignUp(props) {
         <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address} />
         <label htmlFor="detailAddress"/>
         <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off" value={detailAddress}
-          onChange={(e) => setDetailAddress(e.target.value)} 
+          onChange={(e) => 
+            {return setDetailAddress(e.target.value)}
+            
+          }
+          onBlur={() =>
+            { if(detailAddressCheck.test(detailAddress) && detailAddress) { 
+              signUpCheck.find(data => data.title === 'firstname').check = false;
+              console.log(`상세주소를 확인해주세요`);
+            } else {
+              console.log(`상세주소 확인 완료`);
+            }}
+          } 
         />
-        {/*
-          !detailAddress &&
+        {/* {
+          detailAddress? null 
+          :  
           <Error>상세 주소를 입력해 주세요</Error>
-            */}
+        } */}
 
         <h2>NICKNAME</h2>
         <div className="input-check">
@@ -516,8 +535,10 @@ function SignUp(props) {
 
             if (signUpCheck.find(data => data.check === false)) {
               console.log('실패');
+              alert(`필수 입력값을 확인해 주세요`);
             } else {
               console.log('성공');
+              setShowModal(true);
             }
 
   
