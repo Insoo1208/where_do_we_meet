@@ -215,7 +215,7 @@ function SignUp(props) {
     { title: "id", check: false },
     { title: "password", check: false },
     { title: "password2", check: false },
-    { title: "address", check: false },
+    { title: "postcode", check: false },
     { title: "detailaddress", check: true},
     { title: "lastname", check: false },
     { title: "firstname", check: false },
@@ -239,6 +239,17 @@ function SignUp(props) {
     }
   }, [userPasswordCheck, userPassword]);
   
+
+  // 우편번호 검색 후 유효성 검사
+  useEffect(() => {
+    if(postcodeValue.zonecode && postcodeValue.address) {
+      signUpCheck.find( data => data.title === 'postcode').check = true;
+      console.log(`우편번호 확인 완료`);
+      
+    }
+  },[postcodeValue]);
+
+
   // 우편번호 검색
   const handleClickZipBtn = () => {
       setOpenPostcode(openPostcode => !openPostcode);
