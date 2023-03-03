@@ -30,9 +30,6 @@ const theme = {
   background: '#f9f9f9',
   main: '#1f44a0',
   mainLight: '#6885ce',
-  mainDark: '#4f6d7a',
-  accent: '#e8dab2',
-  accentDark: '#dd6e42',
 };  
 
 const GlobalStyle = createGlobalStyle`
