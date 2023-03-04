@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { addComment } from "../../features/post/postSlice";
+import { addComment, removeComment } from "../../features/post/postSlice";
 import { selectUser } from "../../features/user/userSlice";
 import { RiCloseFill } from "react-icons/ri";
 
 
 
 // 댓글 CSS
-const CommentWarp = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
@@ -19,7 +19,7 @@ const CommentWarp = styled.div`
   margin-left: 15px;
 }
 .comment-title span {
-  color: #19a0ff;
+  color: #1f44a0 ;
   font-weight:bold;
 }
 `;
@@ -33,8 +33,9 @@ const CommentInput = styled.input`
   height: 50px;
     box-sizing: border-box;
 `;
-const CommentListItem = styled.li`
+const CommentWarp = styled.li`
   display: flex;
+  align-items: center;
   padding: 10px;
 
   .comment-item-image {
@@ -59,11 +60,30 @@ const CommentListItem = styled.li`
     color:#999;
   }
 `;
+const CommentListItem = styled.div`
+  display: flex;
+  margin-right: 20px;
+
+`;
 function Comment(props) {
   const [comment, setComment] = useState('');
   const { data, postId, listName } = props;
   const dispatch = useDispatch();
   const loggedInUser = useSelector(selectUser);
+  const [authority, setAuthority] = useState('anonymous');
+  
+
+
+  useEffect(() => {
+    if (loggedInUser) {
+      if (loggedInUser.authority === 'admin') setAuthority('admin');
+      else if(loggedInUser.authority === 'user') setAuthority('user');
+    } else setAuthority('anonymous');
+
+    console.log(authority);
+  }, [loggedInUser]);
+
+
 
   const handleSubmit = () => {
     let commentArr;
@@ -87,31 +107,55 @@ function Comment(props) {
     dispatch(addComment({ id: postId, comment: commentArr, listName}));
     setComment('');
   };
-
+console.log(listName);
   return (
-    <CommentWarp>
+    <Wrapper>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
-      <CommentInput type="text" placeholder="댓글을 작성하세요."
-        value={comment} onChange={e => setComment(e.target.value)}
+      <CommentInput 
+        type="text" 
+        placeholder="댓글을 작성하세요."
+        value={comment} 
+        onChange={e => setComment(e.target.value)}
         onKeyUp={ e => {if (e.key === 'Enter' && comment) handleSubmit();} }
+        spellCheck="false" 
+        autoComplete="off"
       />
       <ul>
         {data.map( (comment) => {
           return (
-            <CommentListItem key={comment.id}>
-              <img src={comment.commentUserProfileImg} className="comment-item-image"/>
+            <CommentWarp key={comment.id}>
+              {/* <img src={comment.commentUserProfileImg} className="comment-item-image"/>
               <div>
                 <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
                 <p className="comment-item-text">{comment.comment}</p>
-              </div>
+              </div> */}
 
-              {/* <RiCloseFill /> */}
-            </CommentListItem>                   
+              <CommentListItem>
+                <img src={comment.commentUserProfileImg} className="comment-item-image"/>
+                <div>
+                  <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
+                  <p className="comment-item-text">{comment.comment}</p>
+                </div>
+              </CommentListItem>
+              {/* <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/> */}
+
+
+              {
+            authority === 'admin'
+            ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+            : (authority === 'user' && comment.userId === loggedInUser.id) && (
+              <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+            )
+          }
+
+
+
+            </CommentWarp>                   
           );
         })}
         
       </ul>
-    </CommentWarp>    
+    </Wrapper>    
   );
 }
 

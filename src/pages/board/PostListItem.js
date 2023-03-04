@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { AiOutlineDown, AiOutlineUp, AiFillHeart } from "react-icons/ai";
 import Comment from "./Comment";
-import { useDispatch } from "react-redux";
-import { increment, editContent } from "../../features/post/postSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { editContent, increment, removePost } from "../../features/post/postSlice";
 import { FaRegTrashAlt, FaRegEdit, FaRegCommentDots } from "react-icons/fa";
+import { selectUser } from "../../features/user/userSlice";
 
 
 const PostWarp = styled.div`
@@ -12,12 +13,15 @@ const PostWarp = styled.div`
   border-bottom:1px solid #f3f3f3;
   padding: 50px;
 
+
   .post-item-image {
     width: 45px;
     height: 45px;
   }
   .content-area{
+    flex: 1;
     margin: 5px 0 0 10px;
+    position: relative;
   }
   .post-item-name {
     font-size: 16px;
@@ -32,6 +36,7 @@ const PostWarp = styled.div`
     margin-left: 5px;
   }
   .post-item-text {
+
     font-size: 14px;
     line-height: 1.3;
     margin-bottom: 40px;
@@ -78,22 +83,61 @@ const PostWarp = styled.div`
   .icon-trash{
     font-size: 1.1rem;
   }
-  .aarrow-icon {
-    font-size: 2.5rem;
+  .arrow-icon {
+    /* font-size: 2.5rem; */
+    font-size: 1rem;
   }
+`;
+const StyleTextarea = styled.textarea`
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid #e3e3e3;
+  outline: none;
+  padding: 20px;
+  font-size: 15px;
+  color: #4e4e4e;
+  resize: none;
+  background: #fbfbfb;
+  font-family: inherit;
+  border-radius: 5px;
+  margin-bottom: 10px;
+`;
+const StyleButton = styled.button`
+  background: #333;
+  padding: 5px 10px;
+  color: #fff;
+  border: none;
+  letter-spacing: -1px;
+  border-radius: 5px;
+  display: block;
+  position: absolute;
+  right: 0;
 `;
 const StyleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  
 `;
 function PostListItem(props) {
   const { post, listName } = props;
   const [btn, setBtn] = useState(false);
   const [editContents, setEditContents] = useState(false);
   const [contentsValue, setContentsValue] = useState('');
+  const [authority, setAuthority] = useState('anonymous');
 
   const dispatch = useDispatch();  
+  const loggedinUser = useSelector(selectUser);
+
+  useEffect(() => {
+    if (loggedinUser) {
+      if (loggedinUser.authority === 'admin') setAuthority('admin');
+      else if(loggedinUser.authority === 'user') setAuthority('user');
+    } else setAuthority('anonymous');
+
+    console.log(authority);
+  }, [loggedinUser]);
+
 
   const handleOpen = ()=> {
     setBtn(true);
@@ -102,9 +146,6 @@ function PostListItem(props) {
   const handleClose = ()=> {
     setBtn(false);
   };  
-  const handleRemove = () => {
-    
-  };
 
   const handleEdit = () => {
     setEditContents(true);
@@ -121,15 +162,14 @@ function PostListItem(props) {
     <PostWarp btn={btn}>
       <img src={post.userProfileImg} className="post-item-image"/>
       <div className="content-area">
-        <p className="post-item-name">{post.userNickname} <span>{`@ ${post.userId}`}</span></p>
+        <p className="post-item-name">{post.userNickname} <span>{ post.userId && `@${post.userId}`}</span></p>
         <p className="post-item-text" onClick={handleOpen} >
-          {/* eidt 상태가 true이면 input창과 확인버튼 / false이면 post.content */}
           {editContents
             ? (
               <>
                 <label htmlFor="edit-textarea" />
-                <textarea id="edit-textarea" value={contentsValue} onChange={e => setContentsValue(e.target.value)}/>
-                <button onClick={handleSubmit}>확인</button>
+                <StyleTextarea id="edit-textarea" value={contentsValue} onChange={e => setContentsValue(e.target.value)} spellCheck="false" autoComplete="off" />
+                <StyleButton onClick={handleSubmit} className="cursor-pointer">확인</StyleButton>
               </>
             )
             : post.content}
@@ -142,16 +182,23 @@ function PostListItem(props) {
             <li onClick={() => dispatch(increment({id: post.id, listName }))}><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
             <li onClick={handleOpen}><FaRegCommentDots className="icon-comment" /><span>{post.comments.length}</span></li>
           </ul>
-          <ul className="post-item-icon">       
-            <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
-            <li onClick={undefined}><FaRegTrashAlt className="icon-trash" onClick={handleRemove}/></li>
-          </ul>
+          {
+            authority === 'admin'
+            ? <ul className="post-item-icon">
+                <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
+                <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /> </li>
+              </ul>
+            : (authority === 'user' && post.userId === loggedinUser.id) && (
+              <ul className="post-item-icon">
+                <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
+                <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /> </li>
+              </ul>
+            )
+          }
         </StyleDiv>
       </div>      
 
-      { btn ? <AiOutlineUp className="aarrow-icon" onClick={handleClose}/> : <AiOutlineDown className="aarrow-icon" onClick={handleOpen}/> }   
-
-      
+      { btn ? <AiOutlineUp className="arrow-icon" onClick={handleClose}/> : <AiOutlineDown className="arrow-icon" onClick={handleOpen}/> }
     </PostWarp>    
   );
 }

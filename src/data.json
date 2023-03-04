@@ -29,7 +29,7 @@
     "favorites": [{"title": "집2", "adress": "인천시 서구 경서동"}],
     "friends": [
     ],
-    "authority": "admin",
+    "authority": "user",
     "point": 0
   }, {
     "firstName": "JaeKyung", 
@@ -44,7 +44,7 @@
     "favorites": [{"title": "집3", "adress": "인천시 중구 인현동"}],
     "friends": [
     ],
-    "authority": "admin",
+    "authority": "user",
     "point": 0
   }, {
     "firstName": "JaeHoon", 
@@ -59,7 +59,7 @@
     "favorites": [{"title": "집4", "adress": "인천시 연수구 송도동"}],
     "friends": [
     ],
-    "authority": "admin",
+    "authority": "user",
     "point": 0
   }
 ]
