@@ -11,7 +11,7 @@ const Wrapper = styled.nav`
   justify-content: space-between;
   align-items: center;
   background-color: ${props => props.theme.main};
-  color: ${props => props.theme.gray200}
+  color: ${props => props.theme.gray200};
 `;
 
 const StyledLogo = styled.div`
@@ -31,10 +31,11 @@ const StyledUl = styled.ul`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  column-gap: 15px;
 `;
 
 const SubMenu = styled.li`
-  width: 15%;
+  flex: 1;
   text-align: center;
 `;
 
@@ -62,7 +63,7 @@ function Header () {
             { user
               ? 
               <>
-                <p>{user.nickname}님 환영합니다.</p>
+                <li>{user.nickname}님 환영합니다.</li>
                 <SubMenu><StyledNavLink to='/'>내 정보</StyledNavLink></SubMenu>
                 <SubMenu><StyledNavLink onClick={() => dispatch(userLogOut())}>로그아웃</StyledNavLink></SubMenu>
               </>
