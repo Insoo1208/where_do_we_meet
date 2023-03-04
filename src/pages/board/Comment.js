@@ -93,7 +93,7 @@ function Comment(props) {
     dispatch(addComment({ id: postId, comment: commentArr, listName}));
     setComment('');
   };
-
+console.log(listName);
   return (
     <Wrapper>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  

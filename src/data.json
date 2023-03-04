@@ -24,7 +24,7 @@
     "detailAdress": "detail1",
     "friends": [
     ],
-    "authority": "admin",
+    "authority": "user",
     "point": 0
   }, {
     "firstName": "JaeKyung", 
@@ -37,7 +37,7 @@
     "detailAdress": "detail2",
     "friends": [
     ],
-    "authority": "admin",
+    "authority": "user",
     "point": 0
   }, {
     "firstName": "JaeHoon", 
@@ -50,7 +50,7 @@
     "detailAdress": "detail3",
     "friends": [
     ],
-    "authority": "admin",
+    "authority": "user",
     "point": 0
   }
 ]

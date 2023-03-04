@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { AiOutlineDown, AiOutlineUp, AiFillHeart } from "react-icons/ai";
 import Comment from "./Comment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editContent, increment, removePost } from "../../features/post/postSlice";
 import { FaRegTrashAlt, FaRegEdit, FaRegCommentDots } from "react-icons/fa";
+import { selectUser } from "../../features/user/userSlice";
 
 
 const PostWarp = styled.div`
@@ -102,15 +103,15 @@ const StyleTextarea = styled.textarea`
   margin-bottom: 10px;
 `;
 const StyleButton = styled.button`
-background: #333;
-    padding: 5px 10px;
-    color: #fff;
-    border: none;
-    letter-spacing: -1px;
-    border-radius: 5px;
-    display: block;
-    position: absolute;
-    right: 0;
+  background: #333;
+  padding: 5px 10px;
+  color: #fff;
+  border: none;
+  letter-spacing: -1px;
+  border-radius: 5px;
+  display: block;
+  position: absolute;
+  right: 0;
 `;
 const StyleDiv = styled.div`
   display: flex;
@@ -123,6 +124,7 @@ function PostListItem(props) {
   const [btn, setBtn] = useState(false);
   const [editContents, setEditContents] = useState(false);
   const [contentsValue, setContentsValue] = useState('');
+  const [authority, setAuthority] = useState('anonymous');
   
   const handleEdit = () => {
     setEditContents(true);
@@ -134,6 +136,17 @@ function PostListItem(props) {
   }
 
   const dispatch = useDispatch();  
+  const loggedinUser = useSelector(selectUser);
+
+  useEffect(() => {
+    if (loggedinUser) {
+      if (loggedinUser.authority === 'admin') setAuthority('admin');
+      else if(loggedinUser.authority === 'user') setAuthority('user');
+    } else setAuthority('anonymous');
+
+    console.log(authority);
+  }, [loggedinUser]);
+
 
   const handleOpen = ()=> {
     setBtn(true);
@@ -166,10 +179,19 @@ function PostListItem(props) {
             <li onClick={() => dispatch(increment({id: post.id, listName }))}><AiFillHeart className="icon-like"/><span> {post.like}</span></li>
             <li onClick={handleOpen}><FaRegCommentDots className="icon-comment" /><span>{post.comments.length}</span></li>
           </ul>
-          <ul className="post-item-icon">       
-            <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
-            <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /> </li>
-          </ul>
+          {
+            authority === 'admin'
+            ? <ul className="post-item-icon">
+                <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
+                <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /> </li>
+              </ul>
+            : (authority === 'user' && post.userId === loggedinUser.id) && (
+              <ul className="post-item-icon">
+                <li onClick={handleEdit}><FaRegEdit className="icon-edit"/></li>
+                <li onClick={() => dispatch(removePost({id: post.id, listName }))}><FaRegTrashAlt className="icon-trash" /> </li>
+              </ul>
+            )
+          }
         </StyleDiv>
       </div>      
 
