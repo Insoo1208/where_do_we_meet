@@ -10,17 +10,20 @@ const Wrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #2f2f2f;
-  color: #f2f2f2;
-  /* box-shadow: 0 4px 4px 0px #555; */
+  background-color: ${props => props.theme.main};
+  color: ${props => props.theme.gray200}
 `;
 
 const StyledLogo = styled.div`
-  width: 150px;
+  width: auto;
   height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .logo {
+    font-size: 1.5rem;
+  }
 `;
 
 const StyledUl = styled.ul`
@@ -53,7 +56,7 @@ function Header () {
       <header>
         <Wrapper>
           <StyledLogo onClick={() => { navigate('/'); }}  className="cursor-pointer">
-            <StyledLink to='/'>우리 어디서 만나?</StyledLink>
+            <StyledLink className='logo' to='/'>우리 어디서 만나?</StyledLink>
           </StyledLogo>
           <StyledUl>
             { user

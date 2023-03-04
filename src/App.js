@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { ThemeProvider } from 'styled-components';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reset from "styled-reset";
 
@@ -15,6 +16,22 @@ import Notice from "./pages/board/Notice";
 import Review from "./pages/board/Review";
 import Free from "./pages/board/Free";
 
+const theme = {
+  gray100: '#f1f1f1',
+  gray200: '#eee',
+  gray300: '#ccc',
+  gray400: '#aaa',
+  gray500: '#999',
+  gray600: '#777',
+  gray700: '#555',
+  gray800: '#333',
+  gray900: '#111',
+
+  background: '#f9f9f9',
+  main: '#1f44a0',
+  mainLight: '#6885ce',
+};  
+
 const GlobalStyle = createGlobalStyle`
   /* Reset CSS */
   ${reset}
@@ -25,6 +42,8 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
   }
 
   * {
@@ -38,6 +57,12 @@ const GlobalStyle = createGlobalStyle`
 
   .cursor-pointer {
     cursor: pointer;
+  }
+
+  .text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 

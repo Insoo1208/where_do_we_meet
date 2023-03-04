@@ -1,6 +1,6 @@
 /* global kakao */
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const { kakao } = window;
@@ -12,31 +12,36 @@ const MapWrapper = styled.div`
 `;
 
 function Map (props) {
+  // 지도 객체 담는 state
   const [map, setMap] = useState(null);
+  // 마커담는 배열
   const [markers, setMarkers] = useState([]);
+  // 위도, 경도 담을 객체
   const [geodata, setGeodata] = useState({x: [], y: []});
-  const { myAdress, friendAdress, setSearchData } = props;
+  
+  // 지도를 나타낼 div
+  const mapRef = useRef();
+  
+  // 내 주소, 친구 주소, 컨텐츠 검색,  검색 결과
+  const { myAdress, friendAdress, contentsSearch, setSearchData } = props;
   
   const ps = new kakao.maps.services.Places();
   const geocoder = new kakao.maps.services.Geocoder();
   const infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
-  const geoX = [], geoY = [];
+  const geoX = [],
+        geoY = [];
 
-  // https://apis.map.kakao.com/web/sample/multipleMarkerControl/
-
-  // 마커유지 => 로컬 스토리지 이용
-  // bound 방법 생각
-
+  // 페이지가 렌더링 되었을 때 지도 생성 함수
   useEffect(() => {
-    const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(37.452337443959, 126.69960367814),
       level: 3,
     };
-    setMap(new kakao.maps.Map(container, options));
+    setMap(new kakao.maps.Map(mapRef.current, options));
   }, []);
   
+  // 나의 주소, 친구 주소 모두 들어왔을 때 주소 검색해주는 함수
   useEffect(() => {
     if ( myAdress && friendAdress ) {
       const getAdress = async () => {
@@ -49,17 +54,18 @@ function Map (props) {
       }
       getAdress();
     }
-    // if ( myAdress && !friendAdress ) {
-    //   ps.keywordSearch(myAdress, placesSearchCB, { category_group_code: 'CE7' });
-    // }
-    // setMyAdress('');
-    // setFriendAdress('');
   }, [myAdress, friendAdress]);
 
+  // 컨텐츠 검색 함수
+  useEffect(() => {
+    if (contentsSearch) ps.keywordSearch(contentsSearch, placesSearchCB, { category_group_code: 'CE7' });
+  }, [contentsSearch]);
+
+  // 위도,경도 값이 2개 이상(정상적으로) 들어왔을 때 키워드 검색 해주는 함수
   useEffect(() => {
     if (geodata.x.length >= 2 && geodata.y.length >= 2) {
-      const newGeoX = (Number(geodata.x[0]) + Number(geodata.x[1])) / 2;
-      const newGeoY = (Number(geodata.y[0]) + Number(geodata.y[1])) / 2;
+      const newGeoX = (Number(geodata.x[0]) + Number(geodata.x[1])) / 2,
+            newGeoY = (Number(geodata.y[0]) + Number(geodata.y[1])) / 2;
       geocoder.coord2RegionCode(newGeoX, newGeoY, (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
           ps.keywordSearch(result[0].address_name, placesSearchCB, { category_group_code: 'CE7' });
@@ -72,15 +78,15 @@ function Map (props) {
     }
   }, [geodata]);
   
-  
+  // 키워드 검색 API의 콜백함수
   const placesSearchCB = (data, status) => {
+    removeMarkers();
     if (status === kakao.maps.services.Status.OK) {
       const bounds = new kakao.maps.LatLngBounds();
-      console.log(data);
       setSearchData(data);
       
       for (let i = 0; i < data.length; i++) {
-        addMarker(data[i], i);
+        addMarker(data[i], i, data[i].place_name);
         bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
       };
       map.setBounds(bounds);
@@ -91,8 +97,10 @@ function Map (props) {
     }
   };
 
+  // 주소 키워드로 정확한 주소명 검색하는 API의 콜백함수
   const geoCB = (result, status) => {
     if (status === kakao.maps.services.Status.OK) {
+      return result[0].address_name;
       getLatLng(result[0].address_name);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       return alert('검색 결과가 없습니다.');
@@ -101,6 +109,8 @@ function Map (props) {
     }
   };
 
+  // 카카오 REST API 이용
+  // 입력받은 주소로 위도, 경도값 반환
   const getLatLng = async adress => {
     try {
       const response =
@@ -114,26 +124,9 @@ function Map (props) {
       console.error(error);
     }
   };
-  
-  // const addMarker =  place => {
-  //   // 마커를 생성하고 지도에 표시합니다
-  //   const marker = new kakao.maps.Marker({
-  //     position: new kakao.maps.LatLng(place.y, place.x)
-  //   });
 
-  //   // 마커에 클릭이벤트를 등록합니다
-  //   kakao.maps.event.addListener(marker, 'click', function() {
-  //     // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-  //     infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-  //     infowindow.open(map, marker);
-  //   });
-
-  //   marker.setMap(map);
-
-  //   setMarkers(markers => markers.concat(marker));
-  // };
-
-  const addMarker = (position, index) => {
+  // 마커 생성 함수
+  const addMarker = (position, index, title) => {
     const imgSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
           imgSize = new kakao.maps.Size(36, 37),
           imgOptions = {
@@ -147,21 +140,40 @@ function Map (props) {
             image: markerImage
           });
 
+    addMarkerListener(marker, title);
+
     marker.setMap(map);
 
     setMarkers(markers => markers.concat(marker));
   };
 
+  // 마커에 마우스 오버/아웃 이벤트 등록 함수
+  const addMarkerListener = (marker, title) => {
+    kakao.maps.event.addListener(marker, 'mouseover', function() {
+      displayInfowindow(marker, title);
+    });
+
+    kakao.maps.event.addListener(marker, 'mouseout', function() {
+      infowindow.close();
+    });
+  };
+
+  // 인포 윈도우 생성 함수
+  const displayInfowindow = (marker, title) => {
+    var content = '<div class ="text-ellipsis" style="padding:.5rem;z-index:1;font-size:.75rem;text-align:center">' + title + '</div>';
+
+    infowindow.setContent(content);
+    infowindow.open(map, marker);
+  };
+
+  // 마커 제거 함수
   const removeMarkers = () => {
     for (let i = 0; i < markers.length; i++) markers[i].setMap(null);
     setMarkers([]);
   };
 
   return (
-    <>
-      <MapWrapper id="map" />
-      <button style={{ position: 'absolute', top: 95, right: 15, zIndex: 2 }} onClick={removeMarkers}>마커 지우기</button>
-    </>
+      <MapWrapper ref={mapRef} />
     );
   }
   

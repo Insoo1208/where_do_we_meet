@@ -8,8 +8,29 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    userLogIn: (state, action) => {
-      state.loggedinUser = action.payload;
+    userLogIn: (state, { payload:
+      { firstName,
+        lastName,
+        id,
+        nickname,
+        userProfileImg,
+        friends,
+        authority,
+        favorites,
+        point
+      }
+    }) => {
+      state.loggedinUser = {
+        firstName,
+        lastName,
+        id,
+        nickname,
+        userProfileImg,
+        friends,
+        authority,
+        favorites,
+        point
+      };
     },
     userLogOut: (state) => {
       state.loggedinUser = null;

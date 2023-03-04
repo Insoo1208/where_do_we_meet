@@ -120,20 +120,11 @@ const StyleDiv = styled.div`
   
 `;
 function PostListItem(props) {
-  const {post, listName} = props;
+  const { post, listName } = props;
   const [btn, setBtn] = useState(false);
   const [editContents, setEditContents] = useState(false);
   const [contentsValue, setContentsValue] = useState('');
   const [authority, setAuthority] = useState('anonymous');
-  
-  const handleEdit = () => {
-    setEditContents(true);
-  }
-  const handleSubmit = () => {
-    console.log(listName);
-    dispatch(editContent({ id: post.id, listName, editedcontent: contentsValue }));
-    setEditContents(false);
-  }
 
   const dispatch = useDispatch();  
   const loggedinUser = useSelector(selectUser);
@@ -150,10 +141,22 @@ function PostListItem(props) {
 
   const handleOpen = ()=> {
     setBtn(true);
+    setContentsValue(post.content);
   };
   const handleClose = ()=> {
     setBtn(false);
   };  
+
+  const handleEdit = () => {
+    setEditContents(true);
+  }
+
+  const handleSubmit = () => {
+    console.log(listName);
+    dispatch(editContent({ id: post.id, listName, editedcontent: contentsValue }));
+    setEditContents(false);
+  }
+
 
   return (
     <PostWarp btn={btn}>
@@ -195,9 +198,7 @@ function PostListItem(props) {
         </StyleDiv>
       </div>      
 
-      { btn ? <AiOutlineUp className="arrow-icon" onClick={handleClose}/> : <AiOutlineDown className="arrow-icon" onClick={handleOpen}/> }   
-
-      
+      { btn ? <AiOutlineUp className="arrow-icon" onClick={handleClose}/> : <AiOutlineDown className="arrow-icon" onClick={handleOpen}/> }
     </PostWarp>    
   );
 }
