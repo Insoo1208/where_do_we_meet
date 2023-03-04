@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment, removeComment } from "../../features/post/postSlice";
@@ -70,6 +70,20 @@ function Comment(props) {
   const { data, postId, listName } = props;
   const dispatch = useDispatch();
   const loggedInUser = useSelector(selectUser);
+  const [authority, setAuthority] = useState('anonymous');
+  
+
+
+  useEffect(() => {
+    if (loggedInUser) {
+      if (loggedInUser.authority === 'admin') setAuthority('admin');
+      else if(loggedInUser.authority === 'user') setAuthority('user');
+    } else setAuthority('anonymous');
+
+    console.log(authority);
+  }, [loggedInUser]);
+
+
 
   const handleSubmit = () => {
     let commentArr;
@@ -123,7 +137,19 @@ console.log(listName);
                   <p className="comment-item-text">{comment.comment}</p>
                 </div>
               </CommentListItem>
-              <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({id: comment.id, listName }))}/>
+              {/* <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/> */}
+
+
+              {
+            authority === 'admin'
+            ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+            : (authority === 'user' && comment.userId === loggedInUser.id) && (
+              <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+            )
+          }
+
+
+
             </CommentWarp>                   
           );
         })}

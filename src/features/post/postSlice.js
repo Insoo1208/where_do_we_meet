@@ -195,26 +195,27 @@ const postSlice = createSlice({
       }
       targetPost.comments.push(comment);
     },
-    removeComment:(state, { payload : id, listName }) => {
+    removeComment: (state, { payload : { postId, commentId, listName } }) => {
+      console.log(postId, commentId);
       let targetPost;
+      let targetCommentIndex;
       switch (listName) {
         case "review":
-          targetPost = state.review.findIndex((post) => post.id === id);
-          state.review.splice(targetPost, 1);         
+          targetPost = state.review.find(post => post.id === postId);
           break;
         case "notice":
-          targetPost = state.notice.findIndex((post) => post.id === id);
-          state.notice.splice(targetPost, 1);                        
+          targetPost = state.notice.find(post => post.id === postId);
           break;
         case "free":
-          targetPost = state.free.findIndex((post) => post.id === id);
-          state.free.splice(targetPost, 1);                       
+          targetPost = state.free.find(post => post.id === postId);
           break;
           
         default:
           console.error("에러입니다.");
           break;
       }
+      targetCommentIndex = targetPost.comments.findIndex((comment) => comment.id === commentId);
+      targetPost.comments.splice(targetCommentIndex, 1);
     },
     editContent: (state, { payload: { id, listName, editedcontent } }) => {
       let targetPost;

@@ -83,7 +83,7 @@ const PostWarp = styled.div`
   .icon-trash{
     font-size: 1.1rem;
   }
-  .aarrow-icon {
+  .arrow-icon {
     /* font-size: 2.5rem; */
     font-size: 1rem;
   }
@@ -195,7 +195,7 @@ function PostListItem(props) {
         </StyleDiv>
       </div>      
 
-      { btn ? <AiOutlineUp className="aarrow-icon" onClick={handleClose}/> : <AiOutlineDown className="aarrow-icon" onClick={handleOpen}/> }   
+      { btn ? <AiOutlineUp className="arrow-icon" onClick={handleClose}/> : <AiOutlineDown className="arrow-icon" onClick={handleOpen}/> }   
 
       
     </PostWarp>    
