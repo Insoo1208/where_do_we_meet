@@ -150,21 +150,22 @@ const Error = styled.div`
 
 function SignUp(props) {
   // useState
-  const [userEmail, setUserEmail] = useState('');
-  const [userId, setUserId] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [userPasswordCheck, setUserPasswordCheck] = useState('');
-  const [userLastName, setUserLastName] = useState('');
-  const [userFirstName, setUserFirstName] = useState('');
-  const [openPostcode, setOpenPostcode] = useState(false);
-  const [postcodeValue, setpostcodeValue] = useState({
-    zonecode: '',
-    address: '',
-  });
-  const [detailAddress, setDetailAddress] = useState('');
-  const [userNickname, setUserNickname] = useState('');
-  const [recomenderId, setRecomenderId] = useState('');
+  // const [userEmail, setUserEmail] = useState('');
+  // const [userId, setUserId] = useState('');
+  // const [userPassword, setUserPassword] = useState('');
+  // const [userPasswordCheck, setUserPasswordCheck] = useState('');
+  // const [userLastName, setUserLastName] = useState('');
+  // const [userFirstName, setUserFirstName] = useState('');
+  // const [postcodeValue, setpostcodeValue] = useState({
+  //   zonecode: '',
+  //   address: '',
+  // });
+  // const [detailAddress, setDetailAddress] = useState('');
+  // const [userNickname, setUserNickname] = useState('');
+  // const [recomenderId, setRecomenderId] = useState('');
+  
 
+  const [openPostcode, setOpenPostcode] = useState(false);
   const [inputType, setInputType] = useState('password');
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
@@ -175,28 +176,18 @@ function SignUp(props) {
   const navigate = useNavigate();
 
   // useState 객체 묶기
-  const [signUpState, setSignUpState] = useState({
+  const [signUpInputValues, setSignUpInputValues] = useState({
     userEmail: '',
     userId: '',
-    password: {
-      userPassword: '',
-      userPasswordCheck: '',
-      inputType: 'password',
-      passwordCheckResult: false
-    },
-    userName: {
-      userLastName: '',
-      userFirstName: '',
-    },
-    openPostcode: '',
-    postcodeValue: {
-      zonecode: '',
-      address: '',
-    },
+    userPassword: '',
+    userPasswordCheck: '',
+    userLastName: '',
+    userFirstName: '',
+    zonecode: '',
+    address: '',
     detailAddress: '',
     userNickname: '',
     recomenderId: '',
-    showModal: false
   });
 
   // 회원가입 충족 조건
@@ -215,28 +206,28 @@ function SignUp(props) {
 
   useEffect(() => {
     // 비밀번호 재확인
-    // console.log(userPasswordCheck, '===',userPassword);
-    if (!userPasswordCheck) {
+    // console.log(signUpInputValues.userPasswordCheck, '===',signUpInputValues.userPassword);
+    if (!signUpInputValues.userPasswordCheck) {
       return;
     }
 
-    if((userPasswordCheck === userPassword) && userPasswordCheck) {
+    if((signUpInputValues.userPasswordCheck === signUpInputValues.userPassword) && signUpInputValues.userPasswordCheck) {
       console.log(`비밀번호 재확인 완료!`);
       setPasswordCheckResult(true)
     } else {
       console.log(`비밀번호를 다시 확인해 주세요!`);
       setPasswordCheckResult(false)
     }
-  }, [userPasswordCheck, userPassword]);
+  }, [signUpInputValues.userPasswordCheck, signUpInputValues.userPassword]);
   
 
   // 우편번호 검색 후 유효성 검사
   useEffect(() => {
-    if(postcodeValue.zonecode && postcodeValue.address) {
+    if(signUpInputValues.zonecode && signUpInputValues.address) {
       signUpCheck.current.find( data => data.title === 'postcode').check = true;
       console.log(`우편번호 확인 완료`);
     }
-  },[postcodeValue]);
+  },[signUpInputValues.zonecode, signUpInputValues.address]);
 
 
   // 우편번호 검색
@@ -245,10 +236,11 @@ function SignUp(props) {
     };
 
   const handleSelectAddress = (data) => {
-    setpostcodeValue({
+    setSignUpInputValues({
+      ...signUpInputValues,
       zonecode: data.zonecode,
       address: data.address
-      });
+    });
     setOpenPostcode(!openPostcode);
   };
 
@@ -278,17 +270,17 @@ function SignUp(props) {
 
   // email 중복검사
   const emailDuplicationCheck = userInfo.find((user) => {
-    return user.email === userEmail ; 
+    return user.email === signUpInputValues.userEmail ; 
   });
 
   // id 중복검사
   const idDuplicationCheck = userInfo.find((user) => {
-    return user.id === userId ;
+    return user.id === signUpInputValues.userId ;
   });
   
   // 추천회원 검사
   const recoenderIdCheck = userInfo.find((user) => {
-    return user.id === recomenderId;
+    return user.id === signUpInputValues.recomenderId;
   });
   
   
@@ -307,14 +299,17 @@ function SignUp(props) {
         
         <div className="input-check">
           <label htmlFor="signUpEmail"/>
-          <StyledInput type="email" id="signUpEmail" placeholder="abc123@email.com" value={userEmail} autoComplete="off" spellCheck="false"
+          <StyledInput type="email" id="signUpEmail" placeholder="abc123@email.com" value={signUpInputValues.userEmail} autoComplete="off" spellCheck="false"
           onChange={(e) => {
-            setUserEmail(e.target.value)
-            console.log(emailCheck.test(userEmail));
+            setSignUpInputValues({
+              ...signUpInputValues,
+              userEmail: e.target.value
+            })
+            console.log(emailCheck.test(signUpInputValues.userEmail));
           }}
           onBlur={() => {
-            console.log(emailCheck.test(userEmail));
-            if(emailCheck.test(userEmail) && !emailDuplicationCheck) {
+            console.log(emailCheck.test(signUpInputValues.userEmail));
+            if(emailCheck.test(signUpInputValues.userEmail) && !emailDuplicationCheck) {
             console.log(`올바른 이메일을 입력했습니다.`);
             signUpCheck.current.find( data => data.title === 'email').check = true;
             } else {
@@ -322,13 +317,13 @@ function SignUp(props) {
           }}}
           />
           { 
-            emailCheck.test(userEmail) && !emailDuplicationCheck
+            emailCheck.test(signUpInputValues.userEmail) && !emailDuplicationCheck
             ? <CheckedBox />
             : <CheckBoxBlank />
           }
         </div>
         {
-          !emailCheck.test(userEmail) && userEmail &&
+          !emailCheck.test(signUpInputValues.userEmail) && signUpInputValues.userEmail &&
           <Error>이메일 양식을 확인해 주세요.</Error>
         }
         {
@@ -338,25 +333,28 @@ function SignUp(props) {
         <h2>ID</h2>
         <div className="input-check">
           <label htmlFor="signUnId"/>
-          <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={userId} autoComplete="off" spellCheck="false"
+          <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={signUpInputValues.userId} autoComplete="off" spellCheck="false"
             onChange={(e) => {
-              setUserId(e.target.value);
+              setSignUpInputValues({
+                ...signUpInputValues,
+                userId: e.target.value
+              })
             }}
             onBlur={() => {
-              console.log(idCheck.test(userId));
-              if(idCheck.test(userId) && !idDuplicationCheck) {
+              console.log(idCheck.test(signUpInputValues.userId));
+              if(idCheck.test(signUpInputValues.userId) && !idDuplicationCheck) {
               signUpCheck.current.find(data => data.title === 'id').check = true;
             } else {
               console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
             }}}
           />
-          { idCheck.test(userId) && !idDuplicationCheck
+          { idCheck.test(signUpInputValues.userId) && !idDuplicationCheck
             ? <CheckedBox />
             : <CheckBoxBlank />
           }
         </div>
         {
-          !idCheck.test(userId) && userId &&
+          !idCheck.test(signUpInputValues.userId) && signUpInputValues.userId &&
           <Error>영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.</Error>
         }
         { 
@@ -383,101 +381,113 @@ function SignUp(props) {
         </h2>
         <div className="input-check">
           <label htmlFor="signUpPw"/>
-          <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요."  value={userPassword} autoComplete="off"
+          <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요."  value={signUpInputValues.userPassword} autoComplete="off"
             onChange={(e) => {
-              setUserPassword(e.target.value)
+              setSignUpInputValues({
+                ...signUpInputValues,
+                userPassword: e.target.value
+              })
             }}
             onBlur={() => {
-              console.log(passwordCheck.test(userPassword));
-              if(passwordCheck.test(userPassword)) {
+              console.log(passwordCheck.test(signUpInputValues.userPassword));
+              if(passwordCheck.test(signUpInputValues.userPassword)) {
               console.log(`올바른 비밀번호를 입력했습니다.`);
               signUpCheck.current.find(data => data.title === 'password').check = true;
             } else {
               console.log(`반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요.`);
             }}}
             />
-            { passwordCheck.test(userPassword) 
+            { passwordCheck.test(signUpInputValues.userPassword) 
               ? <CheckedBox />
               : <CheckBoxBlank />
             }
         </div>
         {
-          !passwordCheck.test(userPassword) && userPassword &&
+          !passwordCheck.test(signUpInputValues.userPassword) && signUpInputValues.userPassword &&
           <Error>반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요.</Error>
         }    
         <div className="input-check">
           <label htmlFor="signUpPwCheck"/>
-          <StyledInput type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={userPasswordCheck} autoComplete="off"
+          <StyledInput type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={signUpInputValues.userPasswordCheck} autoComplete="off"
             onChange = {(e) => {
-              setUserPasswordCheck(e.target.value);
+              setSignUpInputValues({
+                ...signUpInputValues,
+                userPasswordCheck: e.target.value
+              })
             }}
 
             onBlur= {() => {
-              if(passwordCheckResult && passwordCheck.test(userPassword)) {
+              if(passwordCheckResult && passwordCheck.test(signUpInputValues.userPassword)) {
                 signUpCheck.current.find(data => data.title === 'password2').check = true;
               } else {
                 console.log(`비밀번호를 다시 확인해 주세요!`);
               }
             }}
           />
-          { passwordCheckResult && passwordCheck.test(userPassword)
+          { passwordCheckResult && passwordCheck.test(signUpInputValues.userPassword)
               ? <CheckedBox />
               : <CheckBoxBlank />
           }
         </div>
         {
-          !passwordCheckResult && userPasswordCheck && 
+          !passwordCheckResult && signUpInputValues.userPasswordCheck && 
             <Error>비밀번호를 다시 확인해 주세요!</Error> 
         }
         <h2>NAME</h2>
         <div className="input-check" style={{ marginBottom: '1rem' }}>
           <div className="user-name" >
             <label htmlFor="userLastName" style={{display:'none'}} />
-            <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={userLastName} autoComplete="off"  
+            <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={signUpInputValues.userLastName} autoComplete="off"  
               onChange={(e) => {
-                setUserLastName(e.target.value);
+                setSignUpInputValues({
+                  ...signUpInputValues,
+                  userLastName: e.target.value
+                })
               }}
               onBlur={() => {
-                if(!nameCheck.test(userLastName)) {
+                if(!nameCheck.test(signUpInputValues.userLastName)) {
                   console.log(`성을 한글로 정확히 입력해 주세요`);
-                } else if( nameCheck.test(userLastName) ) {
+                } else if( nameCheck.test(signUpInputValues.userLastName) ) {
                   signUpCheck.current.find(data => data.title === 'lastname').check = true;
-                  console.log(userLastName);
+                  console.log(signUpInputValues.userLastName);
                 }
               }}
             />
             <label htmlFor="userFirstName" style={{display:'none'}}/>
-            <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={userFirstName} autoComplete="off"
+            <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={signUpInputValues.userFirstName} autoComplete="off"
               onChange={(e) => {
-                setUserFirstName(e.target.value);
+                setSignUpInputValues({
+                  ...signUpInputValues,
+                  userFirstName: e.target.value
+                })
               }}
               onBlur={() => {
-                if(!nameCheck.test(userFirstName)) {
+                if(!nameCheck.test(signUpInputValues.userFirstName)) {
                   console.log(`이름을 한글로 정확히 입력해 주세요`);
-                } else if (nameCheck.test(userFirstName)) {
+                } else if (nameCheck.test(signUpInputValues.userFirstName)) {
                   signUpCheck.current.find(data => data.title === 'firstname').check = true;
-                  console.log(userFirstName);
+                  console.log(signUpInputValues.userFirstName);
                 }
               }}
             />
-          { nameCheck.test(userLastName) && nameCheck.test(userFirstName)
+          { nameCheck.test(signUpInputValues.userLastName) && nameCheck.test(signUpInputValues.userFirstName)
                 ? <CheckedBox />
                 : <CheckBoxBlank />
           }
           </div>
         </div>
         {
-          !nameCheck.test(userLastName) && userLastName &&
+          !nameCheck.test(signUpInputValues.userLastName) && signUpInputValues.userLastName &&
           <Error>성을 한글로 정확히 입력해 주세요</Error> 
         }
         {
-          !nameCheck.test(userFirstName) && userFirstName &&
+          !nameCheck.test(signUpInputValues.userFirstName) && signUpInputValues.userFirstName &&
           <Error>이름을 한글로 정확히 입력해 주세요</Error> 
         }
         <h2>ADDRESS</h2>
         <div className="zip-wrapper">
           <label htmlFor="searchAddress"/>
-          <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={postcodeValue.zonecode}
+          <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={signUpInputValues.zonecode}
           />
           <StyledButton className="btn-zip" onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
           <br />
@@ -491,19 +501,24 @@ function SignUp(props) {
             />
         }
         <label htmlFor="userAddress"/>
-        <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address} 
+        <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={signUpInputValues.address} 
         />
         <label htmlFor="detailAddress"/>
-        <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off" value={detailAddress}
+        <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off" value={signUpInputValues.detailAddress}
           onChange={(e) => 
-            {return setDetailAddress(e.target.value)}
+            {
+              setSignUpInputValues({
+                ...signUpInputValues,
+                detailAddress: e.target.value
+              })
+            }
             
           }
           onBlur={() =>
-            { if(detailAddressCheck.test(detailAddress) && detailAddress) { 
+            { if(detailAddressCheck.test(signUpInputValues.detailAddress) && signUpInputValues.detailAddress) { 
               signUpCheck.current.find(data => data.title === 'detailaddress').check = false;
               console.log(`상세주소를 확인해주세요`);
-            } else if(!detailAddressCheck.test(detailAddress) && detailAddress) {
+            } else if(!detailAddressCheck.test(signUpInputValues.detailAddress) && signUpInputValues.detailAddress) {
               signUpCheck.current.find(data => data.title === 'detailaddress').check = true;
               console.log(`상세주소 확인 완료`);
             } else {
@@ -521,10 +536,14 @@ function SignUp(props) {
         <h2>NICKNAME</h2>
         <div className="input-check">
           <label htmlFor="userNickname"/>
-          <StyledInput id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={userNickname}
-            onChange={(e) => setUserNickname(e.target.value)}
+          <StyledInput id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={signUpInputValues.userNickname}
+            onChange={(e) => 
+              setSignUpInputValues({
+              ...signUpInputValues,
+              userNickname: e.target.value
+            })}
             onBlur={() => {
-              if(nicknameCheck.test(userNickname) && userNickname) {
+              if(nicknameCheck.test(signUpInputValues.userNickname) && signUpInputValues.userNickname) {
                 signUpCheck.current.find(data => data.title === 'nickname').check = true
                 console.log('닉네임 확인 완료');
               } else {
@@ -532,27 +551,32 @@ function SignUp(props) {
               }
             }}
           />
-          { nicknameCheck.test(userNickname)
+          { nicknameCheck.test(signUpInputValues.userNickname)
             ? <CheckedBox />
             : <CheckBoxBlank />
           }
         </div>
         {
-          !nicknameCheck.test(userNickname) && userNickname &&
+          !nicknameCheck.test(signUpInputValues.userNickname) && signUpInputValues.userNickname &&
           <Error>닉네임은 한글, 영문, 숫자만 가능하며 2-10자리 입니다.</Error>
         }
         
         <h2>REFERRAL CODE<span>(선택)</span></h2>
         <label htmlFor="recomenderId"></label>
-        <StyledInput id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={recomenderId}
-          onChange={(e) => setRecomenderId(e.target.value)}
+        <StyledInput id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={signUpInputValues.recomenderId}
+          onChange={(e) => 
+            setSignUpInputValues({
+              ...signUpInputValues,
+              recomenderId: e.target.value
+            })
+          }
           onBlur={() => {
-            if(!recoenderIdCheck && recomenderId){
+            if(!recoenderIdCheck && signUpInputValues.recomenderId){
               signUpCheck.current.find(data => data.title ==='recomender').check = false;
               console.log('추천인 아이디를 확인해 주세요');
-            } else if (recoenderIdCheck && recomenderId ) {
+            } else if (recoenderIdCheck && signUpInputValues.recomenderId ) {
               signUpCheck.current.find(data => data.title ==='recomender').check = true;
-              console.log(userId+'님'+recomenderId+'님'+'각각 1000점 추가 예정');
+              console.log(signUpInputValues.userId+'님'+signUpInputValues.recomenderId+'님'+'각각 1000점 추가 예정');
             } else {
               signUpCheck.current.find(data => data.title ==='recomender').check = true;
               console.log('추천인 id 추가 안하고 회원가입');
@@ -561,7 +585,7 @@ function SignUp(props) {
           }}
         />
         {
-          !recoenderIdCheck && recomenderId &&
+          !recoenderIdCheck && signUpInputValues.recomenderId &&
           <Error>없는 ID 입니다</Error>
         }
         
@@ -594,7 +618,7 @@ function SignUp(props) {
         }}
         visible={showModal}
       >
-        {userLastName + userFirstName}님 회원가입을 축하드립니다!
+        {signUpInputValues.userLastName + signUpInputValues.userFirstName}님 회원가입을 축하드립니다!
       </CenterModal>
       </Wrapper>
     </section>
