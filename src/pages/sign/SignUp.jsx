@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { MdCheckBoxOutlineBlank as CheckBoxBlank, MdCheckBox as CheckedBox  } from "react-icons/md";
+import { MdCheckBoxOutlineBlank as CheckBoxBlank, MdCheckBox as CheckedBox } from "react-icons/md";
 import { IoMdEye as Eye, IoMdEyeOff as EyeOff } from "react-icons/io";
 import  CenterModal  from "../../components/CenterModal";
 
@@ -174,6 +174,8 @@ function SignUp(props) {
 
   const navigate = useNavigate();
 
+  // useState 객체 묶기
+
   const signUpCheck = useRef([
     { title: "email", check: false },
     { title: "id", check: false },
@@ -259,7 +261,6 @@ function SignUp(props) {
   const idDuplicationCheck = userInfo.find((user) => {
     return user.id === userId ;
   });
-  // console.log(idDuplicationCheck);
   
   // 추천회원 검사
   const recoenderIdCheck = userInfo.find((user) => {
@@ -292,7 +293,7 @@ function SignUp(props) {
             if(emailCheck.test(userEmail) && !emailDuplicationCheck) {
             console.log(`올바른 이메일을 입력했습니다.`);
             signUpCheck.current.find( data => data.title === 'email').check = true;
-          } else {
+            } else {
             console.log(`이메일 양식을 확인해 주세요.`);
           }}}
           />
@@ -302,6 +303,10 @@ function SignUp(props) {
             : <CheckBoxBlank />
           }
         </div>
+        {
+          !emailCheck.test(userEmail) && userEmail &&
+          <Error>이메일 양식을 확인해 주세요.</Error>
+        }
         {
           emailDuplicationCheck &&
           <Error>이미 가입한 이메일 입니다.</Error>
@@ -326,6 +331,10 @@ function SignUp(props) {
             : <CheckBoxBlank />
           }
         </div>
+        {
+          !idCheck.test(userId) && userId &&
+          <Error>영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.</Error>
+        }
         { 
           idDuplicationCheck &&
             <Error>아이디가 중복되었습니다.</Error>
@@ -406,7 +415,7 @@ function SignUp(props) {
               }}
               onBlur={() => {
                 if(!nameCheck.test(userLastName)) {
-                  console.log(`성을 정확히 입력해 주세요`);
+                  console.log(`성을 한글로 정확히 입력해 주세요`);
                 } else if( nameCheck.test(userLastName) ) {
                   signUpCheck.current.find(data => data.title === 'lastname').check = true;
                   console.log(userLastName);
@@ -420,7 +429,7 @@ function SignUp(props) {
               }}
               onBlur={() => {
                 if(!nameCheck.test(userFirstName)) {
-                  console.log(`이름을 정확히 입력해 주세요`);
+                  console.log(`이름을 한글로 정확히 입력해 주세요`);
                 } else if (nameCheck.test(userFirstName)) {
                   signUpCheck.current.find(data => data.title === 'firstname').check = true;
                   console.log(userFirstName);
@@ -435,11 +444,11 @@ function SignUp(props) {
         </div>
         {
           !nameCheck.test(userLastName) && userLastName &&
-          <Error>성을 정확히 입력해 주세요</Error> 
+          <Error>성을 한글로 정확히 입력해 주세요</Error> 
         }
         {
           !nameCheck.test(userFirstName) && userFirstName &&
-          <Error>이름을 정확히 입력해 주세요</Error> 
+          <Error>이름을 한글로 정확히 입력해 주세요</Error> 
         }
         <h2>ADDRESS</h2>
         <div className="zip-wrapper">
@@ -454,7 +463,7 @@ function SignUp(props) {
             <DaumPostcode
               onComplete={handleSelectAddress} 
               autoClose={false}
-              defaultQuery='판교역로 235'
+              defaultQuery=''
             />
         }
         <label htmlFor="userAddress"/>
