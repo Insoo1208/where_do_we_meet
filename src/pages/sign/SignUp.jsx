@@ -112,6 +112,11 @@ const StyledInput = styled.input`
   margin-bottom: 1rem;
   border-radius: 0.5rem;
   border: 2px solid ${props => props.theme.main};
+
+  &:disabled {
+    border: 2px solid ${props => props.theme.gray800};
+    background-color: ${props => props.theme.gray200};
+  }
   `;
 
 const StyledButton = styled.button`
@@ -547,11 +552,13 @@ function SignUp(props) {
         title="회원가입 알림"
         size="small"
         cancelText="확인" // 메인페이지로 이동
-        confirmText="로그인 화면" // 로그인페이지로 이동
+        confirmText="로그인 하기" // 로그인페이지로 이동
         onCancel={() => {
-          setShowModal(false);
+          navigate('/');
         }}
-        onConfirm={undefined}
+        onConfirm={() => {
+          navigate('/signin');
+        }}
         visible={showModal}
       >
         {userLastName + userFirstName}님 회원가입을 축하드립니다!
