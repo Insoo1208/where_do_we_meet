@@ -164,8 +164,8 @@ function SignUp(props) {
   const [detailAddress, setDetailAddress] = useState('');
   const [userNickname, setUserNickname] = useState('');
   const [recomenderId, setRecomenderId] = useState('');
+
   const [inputType, setInputType] = useState('password');
-  
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
   const [showModal, setShowModal] = useState(false); // 모달
@@ -175,7 +175,31 @@ function SignUp(props) {
   const navigate = useNavigate();
 
   // useState 객체 묶기
+  const [signUpState, setSignUpState] = useState({
+    userEmail: '',
+    userId: '',
+    password: {
+      userPassword: '',
+      userPasswordCheck: '',
+      inputType: 'password',
+      passwordCheckResult: false
+    },
+    userName: {
+      userLastName: '',
+      userFirstName: '',
+    },
+    openPostcode: '',
+    postcodeValue: {
+      zonecode: '',
+      address: '',
+    },
+    detailAddress: '',
+    userNickname: '',
+    recomenderId: '',
+    showModal: false
+  });
 
+  // 회원가입 충족 조건
   const signUpCheck = useRef([
     { title: "email", check: false },
     { title: "id", check: false },
