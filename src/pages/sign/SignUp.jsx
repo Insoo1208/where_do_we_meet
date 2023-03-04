@@ -19,10 +19,9 @@ const Wrapper = styled.div`
   flex-direction: column; */
   align-items: center;
   padding: 16px;
-  background-color: #ffccaa;
+  /* background-color: ${props => props.theme.background}; */
 
   div.input-check {
-    /* background-color: skyblue; */
     position: relative;
     svg { 
       position: absolute;
@@ -31,8 +30,7 @@ const Wrapper = styled.div`
       bottom: 0;
       margin: auto;
       font-size: 30px;
-      border: 1px;
-      color: #acacac
+      color: ${props => props.theme.main};
     }
   }
   
@@ -75,6 +73,7 @@ const Wrapper = styled.div`
       cursor:pointer;
       svg {
         font-size: 1.25rem;
+        color: ${props => props.theme.gray800};
       }
     }
   }
@@ -91,10 +90,6 @@ const Wrapper = styled.div`
     input.last-name {
       margin-right: 1rem;
       width: 70%;
-    }
-    
-    button {
-      
     }
     
   }
@@ -115,13 +110,26 @@ const StyledInput = styled.input`
   width: 100%;
   height: 58px;
   margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid ${props => props.theme.main};
   `;
 
 const StyledButton = styled.button`
   width: 100%;
   height: 58px;
   margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: none;
   cursor: pointer;
+
+  &.btn-zip {
+    color: ${props => props.theme.background};
+    background-color: ${props => props.theme.mainLight};
+  }
+  &.btn-submit {
+    color: ${props => props.theme.background};
+    background-color: ${props => props.theme.main};
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -134,54 +142,6 @@ const Error = styled.div`
   font-size: .6875rem;
   margin-bottom: 1rem;
 `;
-
-const Pass = styled.div`
-  color: green;
-  font-size: .6875rem;
-`;
-
-// 모달 CSS
-
-const MenuButton = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  &:hover {
-    color: gray;
-  }
-`;
-
-const CloseButton = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-  color: white;
-  cursor: pointer;
-  &:hover {
-    color: black;
-  }
-`;
-
-const MenuContainer = styled.div`
-  width: 50%;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  /* right: -500px; */
-  right: -100%;
-  /* right: -100vw; */
-  background-color: gray;
-
-  transition: 0.5s;
-  ${props => props.showMenu && 
-    css`
-      right: 0;
-    `}
-`;
-
-
-
 
 function SignUp(props) {
   // useState
@@ -242,7 +202,7 @@ function SignUp(props) {
   // 우편번호 검색 후 유효성 검사
   useEffect(() => {
     if(postcodeValue.zonecode && postcodeValue.address) {
-      signUpCheck.find( data => data.title === 'postcode').check = true;
+      signUpCheck.current.find( data => data.title === 'postcode').check = true;
       console.log(`우편번호 확인 완료`);
     }
   },[postcodeValue]);
@@ -275,7 +235,7 @@ function SignUp(props) {
   const nameCheck = /^[가-힣]+$/;
 
   // 상세주소 정규식 검사
-  const detailAddressCheck = /.*[ㄱ-ㅎ|ㅏ-ㅣ]+.*/ ; // 온전하지않은 한글만 아니면 다 괜찮게
+  const detailAddressCheck = /.*[ㄱ-ㅎ|ㅏ-ㅣ]+.*/ ; // 온전하지 않은 한글만 아니면 다 가능 (ex. ㅋㅋ, ㅎ하 금지)
 
   // 닉네임 정규식 검사
   const nicknameCheck = /^([a-zA-Z0-9가-힣]){2,10}$/ ; // 최소 2자~10자이하의 영문 대소문자 숫자 한글 가능
@@ -333,7 +293,7 @@ function SignUp(props) {
           />
           { 
             emailCheck.test(userEmail) && !emailDuplicationCheck
-            ? <CheckedBox style={{color: 'green'}}/>
+            ? <CheckedBox />
             : <CheckBoxBlank />
           }
         </div>
@@ -347,7 +307,6 @@ function SignUp(props) {
           <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={userId} autoComplete="off" spellCheck="false"
             onChange={(e) => {
               setUserId(e.target.value);
-              console.log(signUpCheck);
             }}
             onBlur={() => {
               console.log(idCheck.test(userId));
@@ -358,7 +317,7 @@ function SignUp(props) {
             }}}
           />
           { idCheck.test(userId) && !idDuplicationCheck
-            ? <CheckedBox style={{color: 'green'}}/>
+            ? <CheckedBox />
             : <CheckBoxBlank />
           }
         </div>
@@ -386,7 +345,7 @@ function SignUp(props) {
         </h2>
         <div className="input-check">
           <label htmlFor="signUpPw"/>
-          <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요."  value={userPassword} autoComplete="off"
+          <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요."  value={userPassword} autoComplete="off"
             onChange={(e) => {
               setUserPassword(e.target.value)
             }}
@@ -396,15 +355,18 @@ function SignUp(props) {
               console.log(`올바른 비밀번호를 입력했습니다.`);
               signUpCheck.current.find(data => data.title === 'password').check = true;
             } else {
-              console.log(`반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요.`);
+              console.log(`반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요.`);
             }}}
             />
             { passwordCheck.test(userPassword) 
-              ? <CheckedBox style={{color: 'green'}}/>
+              ? <CheckedBox />
               : <CheckBoxBlank />
             }
         </div>
-            
+        {
+          !passwordCheck.test(userPassword) && userPassword &&
+          <Error>반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요.</Error>
+        }    
         <div className="input-check">
           <label htmlFor="signUpPwCheck"/>
           <StyledInput type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={userPasswordCheck} autoComplete="off"
@@ -421,7 +383,7 @@ function SignUp(props) {
             }}
           />
           { passwordCheckResult && passwordCheck.test(userPassword)
-              ? <CheckedBox style={{color: 'green'}}/>
+              ? <CheckedBox />
               : <CheckBoxBlank />
           }
         </div>
@@ -461,7 +423,7 @@ function SignUp(props) {
               }}
             />
           { nameCheck.test(userLastName) && nameCheck.test(userFirstName)
-                ? <CheckedBox style={{color: 'green'}}/>
+                ? <CheckedBox />
                 : <CheckBoxBlank />
           }
           </div>
@@ -479,7 +441,7 @@ function SignUp(props) {
           <label htmlFor="searchAddress"/>
           <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={postcodeValue.zonecode}
           />
-          <StyledButton onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
+          <StyledButton className="btn-zip" onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
           <br />
         </div>
         {
@@ -506,6 +468,9 @@ function SignUp(props) {
             } else if(!detailAddressCheck.test(detailAddress) && detailAddress) {
               signUpCheck.current.find(data => data.title === 'detailaddress').check = true;
               console.log(`상세주소 확인 완료`);
+            } else {
+              signUpCheck.current.find(data => data.title === 'detailaddress').check = true;
+              console.log(`상세주소값 비어있음`);
             }}
           } 
         />
@@ -530,7 +495,7 @@ function SignUp(props) {
             }}
           />
           { nicknameCheck.test(userNickname)
-            ? <CheckedBox style={{color: 'green'}}/>
+            ? <CheckedBox />
             : <CheckBoxBlank />
           }
         </div>
@@ -549,12 +514,10 @@ function SignUp(props) {
               console.log('추천인 아이디를 확인해 주세요');
             } else if (recoenderIdCheck && recomenderId ) {
               signUpCheck.current.find(data => data.title ==='recomender').check = true;
-              console.log(recomenderId+'님'+'1000점 추가 예정');
-            
-            // } else if (recomenderId === null) {
-              
-            //   signUpCheck.find(data => data.title ==='recomender').check = true;
-            //   console.log('추천인 id 추가 안하고 회원가입 ~');
+              console.log(userId+'님'+recomenderId+'님'+'각각 1000점 추가 예정');
+            } else {
+              signUpCheck.current.find(data => data.title ==='recomender').check = true;
+              console.log('추천인 id 추가 안하고 회원가입');
             }
             console.log(signUpCheck.current.find(data => data.title ==='recomender'));
           }}
@@ -565,6 +528,7 @@ function SignUp(props) {
         }
         
         <StyledButton
+          className="btn-submit"
           onClick={()=>{
 
             if (signUpCheck.current.find(data => data.check === false)) {
@@ -572,30 +536,10 @@ function SignUp(props) {
               alert(`필수 입력값을 확인해 주세요`);
             } else {
               console.log('성공');
+              
               setShowModal(true);
             }
-
-  
-            // if(
-            //   (userEmail && emailCheck.test(userEmail) && !emailDuplicationCheck) && 
-            //   (idCheck.test(userId) && !idDuplicationCheck) && 
-            //   (passwordCheckResult && passwordCheck.test(userPassword)) && (!passwordCheckResult && userPasswordCheck) && 
-            //   (userLastName && userFirstName) && (nameCheck.test(userLastName) && nameCheck.test(userFirstName)) &&
-            //   postcodeValue && 
-            //   detailAddress &&
-            //   nicknameCheck.test(userNickname)              
-            //   ) {
-            //   console.log(`회원가입 완료!`);
-            //   console.log(recomenderId.point);
-            //   // recomenderId.point += 1000; 
-              
-              
-            // } else {
-            //   // 확인이 안되어있는 필수값들이 전부 빨갛게 라인 표시되어야 함
-            //   console.log(`필수입력값을 확인해 주세요!`);
-            //   alert(`필수 입력값을 확인해 주세요`);
-              
-            // }
+            console.log(signUpCheck);
           }}
         >가입하기</StyledButton>
 
@@ -610,7 +554,7 @@ function SignUp(props) {
         onConfirm={undefined}
         visible={showModal}
       >
-        회원가입을 축하드립니다!
+        {userLastName + userFirstName}님 회원가입을 축하드립니다!
       </CenterModal>
       </Wrapper>
     </section>
@@ -637,4 +581,3 @@ export default SignUp;
 
 
 // no:  필수항목 확인 알림 필요한 조건 인풋창 레드라인으로 표시 
-                
