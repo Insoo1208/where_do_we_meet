@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MdCheckBoxOutlineBlank as CheckBoxBlank, MdCheckBox as CheckedBox  } from "react-icons/md";
 import { IoMdEye as Eye, IoMdEyeOff as EyeOff } from "react-icons/io";
 import  CenterModal  from "../../components/CenterModal";
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   background-color: #ffccaa;
 
   div.input-check {
-    background-color: skyblue;
+    /* background-color: skyblue; */
     position: relative;
     svg { 
       position: absolute;
@@ -197,7 +197,6 @@ function SignUp(props) {
     address: '',
   });
   const [detailAddress, setDetailAddress] = useState('');
-  const [postcodeCheck, setPostcodeCheck] = useState(false);
   const [userNickname, setUserNickname] = useState('');
   const [recomenderId, setRecomenderId] = useState('');
   const [inputType, setInputType] = useState('password');
@@ -210,7 +209,7 @@ function SignUp(props) {
 
   const navigate = useNavigate();
 
-  const signUpCheck = [
+  const signUpCheck = useRef([
     { title: "email", check: false },
     { title: "id", check: false },
     { title: "password", check: false },
@@ -221,7 +220,7 @@ function SignUp(props) {
     { title: "firstname", check: false },
     { title: "nickname", check: false },
     { title: "recomender", check: true}
-  ];
+  ]);
 
   useEffect(() => {
     // 비밀번호 재확인
@@ -245,7 +244,6 @@ function SignUp(props) {
     if(postcodeValue.zonecode && postcodeValue.address) {
       signUpCheck.find( data => data.title === 'postcode').check = true;
       console.log(`우편번호 확인 완료`);
-      
     }
   },[postcodeValue]);
 
@@ -328,7 +326,7 @@ function SignUp(props) {
             console.log(emailCheck.test(userEmail));
             if(emailCheck.test(userEmail) && !emailDuplicationCheck) {
             console.log(`올바른 이메일을 입력했습니다.`);
-            signUpCheck.find( data => data.title === 'email').check = true;
+            signUpCheck.current.find( data => data.title === 'email').check = true;
           } else {
             console.log(`이메일 양식을 확인해 주세요.`);
           }}}
@@ -348,12 +346,13 @@ function SignUp(props) {
           <label htmlFor="signUnId"/>
           <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={userId} autoComplete="off" spellCheck="false"
             onChange={(e) => {
-              setUserId(e.target.value)
+              setUserId(e.target.value);
+              console.log(signUpCheck);
             }}
             onBlur={() => {
               console.log(idCheck.test(userId));
               if(idCheck.test(userId) && !idDuplicationCheck) {
-              signUpCheck.find(data => data.title === 'id').check = true;
+              signUpCheck.current.find(data => data.title === 'id').check = true;
             } else {
               console.log(`영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.`);
             }}}
@@ -395,7 +394,7 @@ function SignUp(props) {
               console.log(passwordCheck.test(userPassword));
               if(passwordCheck.test(userPassword)) {
               console.log(`올바른 비밀번호를 입력했습니다.`);
-              signUpCheck.find(data => data.title === 'password').check = true;
+              signUpCheck.current.find(data => data.title === 'password').check = true;
             } else {
               console.log(`반드시 영문, 숫자, 특수문자 포함 8자 이상을 입력해 주세요.`);
             }}}
@@ -415,7 +414,7 @@ function SignUp(props) {
 
             onBlur= {() => {
               if(passwordCheckResult && passwordCheck.test(userPassword)) {
-                signUpCheck.find(data => data.title === 'password2').check = true;
+                signUpCheck.current.find(data => data.title === 'password2').check = true;
               } else {
                 console.log(`비밀번호를 다시 확인해 주세요!`);
               }
@@ -442,7 +441,7 @@ function SignUp(props) {
                 if(!nameCheck.test(userLastName)) {
                   console.log(`성을 정확히 입력해 주세요`);
                 } else if( nameCheck.test(userLastName) ) {
-                  signUpCheck.find(data => data.title === 'lastname').check = true;
+                  signUpCheck.current.find(data => data.title === 'lastname').check = true;
                   console.log(userLastName);
                 }
               }}
@@ -456,7 +455,7 @@ function SignUp(props) {
                 if(!nameCheck.test(userFirstName)) {
                   console.log(`이름을 정확히 입력해 주세요`);
                 } else if (nameCheck.test(userFirstName)) {
-                  signUpCheck.find(data => data.title === 'firstname').check = true;
+                  signUpCheck.current.find(data => data.title === 'firstname').check = true;
                   console.log(userFirstName);
                 }
               }}
@@ -476,24 +475,24 @@ function SignUp(props) {
           <Error>이름을 정확히 입력해 주세요</Error> 
         }
         <h2>ADDRESS</h2>
-          <div className="zip-wrapper">
-            <label htmlFor="searchAddress"/>
-            <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={postcodeValue.zonecode}/>
-            <StyledButton onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
-            <br />
-            
-            
-          </div>
-              {
-                openPostcode&&
-                  <DaumPostcode
-                    onComplete={handleSelectAddress} 
-                    autoClose={false}
-                    defaultQuery='판교역로 235'
-                  />
-              }
+        <div className="zip-wrapper">
+          <label htmlFor="searchAddress"/>
+          <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={postcodeValue.zonecode}
+          />
+          <StyledButton onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
+          <br />
+        </div>
+        {
+          openPostcode&&
+            <DaumPostcode
+              onComplete={handleSelectAddress} 
+              autoClose={false}
+              defaultQuery='판교역로 235'
+            />
+        }
         <label htmlFor="userAddress"/>
-        <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address} />
+        <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={postcodeValue.address} 
+        />
         <label htmlFor="detailAddress"/>
         <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off" value={detailAddress}
           onChange={(e) => 
@@ -502,9 +501,10 @@ function SignUp(props) {
           }
           onBlur={() =>
             { if(detailAddressCheck.test(detailAddress) && detailAddress) { 
-              signUpCheck.find(data => data.title === 'firstname').check = false;
+              signUpCheck.current.find(data => data.title === 'detailaddress').check = false;
               console.log(`상세주소를 확인해주세요`);
-            } else {
+            } else if(!detailAddressCheck.test(detailAddress) && detailAddress) {
+              signUpCheck.current.find(data => data.title === 'detailaddress').check = true;
               console.log(`상세주소 확인 완료`);
             }}
           } 
@@ -520,6 +520,14 @@ function SignUp(props) {
           <label htmlFor="userNickname"/>
           <StyledInput id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={userNickname}
             onChange={(e) => setUserNickname(e.target.value)}
+            onBlur={() => {
+              if(nicknameCheck.test(userNickname) && userNickname) {
+                signUpCheck.current.find(data => data.title === 'nickname').check = true
+                console.log('닉네임 확인 완료');
+              } else {
+                console.log('닉네임을 입력해 주세요');
+              }
+            }}
           />
           { nicknameCheck.test(userNickname)
             ? <CheckedBox style={{color: 'green'}}/>
@@ -535,6 +543,21 @@ function SignUp(props) {
         <label htmlFor="recomenderId"></label>
         <StyledInput id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={recomenderId}
           onChange={(e) => setRecomenderId(e.target.value)}
+          onBlur={() => {
+            if(!recoenderIdCheck && recomenderId){
+              signUpCheck.current.find(data => data.title ==='recomender').check = false;
+              console.log('추천인 아이디를 확인해 주세요');
+            } else if (recoenderIdCheck && recomenderId ) {
+              signUpCheck.current.find(data => data.title ==='recomender').check = true;
+              console.log(recomenderId+'님'+'1000점 추가 예정');
+            
+            // } else if (recomenderId === null) {
+              
+            //   signUpCheck.find(data => data.title ==='recomender').check = true;
+            //   console.log('추천인 id 추가 안하고 회원가입 ~');
+            }
+            console.log(signUpCheck.current.find(data => data.title ==='recomender'));
+          }}
         />
         {
           !recoenderIdCheck && recomenderId &&
@@ -544,7 +567,7 @@ function SignUp(props) {
         <StyledButton
           onClick={()=>{
 
-            if (signUpCheck.find(data => data.check === false)) {
+            if (signUpCheck.current.find(data => data.check === false)) {
               console.log('실패');
               alert(`필수 입력값을 확인해 주세요`);
             } else {
