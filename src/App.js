@@ -69,23 +69,25 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <BrowserRouter>
-      <GlobalStyle />
-      <Routes>
-        <Route path="/" element={<Header />} >
-          <Route index element={<Main />} />
-          <Route path="/board" element={<Board />} >
-            <Route index element={<Review />} /> 
-            <Route path="/board/notice" element={<Notice />} />
-            <Route path="/board/free" element={<Free />} />
-            <Route path="/board/post-write" element={<PostWrite />} />
-          </Route>          
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/findid" element={<FindId />} />
-          <Route path="/findpw" element={<FindPw />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path='*' element={<ErrorPage />} />
-        </Route>
-      </Routes>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Routes>
+          <Route path="/" element={<Header />} >
+            <Route index element={<Main />} />
+            <Route path="/board" element={<Board />} >
+              <Route index element={<Review />} /> 
+              <Route path="/board/notice" element={<Notice />} />
+              <Route path="/board/free" element={<Free />} />
+              <Route path="/board/post-write" element={<PostWrite />} />
+            </Route>          
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/findid" element={<FindId />} />
+            <Route path="/findpw" element={<FindPw />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path='*' element={<ErrorPage />} />
+          </Route>
+        </Routes>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
