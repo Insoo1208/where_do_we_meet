@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet, Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { selectColor } from '../features/color/colorSlice';
 import { selectUser, userLogOut } from '../features/user/userSlice';
 
 const Wrapper = styled.nav`
@@ -10,7 +11,7 @@ const Wrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.theme.main};
+  background-color: ${props => props.myColorHex};
   color: ${props => props.theme.gray200};
 `;
 
@@ -51,11 +52,12 @@ function Header () {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const myColor = useSelector(selectColor);
 
   return (
     <>
       <header>
-        <Wrapper>
+        <Wrapper myColorHex={myColor}>
           <StyledLogo onClick={() => { navigate('/'); }}  className="cursor-pointer">
             <StyledLink className='logo' to='/'>우리 어디서 만나?</StyledLink>
           </StyledLogo>

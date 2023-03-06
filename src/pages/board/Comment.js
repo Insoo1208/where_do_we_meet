@@ -23,15 +23,30 @@ const Wrapper = styled.div`
   font-weight:bold;
 }
 `;
+const InputWrap = styled.div`
+  display: flex;
+  border: 1px solid #efefef;
+  border-radius: 50px;
+  padding: 0 2rem;
+  margin-bottom: 10px;
+  height: 50px;
+  box-sizing: border-box;
+  align-items: center;
+    justify-content: space-between;
+`;
 const CommentInput = styled.input`
   border: none;
   outline: none;
-  border: 1px solid #efefef;
-  border-radius: 50px;
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  height: 50px;
-    box-sizing: border-box;
+`;
+const CommentButton = styled.button`
+  border: none;
+  background: none;
+  color: #0052b9;
+  font-weight: bold;
+  letter-spacing: -0.05rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
 `;
 const CommentWarp = styled.li`
   display: flex;
@@ -86,40 +101,46 @@ function Comment(props) {
 
 
   const handleSubmit = () => {
-    let commentArr;
-    if (loggedInUser) {
-      commentArr = {
-        id: data.length + 1,
-        commentUserProfileImg: data.userProfileImg,
-        commentsUserNickname : loggedInUser.nickname,
-        commentsUserId : loggedInUser.id,
-        comment
+    
+    if(comment) {
+      let commentArr;
+      if (loggedInUser) {
+        commentArr = {
+          id: data.length + 1,
+          commentUserProfileImg: data.userProfileImg,
+          commentsUserNickname : loggedInUser.nickname,
+          commentsUserId : loggedInUser.id,
+          comment
+        }
+      } else {
+        commentArr = {
+          id: data.length + 1,
+          commentUserProfileImg: "/images/user05.png",
+          commentsUserNickname : "익명",
+          commentsUserId : null,
+          comment
+        }
       }
-    } else {
-      commentArr = {
-        id: data.length + 1,
-        commentUserProfileImg: "/images/user05.png",
-        commentsUserNickname : "익명",
-        commentsUserId : null,
-        comment
-      }
-    }
-    dispatch(addComment({ id: postId, comment: commentArr, listName}));
-    setComment('');
+      dispatch(addComment({ id: postId, comment: commentArr, listName}));
+      setComment('');
+    } 
   };
 console.log(listName);
   return (
     <Wrapper>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
-      <CommentInput 
-        type="text" 
-        placeholder="댓글을 작성하세요."
-        value={comment} 
-        onChange={e => setComment(e.target.value)}
-        onKeyUp={ e => {if (e.key === 'Enter' && comment) handleSubmit();} }
-        spellCheck="false" 
-        autoComplete="off"
-      />
+      <InputWrap>
+        <CommentInput 
+          type="text" 
+          placeholder="댓글을 작성하세요."
+          value={comment} 
+          onChange={e => setComment(e.target.value)}
+          onKeyUp={ e => {if (e.key === 'Enter' ) handleSubmit();} }
+          spellCheck="false" 
+          autoComplete="off"
+        />
+        <CommentButton type="button" onClick={handleSubmit}>게시하기</CommentButton>
+      </InputWrap>
       <ul>
         {data.map( (comment) => {
           return (
