@@ -1,4 +1,5 @@
-import { MdClose } from "react-icons/md";
+import { useState } from "react";
+import { MdArrowLeft, MdArrowRight, MdClose } from "react-icons/md";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -45,12 +46,29 @@ const StyledHeader = styled.header`
   padding: 0 1rem;
 `;
 
-const styeldFooter = styled.footer`
-  height: 40px;
+const ContentsSection = styled.section`
+  width: 100%;
+  height: 250px;
+`;
+
+const StyeldFooter = styled.footer`
+  height: 50px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  column-gap: 1rem;
+  padding: 15px;
+
+  border-top: 1px solid #888;
+
+  button {
+
+  }
 `;
 
 function Tooltip (props) {
   const { setShowTooltips } = props;
+  const [showContents, setShowContents] = useState(0);
 
   const tooltipContents = [
     <div>첫 번째 내용</div>,
@@ -70,10 +88,13 @@ function Tooltip (props) {
             <MdClose />
           </CloseButton>
         </StyledHeader>
-        <section className="contents">
-          {}
-        </section>
-        <styeldFooter></styeldFooter>
+        <ContentsSection>
+          {tooltipContents[showContents]}
+        </ContentsSection>
+        <StyeldFooter>
+          <button type="button" onClick={() => {setShowContents(showContents => Math.max(showContents - 1, 0))}}><MdArrowLeft /></button>
+          <button type="button" onClick={() => {setShowContents(showContents => Math.min(showContents + 1, 5))}}><MdArrowRight /></button>
+        </StyeldFooter>
       </TooltipBox>
     </Wrapper>
   );
