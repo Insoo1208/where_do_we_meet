@@ -100,7 +100,6 @@ function Map (props) {
   // 주소 키워드로 정확한 주소명 검색하는 API의 콜백함수
   const geoCB = (result, status) => {
     if (status === kakao.maps.services.Status.OK) {
-      return result[0].address_name;
       getLatLng(result[0].address_name);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       return alert('검색 결과가 없습니다.');
