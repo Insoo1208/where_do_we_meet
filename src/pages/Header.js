@@ -64,7 +64,7 @@ function Header () {
               ? 
               <>
                 <li>{user.nickname}님 환영합니다.</li>
-                <SubMenu><StyledNavLink to='/'>내 정보</StyledNavLink></SubMenu>
+                <SubMenu><StyledNavLink to='/theme'>내 정보</StyledNavLink></SubMenu>
                 <SubMenu><StyledNavLink onClick={() => dispatch(userLogOut())}>로그아웃</StyledNavLink></SubMenu>
               </>
               :
