@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+import { useMediaQuery } from 'react-responsive';
+
 
 
 const Wrapper = styled.div`
@@ -28,6 +30,7 @@ const Wrapper = styled.div`
 
 function Menu(props) {
   const navigate = useNavigate();
+  const isTablet = useMediaQuery();
 
   return (
     <Wrapper>

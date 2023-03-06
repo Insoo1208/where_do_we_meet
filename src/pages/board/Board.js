@@ -6,6 +6,7 @@ const Wrapper = styled.div`
   min-height: 860px;
   display: flex;
   background-color: #f5f5f5;
+
 `;
 
 function Board () {  
