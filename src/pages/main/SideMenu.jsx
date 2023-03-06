@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
 
 import data from "../../data.json";
+import Tooltip from "./Tooltip";
 
 const { kakao } = window;
 
@@ -276,6 +277,8 @@ function SideMenu (props) {
 
   const [selectedFriend, setSelectedFriend] = useState('');
 
+  const [showTooltips, setShowTooltips] = useState(false);
+
   useEffect(() => {
     if(selectedFriend) setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
   }, [selectedFriend]);
@@ -305,145 +308,149 @@ function SideMenu (props) {
   };
 
   return (
-    <SideMenuWrapper menuOpened={menuOpened}>
-      <SideMenuBg>
-        <UserSearchWrapper>
-          <UserSearchArea>
-            <div style={{ cursor: "default" }} className="user-name">나</div>
-            <InputArea>
-              <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }} />
-              <input
-                value={adressValue}
-                onChange={ e => setAdressValue(e.target.value)}
-                onKeyUp={ e => {if(e.key === "Enter" && adressValue) { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }}}
-                spellCheck="false"
-                autoComplete="off"
-                placeholder="주소를 입력해주세요."
-              />
-              <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
-              {showMyDropdown && 
-                <DropDown>
-                  <li className="cursor-pointer close" onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}><MdClose /></li>
-                  {detailAdress.map((address, idx) => 
-                    <li key={idx} className="text-ellipsis cursor-pointer"
-                      onClick={() => {
-                        setAdressValue(detailAdress[idx]);
-                        setDetailAdress([]);
-                        setShowMyDropdown(false);
-                      }}
-                    >{address}</li>
+    <>
+      <SideMenuWrapper menuOpened={menuOpened}>
+        <SideMenuBg>
+          <UserSearchWrapper>
+            <UserSearchArea>
+              <div style={{ cursor: "default" }} className="user-name">나</div>
+              <InputArea>
+                <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }} />
+                <input
+                  value={adressValue}
+                  onChange={ e => setAdressValue(e.target.value)}
+                  onKeyUp={ e => {if(e.key === "Enter" && adressValue) { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }}}
+                  spellCheck="false"
+                  autoComplete="off"
+                  placeholder="주소를 입력해주세요."
+                />
+                <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
+                {showMyDropdown && 
+                  <DropDown>
+                    <li className="cursor-pointer close" onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}><MdClose /></li>
+                    {detailAdress.map((address, idx) => 
+                      <li key={idx} className="text-ellipsis cursor-pointer"
+                        onClick={() => {
+                          setAdressValue(detailAdress[idx]);
+                          setDetailAdress([]);
+                          setShowMyDropdown(false);
+                        }}
+                      >{address}</li>
+                      )}
+                  </DropDown>
+                }
+              </InputArea>
+            </UserSearchArea>
+            {user &&
+              <>
+                <UserSearchLine/>
+                <UserFastSearch>
+                  <ul>
+                    {user.favorites.map((fav, idx) => 
+                      <li key={idx} onClick={() => setAdressValue(fav.adress)}>{fav.title}</li>
                     )}
-                </DropDown>
-              }
-            </InputArea>
-          </UserSearchArea>
-          {user &&
-            <>
-              <UserSearchLine/>
-              <UserFastSearch>
-                <ul>
-                  {user.favorites.map((fav, idx) => 
-                    <li key={idx} onClick={() => setAdressValue(fav.adress)}>{fav.title}</li>
-                  )}
-                </ul>
-              </UserFastSearch>
-            </>
-          }
-        </UserSearchWrapper>
+                  </ul>
+                </UserFastSearch>
+              </>
+            }
+          </UserSearchWrapper>
 
-        <UserSearchWrapper>
-          <UserSearchArea>
-            <div className="user-name cursor-pointer" onClick={() => { if (user) setShowFirendListDropdown(true); }}>
-              { (user && selectedFriend) || '상대' }
-              { showFirendListDropdown &&
-                <DropDown>
-                  <li className="cursor-pointer close" onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}><MdClose /></li>
-                  <li className="cursor-pointer" onClick={e => {e.stopPropagation(); setSelectedFriend(''); setShowFirendListDropdown(false); }}>초기화</li>
-                  {user && user.friends.map((friend, idx) => 
-                    <li key={idx} className="text-ellipsis cursor-pointer"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setSelectedFriend(friend);
-                        setShowFirendListDropdown(false);
-                      }}>{friend}</li>
-                  )}
-                </DropDown>
-              }
-            </div>
-            <InputArea>
-              <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); }}/>
-              <input
-                value={friendAdressValue}
-                onChange={ e => setFriendAdressValue(e.target.value) }
-                onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); };}}
-                spellCheck="false"
-                autoComplete="off"
-                placeholder="주소를 입력해주세요."
-              />
-              {showFriendDropdown && 
-                <DropDown>
-                  <li className="cursor-pointer close" onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}><MdClose /></li>
-                  {detailAdress.map((address, idx) => 
-                    <li key={idx} className="text-ellipsis cursor-pointer"
-                      onClick={() => {
-                        setFriendAdressValue(detailAdress[idx]);
-                        setDetailAdress([]);
-                        setShowFriendDropdown(false);
-                      }}
-                    >{address}</li>
+          <UserSearchWrapper>
+            <UserSearchArea>
+              <div className="user-name cursor-pointer" onClick={() => { if (user) setShowFirendListDropdown(true); }}>
+                { (user && selectedFriend) || '상대' }
+                { showFirendListDropdown &&
+                  <DropDown>
+                    <li className="cursor-pointer close" onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}><MdClose /></li>
+                    <li className="cursor-pointer" onClick={e => {e.stopPropagation(); setSelectedFriend(''); setShowFirendListDropdown(false); }}>초기화</li>
+                    {user && user.friends.map((friend, idx) => 
+                      <li key={idx} className="text-ellipsis cursor-pointer"
+                        onClick={e => {
+                          e.stopPropagation();
+                          setSelectedFriend(friend);
+                          setShowFirendListDropdown(false);
+                        }}>{friend}</li>
                     )}
-                </DropDown>
-              }
-              <StyledMdClose $foucused={friendAdressValue} onClick={() => setFriendAdressValue('') }/>
-            </InputArea>
-          </UserSearchArea>
-          {(user && selectedFriend )&&
-            <>
-              <UserSearchLine/>
-              <UserFastSearch>
-                <ul>
-                  {friendDetailAdress.map((fav, idx) => 
-                    <li key={idx} onClick={() => setFriendAdressValue(fav.adress)}>{fav.title}</li>
-                  )}
-                </ul>
-              </UserFastSearch>
-            </>
-          }
-        </UserSearchWrapper>
-        <FindButton type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </FindButton>
-        <DetailListWrapper user={user}>
-          {searchData && 
-            searchData.map((data, index) => (
-              <li key={index} style={{ margin: '1rem' }}>
-                <h1>{index + 1}. {data.place_name}</h1>
-                <h2>{data.road_address_name}</h2>
-                <h2>{data.address_name}</h2>
-                <h3>{data.phone}</h3>
-              </li>
-            ))
-          }
-        </DetailListWrapper>
-      </SideMenuBg>
-      <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
-        {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
-      </MenuSlideButton>
-      <ContentsSearch>
-        <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
-        <label htmlFor="content-search"/>
-        <input id="content-search" style={{
-          flex: 1,
-          border: "none",
-          outline: "none",
-          paddingLeft: "1rem"
-        }}
-          placeholder="검색할 키워드를 입력해주세요."
-          value={contentsValue} onChange={e => setContentsValue(e.target.value)}
-          onKeyUp={ e => {if(e.key === "Enter" && contentsValue) setContentsSearch(contentsValue);}}
-          spellCheck="false"
-          autoComplete="off"
-        />
-      </ContentsSearch>
-    </SideMenuWrapper>
+                  </DropDown>
+                }
+              </div>
+              <InputArea>
+                <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); }}/>
+                <input
+                  value={friendAdressValue}
+                  onChange={ e => setFriendAdressValue(e.target.value) }
+                  onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); };}}
+                  spellCheck="false"
+                  autoComplete="off"
+                  placeholder="주소를 입력해주세요."
+                />
+                {showFriendDropdown && 
+                  <DropDown>
+                    <li className="cursor-pointer close" onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}><MdClose /></li>
+                    {detailAdress.map((address, idx) => 
+                      <li key={idx} className="text-ellipsis cursor-pointer"
+                        onClick={() => {
+                          setFriendAdressValue(detailAdress[idx]);
+                          setDetailAdress([]);
+                          setShowFriendDropdown(false);
+                        }}
+                      >{address}</li>
+                      )}
+                  </DropDown>
+                }
+                <StyledMdClose $foucused={friendAdressValue} onClick={() => setFriendAdressValue('') }/>
+              </InputArea>
+            </UserSearchArea>
+            {(user && selectedFriend )&&
+              <>
+                <UserSearchLine/>
+                <UserFastSearch>
+                  <ul>
+                    {friendDetailAdress.map((fav, idx) => 
+                      <li key={idx} onClick={() => setFriendAdressValue(fav.adress)}>{fav.title}</li>
+                    )}
+                  </ul>
+                </UserFastSearch>
+              </>
+            }
+          </UserSearchWrapper>
+          <FindButton type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </FindButton>
+          <DetailListWrapper user={user}>
+            {searchData && 
+              searchData.map((data, index) => (
+                <li key={index} style={{ margin: '1rem' }}>
+                  <h1>{index + 1}. {data.place_name}</h1>
+                  <h2>{data.road_address_name}</h2>
+                  <h2>{data.address_name}</h2>
+                  <h3>{data.phone}</h3>
+                </li>
+              ))
+            }
+          </DetailListWrapper>
+        </SideMenuBg>
+        <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
+          {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
+        </MenuSlideButton>
+        <ContentsSearch>
+          <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
+          <label htmlFor="content-search"/>
+          <input id="content-search" style={{
+            flex: 1,
+            border: "none",
+            outline: "none",
+            paddingLeft: "1rem"
+          }}
+            placeholder="검색할 키워드를 입력해주세요."
+            value={contentsValue} onChange={e => setContentsValue(e.target.value)}
+            onKeyUp={ e => {if(e.key === "Enter" && contentsValue) setContentsSearch(contentsValue);}}
+            spellCheck="false"
+            autoComplete="off"
+          />
+        </ContentsSearch>
+      </SideMenuWrapper>
+      <button style={{ position: "fixed", top: 85, lef: 300, zIndex: 90 }} type="button" onClick={() => setShowTooltips(true)}>?</button>
+      {showTooltips && <Tooltip setShowTooltips={setShowTooltips}/>}
+    </>
   );
 }
 
