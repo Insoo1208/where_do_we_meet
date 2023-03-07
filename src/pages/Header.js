@@ -81,7 +81,7 @@ function Header () {
         <Wrapper>
           <StyledLogo onClick={() => { navigate('/'); }}  className="cursor-pointer">
             <StyledLink className='logo' to='/'>우리 어디서 만나?</StyledLink>
-            <StyledButton type="button" onClick={() => setShowTooltips(!showTooltips)}>
+            <StyledButton type="button" aria-label='show-tooltip-button' onClick={() => setShowTooltips(!showTooltips)}>
               <BsQuestionCircle />
             </StyledButton>
             {showTooltips && <Tooltip setShowTooltips={setShowTooltips}/>}
