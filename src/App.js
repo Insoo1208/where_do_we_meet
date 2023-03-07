@@ -16,6 +16,9 @@ import Notice from "./pages/board/Notice";
 import Review from "./pages/board/Review";
 import Free from "./pages/board/Free";
 
+import deviceTheme from "./features/mediaquery/deviceTheme";
+console.log(deviceTheme.device.tablet);
+
 const theme = {
   gray100: '#f1f1f1',
   gray200: '#eee',
@@ -64,29 +67,45 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  html {
+    @media ${deviceTheme.device.desktop} {
+      font-size: 16px;
+    }
+    @media ${deviceTheme.device.tablet} {
+      font-size: 14px;
+    }
+    @media ${deviceTheme.device.mobileL} {
+      font-size: 12px;
+    }
+  }
+  
 `;
 
 function App() {
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Routes>
-          <Route path="/" element={<Header />} >
-            <Route index element={<Main />} />
-            <Route path="/board" element={<Board />} >
-              <Route index element={<Review />} /> 
-              <Route path="/board/notice" element={<Notice />} />
-              <Route path="/board/free" element={<Free />} />
-              <Route path="/board/post-write" element={<PostWrite />} />
-            </Route>          
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/findid" element={<FindId />} />
-            <Route path="/findpw" element={<FindPw />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path='*' element={<ErrorPage />} />
-          </Route>
-        </Routes>
+        <ThemeProvider theme={deviceTheme}>
+          <GlobalStyle />
+          <Routes>
+            <Route path="/" element={<Header />} >
+              <Route index element={<Main />} />
+              <Route path="/board" element={<Board />} >
+                <Route index element={<Review />} /> 
+                <Route path="/board/notice" element={<Notice />} />
+                <Route path="/board/free" element={<Free />} />
+                <Route path="/board/post-write" element={<PostWrite />} />
+              </Route>          
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/findid" element={<FindId />} />
+              <Route path="/findpw" element={<FindPw />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path='*' element={<ErrorPage />} />
+            </Route>
+          </Routes>
+        </ThemeProvider>
       </ThemeProvider>
     </BrowserRouter>
   );
