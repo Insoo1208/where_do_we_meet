@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
 
 import data from "../../data.json";
-import Tooltip from "./Tooltip";
 
 const { kakao } = window;
 
@@ -204,7 +203,7 @@ const DropDown = styled.ul`
   border: 2px solid ${props => props.theme.mainDark};
   color: ${props => props.theme.gray700};
   border-radius: .5rem;
-  width: 250px;
+  min-width: 200px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -276,8 +275,7 @@ function SideMenu (props) {
   const [friendDetailAdress, setFriendDetailAdress] = useState([]);
 
   const [selectedFriend, setSelectedFriend] = useState('');
-
-  const [showTooltips, setShowTooltips] = useState(false);
+  const [friendNickname, setFriendNickname] = useState([]);
 
   useEffect(() => {
     if(selectedFriend) setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
@@ -448,8 +446,6 @@ function SideMenu (props) {
           />
         </ContentsSearch>
       </SideMenuWrapper>
-      <button style={{ position: "fixed", top: 85, lef: 300, zIndex: 90 }} type="button" onClick={() => setShowTooltips(true)}>?</button>
-      {showTooltips && <Tooltip setShowTooltips={setShowTooltips}/>}
     </>
   );
 }

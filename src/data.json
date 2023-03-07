@@ -10,34 +10,35 @@
     "userProfileImg": "/images/user01.png",
     "adress": "인천시 남동구 장아산로 128번길 22",
     "detailAdress": "105-601",
-    "favorites": [{"title": "집", "adress": "인천시 남동구 서창동"}],
+    "favorites": [{"title": "집", "adress": "인천시 남동구 서창동"}, {"title": "회사", "adress": "인천광역시 남동구 1092 55"}],
     "friends": [
       "id1", "id2", "id3"
     ],
     "authority": "admin",
     "point": 0
   }, {
-    "firstName": "Kyuhyun", 
+    "firstName": "Gyuhyun", 
     "lastName": "Yang", 
     "id": "id1",
     "password": "pw1",
     "email": "email1",
-    "nickname": "nickname1",
+    "nickname": "뀨🐇",
     "userProfileImg": "/images/user02.png",
     "adress": "adress1",
     "detailAdress": "detail1",
     "favorites": [{"title": "집2", "adress": "인천시 서구 경서동"}],
     "friends": [
+      "insoo"
     ],
     "authority": "user",
     "point": 0
   }, {
-    "firstName": "JaeKyung", 
+    "firstName": "JaeKyoung", 
     "lastName": "Cha", 
     "id": "id2",
     "password": "pw2",
     "email": "email2",
-    "nickname": "nickname2",
+    "nickname": "차차💕",
     "userProfileImg": "/images/user03.png",
     "adress": "adress2",
     "detailAdress": "detail2",
@@ -52,7 +53,7 @@
     "id": "id3",
     "password": "pw3",
     "email": "email3",
-    "nickname": "nickname3",
+    "nickname": "후니✨",
     "userProfileImg": "/images/user04.png",
     "adress": "adress3",
     "detailAdress": "detail3",
