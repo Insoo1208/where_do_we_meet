@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../features/user/userSlice';
 import { addPost } from '../../features/post/postSlice';
+import { selectColor } from '../../features/color/colorSlice';
 
 
 const Wrapper = styled.div`
@@ -47,6 +48,7 @@ const StyleTextarea = styled.textarea`
   border-radius: 5px;
   margin-bottom: 10px;
 `;
+
 const RadioWrap = styled.div`
 
   label {
@@ -54,15 +56,31 @@ const RadioWrap = styled.div`
     letter-spacing: -0.8px;
   }
 `;
+
 const BtnWrap = styled.div`
   display:flex;
   justify-content: end;
-  .conpim-btn{
-    background:#4a4a4a;
-    color:#fff;
+
+  .btn-submit {
+    background: #6c6c6c;
+    color: #fff;
     margin-left: 10px;
+
+    :hover {
+      background: ${props => props.myColorHex.mainColor};
+    }
+  }
+
+  .btn-cancel {    
+      border: 1px solid #ddd;
+      background: transparent;
+    :hover {
+      background: #f1f1f1;
+    }
   }
 `;
+
+
 const StyleButton = styled.button`
     width: 100px;
     height: 50px;
@@ -76,12 +94,13 @@ const StyleButton = styled.button`
     letter-spacing: -1px;
   `;
 
-function PostWrite(props) {
+function PostWrite() {
   const navigate = useNavigate();
-  const [radioValue, setRadioValue] = useState('');
+  const [radioValue, setRadioValue] = useState('review');
   const [postValue, setPostValue] = useState('');
   const dispatch = useDispatch();
   const loggedInUser = useSelector(selectUser);
+  const myColor = useSelector(selectColor);
 
   const handleSubmit = () => {
     if(!radioValue) {
@@ -90,7 +109,7 @@ function PostWrite(props) {
       let postTextObj;
       if (loggedInUser) {
         postTextObj = {
-          postUserProfileImg: "/images/user01.png",
+          postUserProfileImg: loggedInUser.userProfileImg,
           postUserNickname : loggedInUser.nickname,
           postUserId : loggedInUser.id,
           postValue        
@@ -116,16 +135,20 @@ function PostWrite(props) {
         <p className="post-title">내용 입력</p>      
         <StyleTextarea type="text" placeholder="게시물 내용을 작성하세요." value={postValue} onChange={(e) => {setPostValue(e.target.value)} } spellCheck="false" autoComplete="off" />
         <RadioWrap>
-          <input type="radio" id="review" name="postwrite" value="review" onChange={(e) => {setRadioValue(e.target.value);} }/>
+          <input type="radio" id="review" name="postwrite" value="review" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'review'} />
           <label htmlFor="review">카페리뷰</label>
-          <input type="radio" id="free" name="postwrite" value="free" onChange={(e) => {setRadioValue(e.target.value);} }/>
+          <input type="radio" id="free" name="postwrite" value="free" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'free'} />
           <label htmlFor="free">자유게시판</label>
-          <input type="radio" id="notice" name="postwrite" value="notice" onChange={(e) => {setRadioValue(e.target.value);} } />
-          <label htmlFor="notice">공지사항</label>
+          {(loggedInUser && loggedInUser.authority) === 'admin' &&
+            <>
+              <input type="radio" id="notice" name="postwrite" value="notice" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'notice'} />
+              <label htmlFor="notice">공지사항</label>
+            </>
+          }
         </RadioWrap>
-        <BtnWrap>
-          <StyleButton className="cursor-pointer" type="button" onClick={() => {navigate("/board/review");}}>취소</StyleButton>
-          <StyleButton className="conpim-btn cursor-pointer" type="button" onClick={handleSubmit}>완료</StyleButton>
+        <BtnWrap myColorHex={myColor}>
+          <StyleButton className="btn-cancel cursor-pointer" type="button" onClick={() => {navigate("/board/review");}}>취소</StyleButton>
+          <StyleButton className="btn-submit cursor-pointer" type="button" onClick={handleSubmit}>완료</StyleButton>
         </BtnWrap>
       </Write>    
     </Wrapper>    

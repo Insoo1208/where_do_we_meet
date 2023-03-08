@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
 
 import data from "../../data.json";
+import { selectColor } from "../../features/color/colorSlice";
 
 const { kakao } = window;
 
@@ -27,7 +28,6 @@ const SideMenuWrapper = styled.div`
 const SideMenuBg = styled.div`
   width: 450px;
   height: calc(100vh - 75px);
-  /* background-color: ${props => props.theme.mainLight}; */
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -39,19 +39,13 @@ const SideMenuBg = styled.div`
 
 const UserSearchWrapper = styled.div`
   width: 100%;
-  /* background-color: ${props => props.theme.main}; */
   padding: 1rem 0;
   border-radius: .5rem;
-
-  /* :nth-child(even) {
-    background-color: ${props => props.theme.accent};
-  } */
 `;
 
 const MenuSlideButton = styled.div`
   width: 24px;
   height: 50px;
-  /* background-color: ${props => props.theme.mainLight}; */
   background-color: #fff;
   border-radius: 0 10px 10px 0;
   font-size: 1.5rem;
@@ -76,9 +70,8 @@ const UserSearchArea = styled.div`
     width: 3.375rem;
     height: 3.375rem;
     border-radius: 50%;
-    /* background-color: #fff; */
-    background-color: ${props => props.theme.main};
-    color: ${props => props.theme.gray200};
+    background-color: ${props => props.myColorHex.mainColor};    
+    color: #fff;
     font-weight: 700;
     display: flex;
     justify-content: center;
@@ -93,7 +86,7 @@ const InputArea = styled.div`
   justify-content: space-evenly;
   align-items: center;
   background-color: #fff;
-  border: .125rem solid ${props => props.theme.main} ;
+  border: .125rem solid ${props => props.myColorHex.mainColor}; ;
   border-radius: .5rem;
   padding: .25rem;
 
@@ -107,6 +100,7 @@ const InputArea = styled.div`
     height: 40px;
     border: none;
     outline: none;
+    letter-spacing: -1px;
   }
 `;
 
@@ -120,9 +114,8 @@ const StyledMdClose = styled(MdClose)`
 const UserSearchLine = styled.div`
   width: 100%;
   height: 2px;
-  /* margin: calc((150px - (54px + 48px) - 16px * 2) / 2) 0 ; */
   margin: .5rem 0 ;
-  background-color: ${props => props.theme.main};
+  background-color: ${props => props.myColorHex.mainColor};
 `; 
 
 const UserFastSearch = styled.div`
@@ -138,8 +131,8 @@ const UserFastSearch = styled.div`
 
   li {
     border-radius: 1.5rem;
-    background-color: ${props => props.theme.mainLight};
-    color: ${props => props.theme.gray200};
+    background-color: ${props => props.myColorHex.mainLight};
+    color: #fff;
     padding: .875rem;
     cursor: pointer;
   }
@@ -158,18 +151,15 @@ const DetailListWrapper = styled.ul`
 
   li {
     width: 90%;
-    /* background-color: ${props => props.theme.accent}; */
     background-color: #fff;
-    /* border: 2px solid ${props => props.theme.main}; */
     padding: 1.5rem;
-    /* border-radius: .5rem; */
     margin: 0 !important;
 
     h1 {
       font-size: 1.15rem;
       font-weight: 700;
       padding-bottom: .75rem;
-      color: ${props => props.theme.main};
+      color: ${props => props.myColorHex.mainColor};
     }
 
     h2 {
@@ -200,7 +190,7 @@ const DropDown = styled.ul`
   left: 1.5rem;
   z-index: 12;
   background-color: #fff;
-  border: 2px solid ${props => props.theme.mainDark};
+  border: 2px solid ${props => props.myColorHex.mainColor};
   color: ${props => props.theme.gray700};
   border-radius: .5rem;
   min-width: 200px;
@@ -232,11 +222,12 @@ const FindButton = styled.button`
   height: 2.5rem;
   font-size: 1.25rem;
   font-weight: 700;
-  background-color: ${props => props.theme.main};
-  color: ${props => props.theme.gray200};
+  background-color: ${props => props.myColorHex.mainColor};
+  color: #fff;
   border: none;
   border-radius: .5rem;
   cursor: pointer;
+  letter-spacing: -1px;
 `;
 
 const ContentsSearch = styled.div`
@@ -246,7 +237,7 @@ const ContentsSearch = styled.div`
   width: 350px;
   height: 40px;
   background-color: #fff;
-  border: 2px solid ${props => props.theme.main};
+  border: 2px solid ${props => props.myColorHex.mainColor};
   border-radius: 20px;
   padding: .125rem 15px;
   display: flex;
@@ -254,7 +245,7 @@ const ContentsSearch = styled.div`
   justify-content: center;
 
   svg {
-    color: ${props => props.theme.main};
+    color: ${props => props.myColorHex.mainColor};
     font-weight: 700;
     font-size: 1.25rem;
   }
@@ -305,148 +296,150 @@ function SideMenu (props) {
     } 
   };
 
-  return (
-    <>
-      <SideMenuWrapper menuOpened={menuOpened}>
-        <SideMenuBg>
-          <UserSearchWrapper>
-            <UserSearchArea>
-              <div style={{ cursor: "default" }} className="user-name">나</div>
-              <InputArea>
-                <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }} />
-                <input
-                  value={adressValue}
-                  onChange={ e => setAdressValue(e.target.value)}
-                  onKeyUp={ e => {if(e.key === "Enter" && adressValue) { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }}}
-                  spellCheck="false"
-                  autoComplete="off"
-                  placeholder="주소를 입력해주세요."
-                />
-                <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
-                {showMyDropdown && 
-                  <DropDown>
-                    <li className="cursor-pointer close" onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}><MdClose /></li>
-                    {detailAdress.map((address, idx) => 
-                      <li key={idx} className="text-ellipsis cursor-pointer"
-                        onClick={() => {
-                          setAdressValue(detailAdress[idx]);
-                          setDetailAdress([]);
-                          setShowMyDropdown(false);
-                        }}
-                      >{address}</li>
-                      )}
-                  </DropDown>
-                }
-              </InputArea>
-            </UserSearchArea>
-            {user &&
-              <>
-                <UserSearchLine/>
-                <UserFastSearch>
-                  <ul>
-                    {user.favorites.map((fav, idx) => 
-                      <li key={idx} onClick={() => setAdressValue(fav.adress)}>{fav.title}</li>
-                    )}
-                  </ul>
-                </UserFastSearch>
-              </>
-            }
-          </UserSearchWrapper>
+  const myColor = useSelector(selectColor);
 
-          <UserSearchWrapper>
-            <UserSearchArea>
-              <div className="user-name cursor-pointer" onClick={() => { if (user) setShowFirendListDropdown(true); }}>
-                { (user && selectedFriend) || '상대' }
-                { showFirendListDropdown &&
-                  <DropDown>
-                    <li className="cursor-pointer close" onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}><MdClose /></li>
-                    <li className="cursor-pointer" onClick={e => {e.stopPropagation(); setSelectedFriend(''); setShowFirendListDropdown(false); }}>초기화</li>
-                    {user && user.friends.map((friend, idx) => 
-                      <li key={idx} className="text-ellipsis cursor-pointer"
-                        onClick={e => {
-                          e.stopPropagation();
-                          setSelectedFriend(friend);
-                          setShowFirendListDropdown(false);
-                        }}>{friend}</li>
+  return (
+    <SideMenuWrapper menuOpened={menuOpened}>
+      <SideMenuBg>
+        <UserSearchWrapper>
+          <UserSearchArea myColorHex={myColor}> 
+            <div style={{ cursor: "default" }} className="user-name">나</div>
+            <InputArea myColorHex={myColor}>
+              <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }} />
+              <input
+                value={adressValue}
+                onChange={ e => setAdressValue(e.target.value)}
+                onKeyUp={ e => {if(e.key === "Enter" && adressValue) { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }}}
+                spellCheck="false"
+                autoComplete="off"
+                placeholder="주소를 입력해주세요."
+              />
+              <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
+              {showMyDropdown && 
+                <DropDown myColorHex={myColor}>
+                  <li className="cursor-pointer close" onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}><MdClose /></li>
+                  {detailAdress.map((address, idx) => 
+                    <li key={idx} className="text-ellipsis cursor-pointer"
+                      onClick={() => {
+                        setAdressValue(detailAdress[idx]);
+                        setDetailAdress([]);
+                        setShowMyDropdown(false);
+                      }}
+                    >{address}</li>
                     )}
-                  </DropDown>
-                }
-              </div>
-              <InputArea>
-                <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); }}/>
-                <input
-                  value={friendAdressValue}
-                  onChange={ e => setFriendAdressValue(e.target.value) }
-                  onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); };}}
-                  spellCheck="false"
-                  autoComplete="off"
-                  placeholder="주소를 입력해주세요."
-                />
-                {showFriendDropdown && 
-                  <DropDown>
-                    <li className="cursor-pointer close" onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}><MdClose /></li>
-                    {detailAdress.map((address, idx) => 
-                      <li key={idx} className="text-ellipsis cursor-pointer"
-                        onClick={() => {
-                          setFriendAdressValue(detailAdress[idx]);
-                          setDetailAdress([]);
-                          setShowFriendDropdown(false);
-                        }}
-                      >{address}</li>
-                      )}
-                  </DropDown>
-                }
-                <StyledMdClose $foucused={friendAdressValue} onClick={() => setFriendAdressValue('') }/>
-              </InputArea>
-            </UserSearchArea>
-            {(user && selectedFriend )&&
-              <>
-                <UserSearchLine/>
-                <UserFastSearch>
-                  <ul>
-                    {friendDetailAdress.map((fav, idx) => 
-                      <li key={idx} onClick={() => setFriendAdressValue(fav.adress)}>{fav.title}</li>
+                </DropDown>
+              }
+            </InputArea>
+          </UserSearchArea>
+          {user &&
+            <>
+              <UserSearchLine myColorHex={myColor}/>
+              <UserFastSearch myColorHex={myColor}>
+                <ul>
+                  {user.favorites.map((fav, idx) => 
+                    <li key={idx} onClick={() => setAdressValue(fav.adress)}>{fav.title}</li>
+                  )}
+                </ul>
+              </UserFastSearch>
+            </>
+          }
+        </UserSearchWrapper>
+
+        <UserSearchWrapper>
+          <UserSearchArea myColorHex={myColor}> 
+            <div className="user-name cursor-pointer" onClick={() => { if (user) setShowFirendListDropdown(true); }}>
+              { (user && selectedFriend) || '상대' }
+              { showFirendListDropdown &&
+                <DropDown myColorHex={myColor}>
+                  <li className="cursor-pointer close" onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}><MdClose /></li>
+                  <li className="cursor-pointer" onClick={e => {e.stopPropagation(); setSelectedFriend(''); setShowFirendListDropdown(false); }}>초기화</li>
+                  {user && user.friends.map((friend, idx) => 
+                    <li key={idx} className="text-ellipsis cursor-pointer"
+                      onClick={e => {
+                        e.stopPropagation();
+                        setSelectedFriend(friend);
+                        setShowFirendListDropdown(false);
+                      }}>{friend}</li>
+                  )}
+                </DropDown>
+              }
+            </div>
+            <InputArea myColorHex={myColor}>
+              <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); }}/>
+              <input
+                value={friendAdressValue}
+                onChange={ e => setFriendAdressValue(e.target.value) }
+                onKeyUp={ e => {if(e.key === "Enter" && friendAdressValue) { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); };}}
+                spellCheck="false"
+                autoComplete="off"
+                placeholder="주소를 입력해주세요."
+              />
+              {showFriendDropdown && 
+                <DropDown myColorHex={myColor}>
+                  <li className="cursor-pointer close" onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}><MdClose /></li>
+                  {detailAdress.map((address, idx) => 
+                    <li key={idx} className="text-ellipsis cursor-pointer"
+                      onClick={() => {
+                        setFriendAdressValue(detailAdress[idx]);
+                        setDetailAdress([]);
+                        setShowFriendDropdown(false);
+                      }}
+                    >{address}</li>
                     )}
-                  </ul>
-                </UserFastSearch>
-              </>
-            }
-          </UserSearchWrapper>
-          <FindButton type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </FindButton>
-          <DetailListWrapper user={user}>
-            {searchData && 
-              searchData.map((data, index) => (
-                <li key={index} style={{ margin: '1rem' }}>
-                  <h1>{index + 1}. {data.place_name}</h1>
-                  <h2>{data.road_address_name}</h2>
-                  <h2>{data.address_name}</h2>
-                  <h3>{data.phone}</h3>
-                </li>
-              ))
-            }
-          </DetailListWrapper>
-        </SideMenuBg>
-        <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
-          {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
-        </MenuSlideButton>
-        <ContentsSearch>
-          <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
-          <label htmlFor="content-search"/>
-          <input id="content-search" style={{
-            flex: 1,
-            border: "none",
-            outline: "none",
-            paddingLeft: "1rem"
-          }}
-            placeholder="검색할 키워드를 입력해주세요."
-            value={contentsValue} onChange={e => setContentsValue(e.target.value)}
-            onKeyUp={ e => {if(e.key === "Enter" && contentsValue) setContentsSearch(contentsValue);}}
-            spellCheck="false"
-            autoComplete="off"
-          />
-        </ContentsSearch>
-      </SideMenuWrapper>
-    </>
+                </DropDown>
+              }
+              <StyledMdClose $foucused={friendAdressValue} onClick={() => setFriendAdressValue('') }/>
+            </InputArea>
+          </UserSearchArea>
+          {(user && selectedFriend )&&
+            <>
+              <UserSearchLine myColorHex={myColor}/>
+              <UserFastSearch>
+                <ul>
+                  {friendDetailAdress.map((fav, idx) => 
+                    <li key={idx} onClick={() => setFriendAdressValue(fav.adress)}>{fav.title}</li>
+                  )}
+                </ul>
+              </UserFastSearch>
+            </>
+          }
+        </UserSearchWrapper>
+        <FindButton myColorHex={myColor} type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </FindButton>
+        <DetailListWrapper myColorHex={myColor} user={user}>
+          {searchData && 
+            searchData.map((data, index) => (
+              <li key={index} style={{ margin: '1rem' }}>
+                <h1>{index + 1}. {data.place_name}</h1>
+                <h2>{data.road_address_name}</h2>
+                <h2>{data.address_name}</h2>
+                <h3>{data.phone}</h3>
+              </li>
+            ))
+          }
+        </DetailListWrapper>
+      </SideMenuBg>
+      <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
+        {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
+      </MenuSlideButton>
+      <ContentsSearch myColorHex={myColor}>
+        <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
+        <label htmlFor="content-search"/>
+        <input id="content-search" style={{
+          flex: 1,
+          border: "none",
+          outline: "none",
+          paddingLeft: "1rem",
+          letterSpacing: "-1px"
+        }}
+          placeholder="검색할 키워드를 입력해주세요."
+          value={contentsValue} onChange={e => setContentsValue(e.target.value)}
+          onKeyUp={ e => {if(e.key === "Enter" && contentsValue) setContentsSearch(contentsValue);}}
+          spellCheck="false"
+          autoComplete="off"
+        />
+      </ContentsSearch>
+    </SideMenuWrapper>
+
   );
 }
 

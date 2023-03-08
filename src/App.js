@@ -12,10 +12,10 @@ import SignUp from "./pages/sign/SignUp";
 import FindId from "./pages/sign/FindId";
 import FindPw from "./pages/sign/FindPw";
 import PostWrite from "./pages/board/PostWrite";
-import Notice from "./pages/board/Notice";
-import Review from "./pages/board/Review";
 import Free from "./pages/board/Free";
 import BoardPage from "./pages/board/BoardPage";
+import UserInfo from "./pages/sign/UserInfo";
+
 
 const theme = {
   gray100: '#f1f1f1',
@@ -84,6 +84,7 @@ function App() {
             <Route path="/findid" element={<FindId />} />
             <Route path="/findpw" element={<FindPw />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/theme" element={<UserInfo />} />
             <Route path='*' element={<ErrorPage />} />
           </Route>
         </Routes>
