@@ -12,33 +12,35 @@ const Wrapper = styled.div`
   flex-direction: column;
   margin-bottom: 30px;
 
-.comment-title {
-  @media ${({ theme }) => theme.device.tablet } {
-    font-size: 0.98rem;
-    margin: 0 0 8px 0;
+  .comment-title {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 0.98rem;
+      margin: 0 0 8px 0;
+    }
+    font-size: 15px; 
+    margin-bottom: 10px;
+    margin-left: 15px;
   }
-  font-size: 15px; 
-  margin-bottom: 10px;
-  margin-left: 15px;
-}
-.comment-title span {
-  @media ${({ theme }) => theme.device.tablet } {
-    font-size: 0.98rem;
+
+  .comment-title span {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 0.98rem;
+    }
+    color: #1f44a0 ;
+    font-weight:bold;
   }
-  color: #1f44a0 ;
-  font-weight:bold;
-}
 `;
+
 const CommentInput = styled.input`
-@media ${({ theme }) => theme.device.tablet } {
-    font-size: 0.98rem;
-    margin: 0;
-  }
+  @media ${({ theme }) => theme.device.tablet } {
+      font-size: 0.98rem;
+      margin: 0;
+    }
+
   border: none;
   outline: none;
   color: ${props => props.myColorHex.mainColor};
   font-weight:bold;
-}
 `;
 
 const InputWrap = styled.div`
@@ -50,12 +52,9 @@ const InputWrap = styled.div`
   height: 50px;
   box-sizing: border-box;
   align-items: center;
-    justify-content: space-between;
+  justify-content: space-between;
 `;
-const CommentInput = styled.input`
-  border: none;
-  outline: none;
-`;
+
 const CommentButton = styled.button`
   border: none;
   background: none;  
@@ -66,13 +65,13 @@ const CommentButton = styled.button`
   outline: none;
   color: ${props => props.myColorHex.mainColor};
 `;
+
 const CommentWarp = styled.li`
   display: flex;
   align-items: center;
   padding: .625rem;
 
   .comment-item-image {
-    
     width: 35px;
     height: 35px;
     margin-right: 10px;

@@ -16,9 +16,7 @@ import Free from "./pages/board/Free";
 import BoardPage from "./pages/board/BoardPage";
 import UserInfo from "./pages/sign/UserInfo";
 
-
 import deviceTheme from "./features/mediaquery/deviceTheme";
-console.log(deviceTheme.device.tablet);
 
 const theme = {
   gray100: '#f1f1f1',
@@ -91,23 +89,25 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Routes>
-          <Route path="/" element={<Header />} >
-            <Route index element={<Main />} />
-            <Route path="/board" element={<Board />} >
-              {/* <Route index path="/board/review" element={<BoardPage />} /> */}
-              <Route path="/board/:listName?" element={<BoardPage />} />
-              <Route path="/board/post-write" element={<PostWrite />} />
+        <ThemeProvider theme={deviceTheme}>
+          <GlobalStyle />
+          <Routes>
+            <Route path="/" element={<Header />} >
+              <Route index element={<Main />} />
+              <Route path="/board" element={<Board />} >
+                {/* <Route index path="/board/review" element={<BoardPage />} /> */}
+                <Route path="/board/:listName?" element={<BoardPage />} />
+                <Route path="/board/post-write" element={<PostWrite />} />
+              </Route>
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/findid" element={<FindId />} />
+              <Route path="/findpw" element={<FindPw />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/theme" element={<UserInfo />} />
+              <Route path='*' element={<ErrorPage />} />
             </Route>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/findid" element={<FindId />} />
-            <Route path="/findpw" element={<FindPw />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/theme" element={<UserInfo />} />
-            <Route path='*' element={<ErrorPage />} />
-          </Route>
-        </Routes>
+          </Routes>
+        </ThemeProvider>
       </ThemeProvider>
     </BrowserRouter>
   );
