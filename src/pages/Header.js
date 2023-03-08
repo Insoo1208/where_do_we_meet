@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet, Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { selectColor } from '../features/color/colorSlice';
 import { selectUser, userLogOut } from '../features/user/userSlice';
 import Tooltip from './main/Tooltip';
 import { BsQuestionCircle } from 'react-icons/bs';
@@ -13,8 +14,8 @@ const Wrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.theme.main};
-  color: ${props => props.theme.gray200};
+  background-color: ${props => props.myColorHex.mainColor};
+  color: #fff;
 `;
 
 const StyledLogo = styled.div`
@@ -70,6 +71,7 @@ function Header () {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const myColor = useSelector(selectColor);
 
   const closeTooltip = () => {
     if (showTooltips) setShowTooltips(false);
@@ -78,7 +80,7 @@ function Header () {
   return (
     <>
       <header>
-        <Wrapper>
+        <Wrapper myColorHex={myColor}>
           <StyledLogo onClick={() => { navigate('/'); }}  className="cursor-pointer">
             <StyledLink className='logo' to='/'>우리 어디서 만나?</StyledLink>
             <StyledButton type="button" aria-label='show-tooltip-button' onClick={() => setShowTooltips(!showTooltips)}>
