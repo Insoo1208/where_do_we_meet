@@ -45,7 +45,7 @@ const StyledInput = styled.input`
   border-radius: 8px;
   outline: none;
 
-  &:focus {
+  :focus {
     border: 2px solid ${props => props.myColorHex.mainColor};
   }
 `;
@@ -95,6 +95,7 @@ function SignIn() {
   const pwInput = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const myColor = useSelector(selectColor);
 
   const handleEyeChange = () => {
     setEyeOpen(!eyeOpen);
@@ -116,9 +117,6 @@ function SignIn() {
     };
   };
 
-  const myColor = useSelector(selectColor);
-
-
   return (
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
@@ -129,25 +127,28 @@ function SignIn() {
           autoComplete="off"
           />
         <label htmlFor="signInPw" />
-        <PwWrapper>
-          <StyledInput myColorHex={myColor} type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
-            value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
-            autoComplete="off"
-            onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
-            ref={pwInput}
-            />
-            <IoEye onClick={handleEyeChange}/>
-          </PwWrapper>
-          :
-          <PwWrapper>
-          <StyledInput type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
-          value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
-          autoComplete="off"
-          onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
-          ref={pwInput}
-          />
-          <IoEyeOff onClick={handleEyeChange}/>
-        </PwWrapper>
+          {eyeOpen
+            ?
+            <PwWrapper>
+              <StyledInput myColorHex={myColor} type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
+              value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
+              autoComplete="off"
+              onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
+              ref={pwInput}
+              />
+              <IoEye onClick={handleEyeChange}/>
+            </PwWrapper>
+            :
+            <PwWrapper>
+              <StyledInput myColorHex={myColor} type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
+              value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
+              autoComplete="off"
+              onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
+              ref={pwInput}
+              />
+              <IoEyeOff onClick={handleEyeChange}/>
+            </PwWrapper>
+          }
         <StyledButton myColorHex={myColor} className="signIn" onClick={handleLogin}>로그인</StyledButton>
         <StyledButton myColorHex={myColor} className="signUp" onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>
         <SpanWrapper>
