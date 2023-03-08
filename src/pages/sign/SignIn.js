@@ -96,14 +96,9 @@ function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleEyeClose = () => {
-    pwInput.current.type = 'password';
-    setEyeOpen(false);
-  };
-  const handleEyeOpen = () => {
-    pwInput.current.type = 'text';
-    setEyeOpen(true);
-  };
+  const handleEyeChange = () => {
+    setEyeOpen(!eyeOpen);
+  }
 
   const handleLogin = () => {
     const checkedUser = data.userInfo.find(user => user.id === loginInfo.id);
@@ -140,8 +135,18 @@ function SignIn() {
             autoComplete="off"
             onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
             ref={pwInput}
+            />
+            <IoEye onClick={handleEyeChange}/>
+          </PwWrapper>
+          :
+          <PwWrapper>
+          <StyledInput type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
+          value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
+          autoComplete="off"
+          onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
+          ref={pwInput}
           />
-          {eyeOpen ? <IoEye onClick={handleEyeClose}/> : <IoEyeOff onClick={handleEyeOpen} /> }
+          <IoEyeOff onClick={handleEyeChange}/>
         </PwWrapper>
         <StyledButton myColorHex={myColor} className="signIn" onClick={handleLogin}>로그인</StyledButton>
         <StyledButton myColorHex={myColor} className="signUp" onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>

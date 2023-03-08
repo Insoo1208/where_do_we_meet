@@ -13,7 +13,6 @@ const PostWarp = styled.div`
   border-bottom:1px solid #f3f3f3;
   padding: 50px;
 
-
   .post-item-image {
     width: 45px;
     height: 45px;
@@ -88,6 +87,7 @@ const PostWarp = styled.div`
     font-size: 1rem;
   }
 `;
+
 const StyleTextarea = styled.textarea`
   width: 100%;
   min-height: 100px;
@@ -102,6 +102,7 @@ const StyleTextarea = styled.textarea`
   border-radius: 5px;
   margin-bottom: 10px;
 `;
+
 const StyleButton = styled.button`
   background: #333;
   padding: 5px 10px;
@@ -113,12 +114,14 @@ const StyleButton = styled.button`
   position: absolute;
   right: 0;
 `;
+
 const StyleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   
 `;
+
 function PostListItem(props) {
   const { post, listName } = props;
   const [btn, setBtn] = useState(false);

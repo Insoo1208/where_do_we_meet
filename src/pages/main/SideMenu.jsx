@@ -193,7 +193,7 @@ const DropDown = styled.ul`
   border: 2px solid ${props => props.myColorHex.mainColor};
   color: ${props => props.theme.gray700};
   border-radius: .5rem;
-  width: 250px;
+  min-width: 200px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -266,6 +266,7 @@ function SideMenu (props) {
   const [friendDetailAdress, setFriendDetailAdress] = useState([]);
 
   const [selectedFriend, setSelectedFriend] = useState('');
+  const [friendNickname, setFriendNickname] = useState([]);
 
   useEffect(() => {
     if(selectedFriend) setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
@@ -438,6 +439,7 @@ function SideMenu (props) {
         />
       </ContentsSearch>
     </SideMenuWrapper>
+
   );
 }
 
