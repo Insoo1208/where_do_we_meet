@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addComment, removeComment } from "../../features/post/postSlice";
 import { selectUser } from "../../features/user/userSlice";
 import { RiCloseFill } from "react-icons/ri";
-
-
+import { selectColor } from "../../features/color/colorSlice";
 
 // 댓글 CSS
 const Wrapper = styled.div`
@@ -19,7 +18,7 @@ const Wrapper = styled.div`
   margin-left: 15px;
 }
 .comment-title span {
-  color: #1f44a0 ;
+  color: ${props => props.myColorHex.mainColor};
   font-weight:bold;
 }
 `;
@@ -40,13 +39,13 @@ const CommentInput = styled.input`
 `;
 const CommentButton = styled.button`
   border: none;
-  background: none;
-  color: #0052b9;
+  background: none;  
   font-weight: bold;
   letter-spacing: -0.05rem;
   font-size: 0.85rem;
   cursor: pointer;
   outline: none;
+  color: ${props => props.myColorHex.mainColor};
 `;
 const CommentWarp = styled.li`
   display: flex;
@@ -86,6 +85,7 @@ function Comment(props) {
   const dispatch = useDispatch();
   const loggedInUser = useSelector(selectUser);
   const [authority, setAuthority] = useState('anonymous');
+  const myColor = useSelector(selectColor);
   
 
 
@@ -98,16 +98,16 @@ function Comment(props) {
     console.log(authority);
   }, [loggedInUser]);
 
+  console.log(data);
 
 
   const handleSubmit = () => {
-    
     if(comment) {
       let commentArr;
       if (loggedInUser) {
         commentArr = {
           id: data.length + 1,
-          commentUserProfileImg: data.userProfileImg,
+          commentUserProfileImg: loggedInUser.userProfileImg,
           commentsUserNickname : loggedInUser.nickname,
           commentsUserId : loggedInUser.id,
           comment
@@ -125,9 +125,9 @@ function Comment(props) {
       setComment('');
     } 
   };
-console.log(listName);
+
   return (
-    <Wrapper>
+    <Wrapper myColorHex={myColor}>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
       <InputWrap>
         <CommentInput 
@@ -139,7 +139,7 @@ console.log(listName);
           spellCheck="false" 
           autoComplete="off"
         />
-        <CommentButton type="button" onClick={handleSubmit}>게시하기</CommentButton>
+        <CommentButton myColorHex={myColor} type="button" onClick={handleSubmit}>게시하기</CommentButton>
       </InputWrap>
       <ul>
         {data.map( (comment) => {

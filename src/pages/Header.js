@@ -11,7 +11,7 @@ const Wrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.myColorHex};
+  background-color: ${props => props.myColorHex.mainColor};
   color: ${props => props.theme.gray200};
 `;
 

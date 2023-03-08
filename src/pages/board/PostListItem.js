@@ -152,7 +152,6 @@ function PostListItem(props) {
   }
 
   const handleSubmit = () => {
-    console.log(listName);
     dispatch(editContent({ id: post.id, listName, editedcontent: contentsValue }));
     setEditContents(false);
   }
