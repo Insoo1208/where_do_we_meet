@@ -22,7 +22,6 @@ const Wrapper = styled.div`
     margin-bottom: 30px;
   }
   p {
-    margin-bottom: 20px;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: -1px;
@@ -33,9 +32,6 @@ const Wrapper = styled.div`
     margin-left: 10px;
   }
 `;
-const RandomButton = styled.button`
-  margin-bottom: 70px;
-`;
 const StyledUl = styled.ul`
   width: 400px;
   display:flex;
@@ -45,7 +41,6 @@ const StyledUl = styled.ul`
   padding: 0 20px;
   column-gap: 10px;
   row-gap: 10px;
-  margin-bottom: 20px;
 `;
 const StyledLi = styled.li`  
   width: 30px;
@@ -62,7 +57,7 @@ const MyColorDiv = styled.div`
   border-radius: .3rem;
 `;
 
-const ApplyButton = styled.button`
+const StyleButton = styled.button`
   font-size: 16px;
   background: #fff;
   width: 50%;
@@ -74,15 +69,16 @@ const ApplyButton = styled.button`
   padding: 10px 0;
   font-weight: bold;
   letter-spacing: -1px;
+  margin-top: 2rem;
 `;
 
 function UserInfo() {
   const colors = [
-    {main: '#d86060', light: '#f0a0a0'},
-    {main: '#ea791d', light: '#f4ac72'},
+    {main: '#e75d5d', light: '#ff9090'},
+    {main: '#f78b33', light: '#ffbc85'},
     {main: '#ffb539', light: '#f8c963'},
     {main: '#ffcb16', light: '#ffe073'},
-    {main: '#ffe118', light: '#ffed73'},
+    {main: '#ffc705', light: '#ffed73'},
     {main: '#adcd1d', light: '#d3f182'},
     {main: '#74c723', light: '#b1ef74'},
     {main: '#91da4a', light: '#c2e2a3'},
@@ -137,15 +133,16 @@ function UserInfo() {
             return <StyledLi className="cursor-pointer" key={index} props={color.main} onClick={() => {dispatch(chooseColor(color))}}></StyledLi>
           })}
         </StyledUl>
-        <RandomButton type='button' onClick={handleApi} className="cursor-pointer">랜덤색상받기</RandomButton>
 
-        <div style={{ display: "flex", columnGap: "1rem" }}>
+        <StyleButton type='button' onClick={handleApi} className="cursor-pointer">랜덤색상받기</StyleButton>
+
+        <div style={{ display: "flex", columnGap: "1rem", marginTop: "5rem" }}>
           <p>현재테마 색상 : </p>
           <MyColorDiv myColorprops={myColor.mainColor}></MyColorDiv>
           <MyColorDiv myColorprops={myColor.mainLight}></MyColorDiv>
         </div>
         
-        <ApplyButton type="button" onClick={() => { navigate('/'); }} className="cursor-pointer">적용하기</ApplyButton>
+        <StyleButton type="button" onClick={() => { navigate('/'); }} className="cursor-pointer">적용하기</StyleButton>
         
       </Wrapper>
     </section>

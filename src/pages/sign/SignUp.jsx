@@ -8,6 +8,8 @@ import  CenterModal  from "../../components/CenterModal";
 
 
 import userData from "../../data.json";
+import { useSelector } from "react-redux";
+import { selectColor } from "../../features/color/colorSlice";
 // 서버에서 받아온 데이터 가정(import로 자동 파싱)
 // console.log(userData);
 
@@ -30,8 +32,8 @@ const Wrapper = styled.div`
       bottom: 0;
       margin: auto;
       font-size: 30px;
-      color: ${props => props.theme.main};
-    }
+      color: ${props => props.myColorHex.mainColor};
+     }
   }
   
   h1 {
@@ -111,8 +113,11 @@ const StyledInput = styled.input`
   height: 58px;
   margin-bottom: 1rem;
   border-radius: 0.5rem;
-  border: 2px solid ${props => props.theme.main};
-
+  border: 2px solid #333;
+  outline: none;
+  &:focus {
+    border: 2px solid ${props => props.myColorHex.mainColor};
+  }
   &:disabled {
     border: 2px solid ${props => props.theme.gray800};
     background-color: ${props => props.theme.gray200};
@@ -128,12 +133,14 @@ const StyledButton = styled.button`
   cursor: pointer;
 
   &.btn-zip {
-    color: ${props => props.theme.background};
-    background-color: ${props => props.theme.mainLight};
+    color: #fff;
+    background-color: #4a4c4e;
+    font-weight: bold;
   }
   &.btn-submit {
-    color: ${props => props.theme.background};
-    background-color: ${props => props.theme.main};
+    color: #fff;
+    background-color: ${props => props.myColorHex.mainColor};
+    font-weight:bold;
   }
 `;
 
@@ -282,11 +289,13 @@ function SignUp(props) {
   const recoenderIdCheck = userInfo.find((user) => {
     return user.id === signUpInputValues.recomenderId;
   });
+
+  const myColor = useSelector(selectColor);
   
   
   return (
     <section style={{ padding: '150px 0' }}>
-      <Wrapper>
+      <Wrapper myColorHex={myColor}>
         <h1>Sign Up</h1>
         <h2>E-MAIL</h2>
         {/* 
@@ -299,7 +308,7 @@ function SignUp(props) {
         
         <div className="input-check">
           <label htmlFor="signUpEmail"/>
-          <StyledInput type="email" id="signUpEmail" placeholder="abc123@email.com" value={signUpInputValues.userEmail} autoComplete="off" spellCheck="false"
+          <StyledInput myColorHex={myColor} type="email" id="signUpEmail" placeholder="abc123@email.com" value={signUpInputValues.userEmail} autoComplete="off" spellCheck="false"
           onChange={(e) => {
             setSignUpInputValues({
               ...signUpInputValues,
@@ -333,7 +342,7 @@ function SignUp(props) {
         <h2>ID</h2>
         <div className="input-check">
           <label htmlFor="signUnId"/>
-          <StyledInput type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={signUpInputValues.userId} autoComplete="off" spellCheck="false"
+          <StyledInput myColorHex={myColor} type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={signUpInputValues.userId} autoComplete="off" spellCheck="false"
             onChange={(e) => {
               setSignUpInputValues({
                 ...signUpInputValues,
@@ -381,7 +390,7 @@ function SignUp(props) {
         </h2>
         <div className="input-check">
           <label htmlFor="signUpPw"/>
-          <StyledInput type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요."  value={signUpInputValues.userPassword} autoComplete="off"
+          <StyledInput myColorHex={myColor} type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요."  value={signUpInputValues.userPassword} autoComplete="off"
             onChange={(e) => {
               setSignUpInputValues({
                 ...signUpInputValues,
@@ -408,7 +417,7 @@ function SignUp(props) {
         }    
         <div className="input-check">
           <label htmlFor="signUpPwCheck"/>
-          <StyledInput type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={signUpInputValues.userPasswordCheck} autoComplete="off"
+          <StyledInput myColorHex={myColor} type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={signUpInputValues.userPasswordCheck} autoComplete="off"
             onChange = {(e) => {
               setSignUpInputValues({
                 ...signUpInputValues,
@@ -437,7 +446,7 @@ function SignUp(props) {
         <div className="input-check" style={{ marginBottom: '1rem' }}>
           <div className="user-name" >
             <label htmlFor="userLastName" style={{display:'none'}} />
-            <StyledInput className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={signUpInputValues.userLastName} autoComplete="off"  
+            <StyledInput myColorHex={myColor} className="last-name" type='text' id="userLastName" placeholder="성을 입력해 주세요" value={signUpInputValues.userLastName} autoComplete="off"  
               onChange={(e) => {
                 setSignUpInputValues({
                   ...signUpInputValues,
@@ -454,7 +463,7 @@ function SignUp(props) {
               }}
             />
             <label htmlFor="userFirstName" style={{display:'none'}}/>
-            <StyledInput className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={signUpInputValues.userFirstName} autoComplete="off"
+            <StyledInput myColorHex={myColor} className="first-name" type='text' id="userFirstName" placeholder="이름을 입력해 주세요" value={signUpInputValues.userFirstName} autoComplete="off"
               onChange={(e) => {
                 setSignUpInputValues({
                   ...signUpInputValues,
@@ -487,9 +496,9 @@ function SignUp(props) {
         <h2>ADDRESS</h2>
         <div className="zip-wrapper">
           <label htmlFor="searchAddress"/>
-          <StyledInput className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={signUpInputValues.zonecode}
+          <StyledInput myColorHex={myColor} className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={signUpInputValues.zonecode}
           />
-          <StyledButton className="btn-zip" onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
+          <StyledButton myColorHex={myColor} className="btn-zip" onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
           <br />
         </div>
         {
@@ -501,10 +510,10 @@ function SignUp(props) {
             />
         }
         <label htmlFor="userAddress"/>
-        <StyledInput id="userAddress" placeholder="도로명 주소" disabled={true} value={signUpInputValues.address} 
+        <StyledInput myColorHex={myColor} id="userAddress" placeholder="도로명 주소" disabled={true} value={signUpInputValues.address} 
         />
         <label htmlFor="detailAddress"/>
-        <StyledInput id="detailAddress" placeholder="상세 주소" autoComplete="off" value={signUpInputValues.detailAddress}
+        <StyledInput myColorHex={myColor} id="detailAddress" placeholder="상세 주소" autoComplete="off" value={signUpInputValues.detailAddress}
           onChange={(e) => 
             {
               setSignUpInputValues({
@@ -536,7 +545,7 @@ function SignUp(props) {
         <h2>NICKNAME</h2>
         <div className="input-check">
           <label htmlFor="userNickname"/>
-          <StyledInput id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={signUpInputValues.userNickname}
+          <StyledInput myColorHex={myColor} id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={signUpInputValues.userNickname}
             onChange={(e) => 
               setSignUpInputValues({
               ...signUpInputValues,
@@ -563,7 +572,7 @@ function SignUp(props) {
         
         <h2>REFERRAL CODE<span>(선택)</span></h2>
         <label htmlFor="recomenderId"></label>
-        <StyledInput id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={signUpInputValues.recomenderId}
+        <StyledInput myColorHex={myColor} id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={signUpInputValues.recomenderId}
           onChange={(e) => 
             setSignUpInputValues({
               ...signUpInputValues,
@@ -590,6 +599,7 @@ function SignUp(props) {
         }
         
         <StyledButton
+          myColorHex={myColor}
           className="btn-submit"
           onClick={()=>{
 

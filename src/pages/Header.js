@@ -12,7 +12,7 @@ const Wrapper = styled.nav`
   justify-content: space-between;
   align-items: center;
   background-color: ${props => props.myColorHex.mainColor};
-  color: ${props => props.theme.gray200};
+  color: #fff;
 `;
 
 const StyledLogo = styled.div`

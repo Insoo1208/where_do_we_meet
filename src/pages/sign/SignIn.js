@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IoEyeOff, IoEye } from "react-icons/io5";
 import data from "../../data.json";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userLogIn } from "../../features/user/userSlice";
+import { selectColor } from "../../features/color/colorSlice";
 
 const Wrapper = styled.div`
   width: 500px;
@@ -40,22 +41,29 @@ const StyledInput = styled.input`
   width: 100%;
   height: 45px;
   margin-bottom: 1rem;
-  border: 1px solid ${props => props.theme.main};
+  border: 1px solid #333;
   border-radius: 8px;
+  outline: none;
+
+  &:focus {
+    border: 2px solid ${props => props.myColorHex.mainColor};
+  }
 `;
 
 const StyledButton = styled.button`
   width: 100%;
   height: 45px;
   margin-bottom: 1rem;
-  color: ${props => props.theme.gray200};
-  background-color: ${props => props.theme.main};
+  color: #fff;
+  background-color: ${props => props.myColorHex.mainColor};
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  font-weight:bold;
+  letter-spacing: -1px;
 
   &.signUp {
-    background-color: ${props => props.theme.mainLight};
+    background-color: ${props => props.myColorHex.mainLight};
   }
 `;
 
@@ -113,19 +121,21 @@ function SignIn() {
     };
   };
 
+  const myColor = useSelector(selectColor);
+
 
   return (
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
         <h1>Sign In</h1>
         <label htmlFor="signInId" />
-        <StyledInput type='text' id="signInId" placeholder="아이디를 입력하세요"
+        <StyledInput myColorHex={myColor} type='text' id="signInId" placeholder="아이디를 입력하세요"
           value={loginInfo.id} onChange={e => setLoginInfo({...loginInfo, id: e.target.value})}
           autoComplete="off"
           />
         <label htmlFor="signInPw" />
         <PwWrapper>
-          <StyledInput type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
+          <StyledInput myColorHex={myColor} type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
             value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
             autoComplete="off"
             onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
@@ -133,8 +143,8 @@ function SignIn() {
           />
           {eyeOpen ? <IoEye onClick={handleEyeClose}/> : <IoEyeOff onClick={handleEyeOpen} /> }
         </PwWrapper>
-        <StyledButton className="signIn" onClick={handleLogin}>로그인</StyledButton>
-        <StyledButton className="signUp" onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>
+        <StyledButton myColorHex={myColor} className="signIn" onClick={handleLogin}>로그인</StyledButton>
+        <StyledButton myColorHex={myColor} className="signUp" onClick={() => { navigate('/signup'); }}>회원가입</StyledButton>
         <SpanWrapper>
           <li><StyledLink to="/findid">아이디 찾기</StyledLink></li>
           <li><StyledLink to="/findpw">비밀번호 찾기</StyledLink></li>
