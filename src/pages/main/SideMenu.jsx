@@ -7,6 +7,10 @@ import { selectUser } from "../../features/user/userSlice";
 import data from "../../data.json";
 import { selectColor } from "../../features/color/colorSlice";
 
+import { TbLink } from "react-icons/tb";
+import { SiKakaotalk } from "react-icons/si";
+import CopyToClipboard from "react-copy-to-clipboard";
+
 const { kakao } = window;
 
 const SideMenuWrapper = styled.div`
@@ -160,6 +164,7 @@ const DetailListWrapper = styled.ul`
       font-weight: 700;
       padding-bottom: .75rem;
       color: ${props => props.myColorHex.mainColor};
+      letter-spacing: -0.06rem;
     }
 
     h2 {
@@ -249,6 +254,23 @@ const ContentsSearch = styled.div`
     font-weight: 700;
     font-size: 1.25rem;
   }
+`;
+const IconGroup = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 10px;
+
+    svg {
+      font-size: 1rem;
+    }
+    button {
+      width: auto;
+      height: auto;
+      border: none;
+      background: inherit;
+    }
+
 `;
 
 function SideMenu (props) {
@@ -413,6 +435,13 @@ function SideMenu (props) {
                 <h2>{data.road_address_name}</h2>
                 <h2>{data.address_name}</h2>
                 <h3>{data.phone}</h3>
+                <IconGroup>
+                  <CopyToClipboard text={data.place_name} onCopy={() => alert("클립보드에 복사되었습니다.")}>
+                    <button type="button"><TbLink /></button>
+                  </CopyToClipboard>
+
+                  <SiKakaotalk />
+                </IconGroup>
               </li>
             ))
           }
