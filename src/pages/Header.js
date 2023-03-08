@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet, Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { selectColor } from '../features/color/colorSlice';
+import { resetColor, selectColor } from '../features/color/colorSlice';
 import { selectUser, userLogOut } from '../features/user/userSlice';
 import Tooltip from './main/Tooltip';
 import { BsQuestionCircle } from 'react-icons/bs';
@@ -77,6 +77,12 @@ function Header () {
     if (showTooltips) setShowTooltips(false);
   };
 
+  const handleLogOut = () => {
+    dispatch(userLogOut());
+    dispatch(resetColor());
+    closeTooltip();
+  }
+
   return (
     <>
       <header>
@@ -93,8 +99,8 @@ function Header () {
               ? 
               <>
                 <li>{user.nickname}님 환영합니다.</li>
-                <SubMenu><StyledNavLink to='/' onClick={closeTooltip}>내 정보</StyledNavLink></SubMenu>
-                <SubMenu><StyledNavLink onClick={() => { dispatch(userLogOut()); closeTooltip(); }}>로그아웃</StyledNavLink></SubMenu>
+                <SubMenu><StyledNavLink to='/theme' onClick={closeTooltip}>내 정보</StyledNavLink></SubMenu>
+                <SubMenu><StyledNavLink to='/' onClick={handleLogOut}>로그아웃</StyledNavLink></SubMenu>
               </>
               :
               <>

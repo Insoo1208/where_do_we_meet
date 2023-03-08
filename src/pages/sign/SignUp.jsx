@@ -15,12 +15,11 @@ import { selectColor } from "../../features/color/colorSlice";
 
 
 const Wrapper = styled.div`
-  width: 590px;
+  width: 500px;
   margin: 0 auto;
   /* display: flex;
   flex-direction: column; */
   align-items: center;
-  padding: 16px;
   /* background-color: ${props => props.theme.background}; */
 
   div.input-check {
@@ -33,7 +32,7 @@ const Wrapper = styled.div`
       margin: auto;
       font-size: 30px;
       color: ${props => props.myColorHex.mainColor};
-     }
+    }
   }
   
   h1 {
@@ -45,7 +44,7 @@ const Wrapper = styled.div`
   }
 
   h2 {
-    font-size: 28px;
+    font-size: 1.5rem;
     font-weight: 100;
     padding-bottom: .625rem;
     margin-top: .875rem;
@@ -110,23 +109,23 @@ const StyledInput = styled.input`
   display: block;
   padding-left: .7rem;
   width: 100%;
-  height: 58px;
+  height: 55px;
   margin-bottom: 1rem;
   border-radius: 0.5rem;
-  border: 2px solid #333;
+  border: 1px solid #333;
   outline: none;
   &:focus {
     border: 2px solid ${props => props.myColorHex.mainColor};
   }
   &:disabled {
-    border: 2px solid ${props => props.theme.gray800};
+    border: 1px solid ${props => props.theme.gray800};
     background-color: ${props => props.theme.gray200};
   }
   `;
 
 const StyledButton = styled.button`
   width: 100%;
-  height: 58px;
+  height: 55px;
   margin-bottom: 1rem;
   border-radius: 0.5rem;
   border: none;

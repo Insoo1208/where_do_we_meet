@@ -25,11 +25,15 @@ const colorSlice = createSlice({
     chooseColor: (state, { payload : colors}) => {
       state.mainColor = colors.main;
       state.mainLight = colors.light;
+    },
+    resetColor: state => {
+      state.mainColor = '#1f44a0';
+      state.mainLight = '#6885ce';
     }
   }
 });
 
-export const { changeColor, chooseColor } = colorSlice.actions;
+export const { changeColor, chooseColor, resetColor } = colorSlice.actions;
 export const selectColor = state => state.color;
 
 export default colorSlice.reducer;

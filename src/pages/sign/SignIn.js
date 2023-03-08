@@ -16,9 +16,10 @@ const Wrapper = styled.div`
   color: ${props => props.theme.gray700};
 
   h1 {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 700;
     padding: 1rem 2rem 1.5rem;
+    color: ${props => props.theme.gray800};
     cursor: default;
   }
 `;

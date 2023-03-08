@@ -79,7 +79,7 @@ function App() {
               {/* <Route index path="/board/review" element={<BoardPage />} /> */}
               <Route path="/board/:listName?" element={<BoardPage />} />
               <Route path="/board/post-write" element={<PostWrite />} />
-            </Route>          
+            </Route>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/findid" element={<FindId />} />
             <Route path="/findpw" element={<FindPw />} />

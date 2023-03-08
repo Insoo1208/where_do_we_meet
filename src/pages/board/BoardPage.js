@@ -6,6 +6,7 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { useSelector } from 'react-redux';
 import { selectAll } from '../../features/post/postSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { selectColor } from '../../features/color/colorSlice';
 
 const Wrapper = styled.div`
   padding: 50px;
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
     letter-spacing: -2px;
   }
 `;
+
 const StyleDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -35,7 +37,7 @@ const StyleDiv = styled.div`
     width: 64px;
     height: 64px;
     margin-right: 15px;
-    color:#1f44a0;
+    color: ${props => props.myColorHex.mainColor};
   }
 `;
 const Search = styled.div`
@@ -76,6 +78,7 @@ function BoardPage() {
   const [postData, setPostData] = useState([]);
   
   const data = useSelector(selectAll);
+  const myColor = useSelector(selectColor);
   const navigate = useNavigate();
   const titleParams = useParams();
 
@@ -122,7 +125,7 @@ function BoardPage() {
   return (
     <Wrapper>
       <h3>{titleData.current}</h3>
-      <StyleDiv>
+      <StyleDiv myColorHex={myColor}>
         <AiFillPlusSquare className="writeIcon cursor-pointer" onClick={() => {navigate("/board/post-write"); }}/>
         <Search>
           <AiOutlineSearch className="search-icon" onClick={handleSearch}/>

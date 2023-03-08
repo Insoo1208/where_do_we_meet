@@ -81,6 +81,7 @@ const PostWarp = styled.div`
   }
   .icon-trash{
     font-size: 1.1rem;
+    color: #be3455;
   }
   .arrow-icon {
     /* font-size: 2.5rem; */
