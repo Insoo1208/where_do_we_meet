@@ -9,17 +9,23 @@ import { useNavigate } from 'react-router-dom';
 import { selectColor } from '../../features/color/colorSlice';
 
 const Wrapper = styled.div`
-  padding: 50px;
+  @media ${({ theme }) => theme.device.tablet } {
+    padding: 2rem;    
+  }
+  padding: 3.125rem;
   flex: 1;
   
   h3 {
-    font-size: 26px;
-    padding-bottom: 15px;
-    margin-bottom: 50px;
+    @media ${({ theme }) => theme.device.tablet } {
+      margin-bottom: 1.5rem;
+    }
+    font-size: 1.625rem;
+    padding-bottom: .9375rem;
+    margin-bottom: 3.125rem;
     font-weight: 600;
-    letter-spacing: -1px;
+    letter-spacing: -0.0625rem;
     color: #333;
-    letter-spacing: -2px;
+    letter-spacing: -0.125rem;
   }
 `;
 
@@ -27,27 +33,27 @@ const StyleDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 
   .writeIcon{
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
-    width: 64px;
-    height: 64px;
-    margin-right: 15px;
+    border-radius: .625rem;
+    width: 4rem;
+    height: 4rem;
+    margin-right: .9375rem;
     color: ${props => props.myColorHex};
   }
 `;
 
 const Search = styled.div`
   display: flex;
-  border-radius: 50px;
+  border-radius: 3.125rem;
   background:#fff;
-  padding: 20px 30px;
+  padding: 1.25rem 1.875rem;
   flex:1;
-  height: 60px;
+  height: 3.75rem;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
@@ -55,18 +61,18 @@ const Search = styled.div`
   
   .search-icon {
     font-size: 1.5rem;
-    margin-right: 5px;
+    margin-right: .3125rem;
   }
 `;
 const SearchInput = styled.input`
   outline: none;
   border:none;
   flex:1;
-  font-size: 17px;
+  font-size: 1.0625rem;
 
   &::placeholder {
     color: #d9d9d9;
-    letter-spacing: -1px;
+    letter-spacing: -0.0625rem;
   }
 `;
 const PostList = styled.div`

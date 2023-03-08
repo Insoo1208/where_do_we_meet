@@ -9,36 +9,49 @@ import { selectUser } from "../../features/user/userSlice";
 
 
 const PostWarp = styled.div`
+  @media ${({ theme }) => theme.device.tablet } {
+    padding: 2rem;    
+  }
   display: flex;  
-  border-bottom:1px solid #f3f3f3;
-  padding: 50px;
+  border-bottom:.0625rem solid #f3f3f3;
+  padding: 3.125rem;
 
   .post-item-image {
-    width: 45px;
-    height: 45px;
+    width: 2.8125rem;
+    height: 2.8125rem;
   }
   .content-area{
     flex: 1;
-    margin: 5px 0 0 10px;
+    margin: .3125rem 0 0 .625rem;
     position: relative;
+    
   }
   .post-item-name {
-    font-size: 16px;
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 1.1rem;   
+    }
+    font-size: 1rem;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: .625rem;
     display:flex;
   }
   .post-item-name span {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 1rem;   
+    }
     color:#adadad;
     font-weight: normal;
-    font-size: 14px;
-    margin-left: 5px;
+    font-size: .875rem;
+    margin-left: .3125rem;
   }
   .post-item-text {
-
-    font-size: 14px;
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 1rem;
+    }
+    
+    font-size: .875rem;
     line-height: 1.3;
-    margin-bottom: 40px;
+    margin-bottom: 2.5rem;
     color:#898989;
     ${ props => props.btn
       ? css` `
@@ -57,14 +70,14 @@ const PostWarp = styled.div`
     align-items: center;   
   } 
   .post-item-icon li{
-    font-size: 13px;
+    font-size: .8125rem;
     cursor: pointer;  
     display:flex ;
     justify-content: center;
     align-items: center;
   }  
   .post-item-icon li span {
-    margin-left: 2px;
+    margin-left: .125rem;
     font-weight: 500;
   }
   .icon-like {
@@ -73,11 +86,11 @@ const PostWarp = styled.div`
   }
   .icon-comment {
     font-size: 1.2rem;
-    margin-left: 10px;
+    margin-left: .625rem;
   }
   .icon-edit {
     font-size: 1.2rem;
-    margin-right: 5px;
+    margin-right: .3125rem;
   }
   .icon-trash{
     font-size: 1.1rem;
@@ -91,26 +104,26 @@ const PostWarp = styled.div`
 
 const StyleTextarea = styled.textarea`
   width: 100%;
-  min-height: 100px;
-  border: 1px solid #e3e3e3;
+  min-height: 6.25rem;
+  border: .0625rem solid #e3e3e3;
   outline: none;
-  padding: 20px;
-  font-size: 15px;
+  padding: 1.25rem;
+  font-size: .9375rem;
   color: #4e4e4e;
   resize: none;
   background: #fbfbfb;
   font-family: inherit;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  border-radius: .3125rem;
+  margin-bottom: .625rem;
 `;
 
 const StyleButton = styled.button`
   background: #333;
-  padding: 5px 10px;
+  padding: .3125rem .625rem;
   color: #fff;
   border: none;
-  letter-spacing: -1px;
-  border-radius: 5px;
+  letter-spacing: -0.0625rem;
+  border-radius: .3125rem;
   display: block;
   position: absolute;
   right: 0;

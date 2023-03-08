@@ -13,15 +13,34 @@ const Wrapper = styled.div`
   margin-bottom: 30px;
 
 .comment-title {
+  @media ${({ theme }) => theme.device.tablet } {
+    font-size: 0.98rem;
+    margin: 0 0 8px 0;
+  }
   font-size: 15px; 
   margin-bottom: 10px;
   margin-left: 15px;
 }
 .comment-title span {
+  @media ${({ theme }) => theme.device.tablet } {
+    font-size: 0.98rem;
+  }
+  color: #1f44a0 ;
+  font-weight:bold;
+}
+`;
+const CommentInput = styled.input`
+@media ${({ theme }) => theme.device.tablet } {
+    font-size: 0.98rem;
+    margin: 0;
+  }
+  border: none;
+  outline: none;
   color: ${props => props.myColorHex.mainColor};
   font-weight:bold;
 }
 `;
+
 const InputWrap = styled.div`
   display: flex;
   border: 1px solid #efefef;
@@ -50,26 +69,36 @@ const CommentButton = styled.button`
 const CommentWarp = styled.li`
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: .625rem;
 
   .comment-item-image {
+    
     width: 35px;
     height: 35px;
     margin-right: 10px;
   }
   .comment-item-name {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 0.98rem;
+    }
     font-size: 14px;
     font-weight: bold;
     margin: 3px 0 5px;
     display:flex;
   }
   .comment-item-name span{
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 0.92rem;
+    }
     color:#adadad;
     font-weight: normal;
     font-size: 12px;
     margin-left: 5px;
 }
   .comment-item-text {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 0.94rem;
+    }
     font-size: 13px;
     color:#999;
   }

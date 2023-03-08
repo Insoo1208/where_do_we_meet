@@ -31,6 +31,10 @@ const StyledLogo = styled.div`
 `;
 
 const StyledUl = styled.ul`
+  @media ${({ theme }) => theme.device.tablet } {
+    flex: 1;
+    margin-left: 1rem;
+  }
   width: 50%;
   display: flex;
   flex-direction: row;
@@ -39,8 +43,11 @@ const StyledUl = styled.ul`
 `;
 
 const SubMenu = styled.li`
+  @media ${({ theme }) => theme.device.tablet } {
+  }
   flex: 1;
   text-align: center;
+  white-space: nowrap;
 `;
 
 const StyledLink = styled(Link)`

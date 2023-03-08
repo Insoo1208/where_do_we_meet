@@ -3,28 +3,60 @@ import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 
 
+
 const Wrapper = styled.div`
+  @media ${({ theme }) => theme.device.tablet } {
+    width: 100%;
+    padding: 1.125rem;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    border-bottom: .0625rem solid #cbcbcb;
+  }
     width: 300px;
     height: auto;
-    padding: 50px;
-
+    padding: 3.125rem;
+    
+    
     h3{
-      font-size: 30px;
+      @media ${({ theme }) => theme.device.tablet } {
+        white-space: nowrap;
+        margin-bottom: 0;
+        font-size: 1.6rem;
+      }
+      font-size: 1.875rem;
       margin-bottom: 30px;
       font-weight: 600;
       padding-left: 10px;
+
+    }
+    ul {
+      @media ${({ theme }) => theme.device.tablet } {
+        display: flex;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+      }
     }
     ul li {
-      font-size: 16px;
-    height: 50px;
-    line-height: 46px;
-    border-bottom: 1px solid #cbcbcb;
-    padding: 0 25px;
-    background: #fff;
-    border-radius: 50px;
-    margin-bottom: 5px;
+      @media ${({ theme }) => theme.device.tablet } {
+        margin-bottom: 0;
+        margin-left :1rem;
+          
+      }
+      font-size: 1rem;
+      height: 3.125rem;
+      line-height: 2.875rem;
+      border-bottom: .0625rem solid #cbcbcb;
+      padding: 0 1.5625rem;
+      background: #fff;
+      border-radius: 50px;
+      margin-bottom: .3125rem;
     }
+
+    
 `;
+
 
 function Menu(props) {
   const navigate = useNavigate();

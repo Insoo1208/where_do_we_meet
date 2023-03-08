@@ -17,6 +17,9 @@ import BoardPage from "./pages/board/BoardPage";
 import UserInfo from "./pages/sign/UserInfo";
 
 
+import deviceTheme from "./features/mediaquery/deviceTheme";
+console.log(deviceTheme.device.tablet);
+
 const theme = {
   gray100: '#f1f1f1',
   gray200: '#eee',
@@ -65,9 +68,26 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  html {
+    @media ${deviceTheme.device.desktop} {
+      font-size: 16px;
+    }
+    @media ${deviceTheme.device.tablet} {
+      font-size: 14px;
+    }
+    @media ${deviceTheme.device.mobileL} {
+      font-size: 12px;
+    }
+    @media ${deviceTheme.device.mobileM} {
+      font-size: 11px;
+    }
+  }
+  
 `;
 
 function App() {
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
