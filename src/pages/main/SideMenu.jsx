@@ -487,7 +487,7 @@ function SideMenu (props) {
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
       <ContentsSearch myColorHex={myColor}>
-        <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
+        <MdSearch className="cursor-pointer" onClick={() => setContentsSearch(contentsValue)}/>
         <label htmlFor="content-search"/>
         <input id="content-search" style={{
           flex: 1,

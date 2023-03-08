@@ -46,6 +46,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #f9f9f9;
     color: #333;
+    cursor: default;
   }
 
   * {

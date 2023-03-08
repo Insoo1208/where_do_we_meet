@@ -135,10 +135,10 @@ function PostWrite() {
         <p className="post-title">내용 입력</p>      
         <StyleTextarea type="text" placeholder="게시물 내용을 작성하세요." value={postValue} onChange={(e) => {setPostValue(e.target.value)} } spellCheck="false" autoComplete="off" />
         <RadioWrap>
-          <input type="radio" id="review" name="postwrite" value="review" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'review'} />
-          <label htmlFor="review">카페리뷰</label>
-          <input type="radio" id="free" name="postwrite" value="free" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'free'} />
-          <label htmlFor="free">자유게시판</label>
+          <input type="radio" className="cursor-pointer" id="review" name="postwrite" value="review" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'review'} />
+          <label className="cursor-pointer" htmlFor="review">카페리뷰</label>
+          <input type="radio" className="cursor-pointer" id="free" name="postwrite" value="free" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'free'} />
+          <label className="cursor-pointer" htmlFor="free">자유게시판</label>
           {(loggedInUser && loggedInUser.authority) === 'admin' &&
             <>
               <input type="radio" id="notice" name="postwrite" value="notice" onChange={(e) => {setRadioValue(e.target.value);} } checked={radioValue === 'notice'} />

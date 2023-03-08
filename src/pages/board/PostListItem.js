@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { editContent, increment, removePost } from "../../features/post/postSlice";
 import { FaRegTrashAlt, FaRegEdit, FaRegCommentDots } from "react-icons/fa";
 import { selectUser } from "../../features/user/userSlice";
+import { selectColor } from "../../features/color/colorSlice";
 
 
-const PostWarp = styled.div`
+const PostWrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet } {
     padding: 2rem;    
   }
@@ -94,7 +95,7 @@ const PostWarp = styled.div`
   }
   .icon-trash{
     font-size: 1.1rem;
-    color: #be3455;
+    color: #BB2649;
   }
   .arrow-icon {
     /* font-size: 2.5rem; */
@@ -127,6 +128,10 @@ const StyleButton = styled.button`
   display: block;
   position: absolute;
   right: 0;
+
+  :hover {
+    background-color: ${props => props.myColorHex.mainColor};
+  }
 `;
 
 const StyleDiv = styled.div`
@@ -142,6 +147,8 @@ function PostListItem(props) {
   const [editContents, setEditContents] = useState(false);
   const [contentsValue, setContentsValue] = useState('');
   const [authority, setAuthority] = useState('anonymous');
+
+  const myColor = useSelector(selectColor);
 
   const dispatch = useDispatch();  
   const loggedinUser = useSelector(selectUser);
@@ -173,7 +180,7 @@ function PostListItem(props) {
 
 
   return (
-    <PostWarp btn={btn}>
+    <PostWrapper btn={btn}>
       <img src={post.userProfileImg} className="post-item-image"/>
       <div className="content-area">
         <p className="post-item-name">{post.userNickname} <span>{ post.userId && `@${post.userId}`}</span></p>
@@ -183,7 +190,7 @@ function PostListItem(props) {
               <>
                 <label htmlFor="edit-textarea" />
                 <StyleTextarea id="edit-textarea" value={contentsValue} onChange={e => setContentsValue(e.target.value)} spellCheck="false" autoComplete="off" />
-                <StyleButton onClick={handleSubmit} className="cursor-pointer">확인</StyleButton>
+                <StyleButton myColorHex={myColor} onClick={handleSubmit} className="cursor-pointer">확인</StyleButton>
               </>
             )
             : post.content}
@@ -212,8 +219,8 @@ function PostListItem(props) {
         </StyleDiv>
       </div>      
 
-      { btn ? <AiOutlineUp className="arrow-icon" onClick={handleClose}/> : <AiOutlineDown className="arrow-icon" onClick={handleOpen}/> }
-    </PostWarp>    
+      {btn ? <AiOutlineUp className="arrow-icon cursor-pointer" onClick={handleClose} /> : <AiOutlineDown className="arrow-icon cursor-pointer" onClick={handleOpen}/> }
+    </PostWrapper>    
   );
 }
 

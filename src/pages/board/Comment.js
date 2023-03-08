@@ -39,7 +39,6 @@ const CommentInput = styled.input`
 
   border: none;
   outline: none;
-  color: ${props => props.myColorHex.mainColor};
   font-weight:bold;
 `;
 
@@ -66,7 +65,7 @@ const CommentButton = styled.button`
   color: ${props => props.myColorHex.mainColor};
 `;
 
-const CommentWarp = styled.li`
+const CommentWrapper = styled.li`
   display: flex;
   align-items: center;
   padding: .625rem;
@@ -101,6 +100,10 @@ const CommentWarp = styled.li`
     font-size: 13px;
     color:#999;
   }
+
+  svg {
+    color: #BB2649;
+  }
 `;
 const CommentListItem = styled.div`
   display: flex;
@@ -123,11 +126,7 @@ function Comment(props) {
       else if(loggedInUser.authority === 'user') setAuthority('user');
     } else setAuthority('anonymous');
 
-    console.log(authority);
   }, [loggedInUser]);
-
-  console.log(data);
-
 
   const handleSubmit = () => {
     if(comment) {
@@ -158,7 +157,8 @@ function Comment(props) {
     <Wrapper myColorHex={myColor}>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
       <InputWrap>
-        <CommentInput 
+        <CommentInput
+          myColorHex={myColor}
           type="text" 
           placeholder="댓글을 작성하세요."
           value={comment} 
@@ -172,7 +172,7 @@ function Comment(props) {
       <ul>
         {data.map( (comment) => {
           return (
-            <CommentWarp key={comment.id}>            
+            <CommentWrapper key={comment.id}>            
               <CommentListItem>
                 <img src={comment.commentUserProfileImg} className="comment-item-image"/>
                 <div>
@@ -187,7 +187,7 @@ function Comment(props) {
                   <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
                 )
               }
-            </CommentWarp>                   
+            </CommentWrapper>                   
           );
         })}        
       </ul>
