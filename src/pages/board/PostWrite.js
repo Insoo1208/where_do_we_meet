@@ -105,9 +105,8 @@ function PostWrite(props) {
       }
       dispatch(addPost({ radioValue, postTextObj }));
       setPostValue('');
-      if (radioValue === 'review') navigate('/board')
-      else navigate(`/board/${radioValue}`);
-    } else if (!postValue) alert('게시물 내용을 입력해주세요.');
+      navigate(`/board/${radioValue}`);
+    } if (!postValue) alert('게시물 내용을 입력해주세요.');
   };
   
   return (
@@ -125,7 +124,7 @@ function PostWrite(props) {
           <label htmlFor="notice">공지사항</label>
         </RadioWrap>
         <BtnWrap>
-          <StyleButton className="cursor-pointer" type="button" onClick={() => {navigate("/board");}}>취소</StyleButton>
+          <StyleButton className="cursor-pointer" type="button" onClick={() => {navigate("/board/review");}}>취소</StyleButton>
           <StyleButton className="conpim-btn cursor-pointer" type="button" onClick={handleSubmit}>완료</StyleButton>
         </BtnWrap>
       </Write>    

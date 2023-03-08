@@ -15,6 +15,7 @@ import PostWrite from "./pages/board/PostWrite";
 import Notice from "./pages/board/Notice";
 import Review from "./pages/board/Review";
 import Free from "./pages/board/Free";
+import BoardPage from "./pages/board/BoardPage";
 
 const theme = {
   gray100: '#f1f1f1',
@@ -75,9 +76,8 @@ function App() {
           <Route path="/" element={<Header />} >
             <Route index element={<Main />} />
             <Route path="/board" element={<Board />} >
-              <Route index element={<Review />} /> 
-              <Route path="/board/notice" element={<Notice />} />
-              <Route path="/board/free" element={<Free />} />
+              {/* <Route index path="/board/review" element={<BoardPage />} /> */}
+              <Route path="/board/:listName?" element={<BoardPage />} />
               <Route path="/board/post-write" element={<PostWrite />} />
             </Route>          
             <Route path="/signin" element={<SignIn />} />

@@ -33,7 +33,7 @@ function Menu(props) {
     <Wrapper>
       <h3>게시판</h3>
       <ul>
-        <li className="cursor-pointer" onClick={() => {navigate("/board");}}>카페리뷰</li>
+        <li className="cursor-pointer" onClick={() => {navigate("/board/review");}}>카페리뷰</li>
         <li className="cursor-pointer" onClick={() => {navigate("/board/free");}} >자유게시판</li>
         <li className="cursor-pointer" onClick={() => {navigate("/board/notice");}}>공지사항</li>
       </ul>          

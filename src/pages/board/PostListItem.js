@@ -137,8 +137,6 @@ function PostListItem(props) {
       if (loggedinUser.authority === 'admin') setAuthority('admin');
       else if(loggedinUser.authority === 'user') setAuthority('user');
     } else setAuthority('anonymous');
-
-    console.log(authority);
   }, [loggedinUser]);
 
 
@@ -155,7 +153,6 @@ function PostListItem(props) {
   }
 
   const handleSubmit = () => {
-    console.log(listName);
     dispatch(editContent({ id: post.id, listName, editedcontent: contentsValue }));
     setEditContents(false);
   }

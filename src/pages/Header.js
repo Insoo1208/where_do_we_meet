@@ -99,7 +99,7 @@ function Header () {
                 <SubMenu><StyledNavLink to='/signin' onClick={closeTooltip}>로그인</StyledNavLink></SubMenu>
                 <SubMenu><StyledNavLink to='/signup' onClick={closeTooltip}>회원가입</StyledNavLink></SubMenu>
               </>}
-            <SubMenu><StyledNavLink to='/board' onClick={closeTooltip}>게시판</StyledNavLink></SubMenu>
+            <SubMenu><StyledNavLink to='/board/review' onClick={closeTooltip}>게시판</StyledNavLink></SubMenu>
           </StyledUl>
         </Wrapper>
       </header>
