@@ -1,11 +1,11 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import data from "../../data.json";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogIn } from "../../features/user/userSlice";
 import { selectColor } from "../../features/color/colorSlice";
+import axios from "axios";
 
 const Wrapper = styled.div`
   width: 500px;
@@ -98,12 +98,30 @@ function SignIn() {
   const dispatch = useDispatch();
   const myColor = useSelector(selectColor);
 
+  const data = useRef();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
+        if (response.status === 200) {
+          data.current =  response.data;
+        }
+        else throw new Error(`api error: ${response.status} ${response.statusText}`);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+
   const handleEyeChange = () => {
     setEyeOpen(!eyeOpen);
   }
 
   const handleLogin = () => {
-    const checkedUser = data.userInfo.find(user => user.id === loginInfo.id);
+    const checkedUser = data.current.find(user => user.id === loginInfo.id);
     if (checkedUser) {
       if (checkedUser.password === loginInfo.pw) {
         dispatch(userLogIn(checkedUser));

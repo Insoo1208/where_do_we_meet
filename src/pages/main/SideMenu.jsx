@@ -1,15 +1,14 @@
 import styled, { css } from "styled-components";
 import { MdChevronLeft, MdChevronRight, MdSearch, MdClose } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
-
-import data from "../../data.json";
 import { selectColor } from "../../features/color/colorSlice";
 
 import { TbLink } from "react-icons/tb";
 import { SiKakaotalk } from "react-icons/si";
 import CopyToClipboard from "react-copy-to-clipboard";
+import axios from "axios";
 
 const { kakao } = window;
 
@@ -308,14 +307,33 @@ function SideMenu (props) {
   const [friendDetailAdress, setFriendDetailAdress] = useState([]);
 
   const [selectedFriend, setSelectedFriend] = useState('');
-  const [friendNickname, setFriendNickname] = useState([]);
+
+  const { setMyAdress, setFriendAdress, setContentsSearch, searchData } = props;
+
+  const data = useRef();
 
   useEffect(() => {
-    if(selectedFriend) setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
+        if (response.status === 200) {
+          data.current =  response.data;
+        }
+        else throw new Error(`api error: ${response.status} ${response.statusText}`);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if(selectedFriend) setFriendDetailAdress([...data.current.find(user => user.id === selectedFriend).favorites]);
   }, [selectedFriend]);
 
   const user = useSelector(selectUser);
-  const { setMyAdress, setFriendAdress, setContentsSearch, searchData } = props;
+  const myColor = useSelector(selectColor);
+
 
   const geocoder = new kakao.maps.services.Geocoder();
 
@@ -337,8 +355,6 @@ function SideMenu (props) {
       console.error(error);
     } 
   };
-
-  const myColor = useSelector(selectColor);
 
   return (
     <SideMenuWrapper menuOpened={menuOpened}>
