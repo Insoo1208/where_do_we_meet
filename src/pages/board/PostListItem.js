@@ -16,7 +16,6 @@ const PostWarp = styled.div`
   border-bottom:.0625rem solid #f3f3f3;
   padding: 3.125rem;
 
-
   .post-item-image {
     width: 2.8125rem;
     height: 2.8125rem;
@@ -95,12 +94,14 @@ const PostWarp = styled.div`
   }
   .icon-trash{
     font-size: 1.1rem;
+    color: #be3455;
   }
   .arrow-icon {
     /* font-size: 2.5rem; */
     font-size: 1rem;
   }
 `;
+
 const StyleTextarea = styled.textarea`
   width: 100%;
   min-height: 6.25rem;
@@ -115,6 +116,7 @@ const StyleTextarea = styled.textarea`
   border-radius: .3125rem;
   margin-bottom: .625rem;
 `;
+
 const StyleButton = styled.button`
   background: #333;
   padding: .3125rem .625rem;
@@ -126,12 +128,14 @@ const StyleButton = styled.button`
   position: absolute;
   right: 0;
 `;
+
 const StyleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   
 `;
+
 function PostListItem(props) {
   const { post, listName } = props;
   const [btn, setBtn] = useState(false);
@@ -147,8 +151,6 @@ function PostListItem(props) {
       if (loggedinUser.authority === 'admin') setAuthority('admin');
       else if(loggedinUser.authority === 'user') setAuthority('user');
     } else setAuthority('anonymous');
-
-    console.log(authority);
   }, [loggedinUser]);
 
 
@@ -165,7 +167,6 @@ function PostListItem(props) {
   }
 
   const handleSubmit = () => {
-    console.log(listName);
     dispatch(editContent({ id: post.id, listName, editedcontent: contentsValue }));
     setEditContents(false);
   }

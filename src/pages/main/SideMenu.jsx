@@ -5,6 +5,11 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/user/userSlice";
 
 import data from "../../data.json";
+import { selectColor } from "../../features/color/colorSlice";
+
+import { TbLink } from "react-icons/tb";
+import { SiKakaotalk } from "react-icons/si";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 const { kakao } = window;
 
@@ -33,7 +38,6 @@ const SideMenuBg = styled.div`
   }
   width: 450px;
   height: calc(100vh - 75px);
-  /* background-color: ${props => props.theme.mainLight}; */
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -45,19 +49,13 @@ const SideMenuBg = styled.div`
 
 const UserSearchWrapper = styled.div`
   width: 100%;
-  /* background-color: ${props => props.theme.main}; */
   padding: 1rem 0;
   border-radius: .5rem;
-
-  /* :nth-child(even) {
-    background-color: ${props => props.theme.accent};
-  } */
 `;
 
 const MenuSlideButton = styled.div`
   width: 24px;
   height: 50px;
-  /* background-color: ${props => props.theme.mainLight}; */
   background-color: #fff;
   border-radius: 0 10px 10px 0;
   font-size: 1.5rem;
@@ -81,9 +79,8 @@ const UserSearchArea = styled.div`
     width: 3.375rem;
     height: 3.375rem;
     border-radius: 50%;
-    /* background-color: #fff; */
-    background-color: ${props => props.theme.main};
-    color: ${props => props.theme.gray200};
+    background-color: ${props => props.myColorHex.mainColor};    
+    color: #fff;
     font-weight: 700;
     display: flex;
     justify-content: center;
@@ -98,7 +95,7 @@ const InputArea = styled.div`
   justify-content: space-evenly;
   align-items: center;
   background-color: #fff;
-  border: 2px solid ${props => props.theme.main} ;
+  border: 2px solid ${props => props.myColorHex.mainColor};
   border-radius: .5rem;
   padding: .25rem;
 
@@ -116,6 +113,7 @@ const InputArea = styled.div`
     height: 40px;
     border: none;
     outline: none;
+    letter-spacing: -1px;
   }
 `;
 
@@ -129,9 +127,8 @@ const StyledMdClose = styled(MdClose)`
 const UserSearchLine = styled.div`
   width: 100%;
   height: 2px;
-  /* margin: calc((150px - (54px + 48px) - 16px * 2) / 2) 0 ; */
   margin: .5rem 0 ;
-  background-color: ${props => props.theme.main};
+  background-color: ${props => props.myColorHex.mainColor};
 `; 
 
 const UserFastSearch = styled.div`
@@ -147,8 +144,8 @@ const UserFastSearch = styled.div`
 
   li {
     border-radius: 1.5rem;
-    background-color: ${props => props.theme.mainLight};
-    color: ${props => props.theme.gray200};
+    background-color: ${props => props.myColorHex.mainLight};
+    color: #fff;
     padding: .875rem;
     cursor: pointer;
   }
@@ -167,18 +164,16 @@ const DetailListWrapper = styled.ul`
 
   li {
     width: 90%;
-    /* background-color: ${props => props.theme.accent}; */
     background-color: #fff;
-    /* border: 2px solid ${props => props.theme.main}; */
     padding: 1.5rem;
-    /* border-radius: .5rem; */
     margin: 0 !important;
 
     h1 {
       font-size: 1.15rem;
       font-weight: 700;
       padding-bottom: .75rem;
-      color: ${props => props.theme.main};
+      color: ${props => props.myColorHex.mainColor};
+      letter-spacing: -0.06rem;
     }
 
     h2 {
@@ -213,10 +208,10 @@ const DropDown = styled.ul`
   left: 1.5rem;
   z-index: 12;
   background-color: #fff;
-  border: 2px solid ${props => props.theme.mainDark};
+  border: 2px solid ${props => props.myColorHex.mainColor};
   color: ${props => props.theme.gray700};
   border-radius: .5rem;
-  width: 250px;
+  min-width: 200px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -249,11 +244,12 @@ const FindButton = styled.button`
   height: 2.5rem;
   font-size: 1.25rem;
   font-weight: 700;
-  background-color: ${props => props.theme.main};
-  color: ${props => props.theme.gray200};
+  background-color: ${props => props.myColorHex.mainColor};
+  color: #fff;
   border: none;
   border-radius: .5rem;
   cursor: pointer;
+  letter-spacing: -1px;
 `;
 
 const ContentsSearch = styled.div`
@@ -266,7 +262,7 @@ const ContentsSearch = styled.div`
   width: 350px;
   height: 40px;
   background-color: #fff;
-  border: 2px solid ${props => props.theme.main};
+  border: 2px solid ${props => props.myColorHex.mainColor};
   border-radius: 20px;
   padding: .125rem 15px;
   display: flex;
@@ -274,10 +270,27 @@ const ContentsSearch = styled.div`
   justify-content: center;
 
   svg {
-    color: ${props => props.theme.main};
+    color: ${props => props.myColorHex.mainColor};
     font-weight: 700;
     font-size: 1.25rem;
   }
+`;
+const IconGroup = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 10px;
+
+    svg {
+      font-size: 1rem;
+    }
+    button {
+      width: auto;
+      height: auto;
+      border: none;
+      background: inherit;
+    }
+
 `;
 
 function SideMenu (props) {
@@ -295,6 +308,7 @@ function SideMenu (props) {
   const [friendDetailAdress, setFriendDetailAdress] = useState([]);
 
   const [selectedFriend, setSelectedFriend] = useState('');
+  const [friendNickname, setFriendNickname] = useState([]);
 
   useEffect(() => {
     if(selectedFriend) setFriendDetailAdress([...data.userInfo.find(user => user.id === selectedFriend).favorites]);
@@ -321,16 +335,18 @@ function SideMenu (props) {
       });
     } catch (error) {
       console.error(error);
-    }
+    } 
   };
+
+  const myColor = useSelector(selectColor);
 
   return (
     <SideMenuWrapper menuOpened={menuOpened}>
       <SideMenuBg>
         <UserSearchWrapper>
-          <UserSearchArea>
+          <UserSearchArea myColorHex={myColor}> 
             <div style={{ cursor: "default" }} className="user-name">나</div>
-            <InputArea>
+            <InputArea myColorHex={myColor}>
               <MdSearch onClick={() => { handleDetailSearch(adressValue); setShowFriendDropdown(false); setShowMyDropdown(true); }} />
               <input
                 value={adressValue}
@@ -342,7 +358,7 @@ function SideMenu (props) {
               />
               <StyledMdClose $foucused={adressValue} onClick={() => setAdressValue('') }/>
               {showMyDropdown && 
-                <DropDown>
+                <DropDown myColorHex={myColor}>
                   <li className="cursor-pointer close" onClick={() => {setShowMyDropdown(false); setDetailAdress([]);}}><MdClose /></li>
                   {detailAdress.map((address, idx) => 
                     <li key={idx} className="text-ellipsis cursor-pointer"
@@ -359,8 +375,8 @@ function SideMenu (props) {
           </UserSearchArea>
           {user &&
             <>
-              <UserSearchLine/>
-              <UserFastSearch>
+              <UserSearchLine myColorHex={myColor}/>
+              <UserFastSearch myColorHex={myColor}>
                 <ul>
                   {user.favorites.map((fav, idx) => 
                     <li key={idx} onClick={() => setAdressValue(fav.adress)}>{fav.title}</li>
@@ -372,11 +388,11 @@ function SideMenu (props) {
         </UserSearchWrapper>
 
         <UserSearchWrapper>
-          <UserSearchArea>
+          <UserSearchArea myColorHex={myColor}> 
             <div className="user-name cursor-pointer" onClick={() => { if (user) setShowFirendListDropdown(true); }}>
               { (user && selectedFriend) || '상대' }
               { showFirendListDropdown &&
-                <DropDown>
+                <DropDown myColorHex={myColor}>
                   <li className="cursor-pointer close" onClick={e => {e.stopPropagation(); setShowFirendListDropdown(false);}}><MdClose /></li>
                   <li className="cursor-pointer" onClick={e => {e.stopPropagation(); setSelectedFriend(''); setShowFirendListDropdown(false); }}>초기화</li>
                   {user && user.friends.map((friend, idx) => 
@@ -390,7 +406,7 @@ function SideMenu (props) {
                 </DropDown>
               }
             </div>
-            <InputArea>
+            <InputArea myColorHex={myColor}>
               <MdSearch onClick={() => { handleDetailSearch(friendAdressValue); setShowMyDropdown(false); setShowFriendDropdown(true); }}/>
               <input
                 value={friendAdressValue}
@@ -401,7 +417,7 @@ function SideMenu (props) {
                 placeholder="주소를 입력해주세요."
               />
               {showFriendDropdown && 
-                <DropDown>
+                <DropDown myColorHex={myColor}>
                   <li className="cursor-pointer close" onClick={() => {setShowFriendDropdown(false); setDetailAdress([]);}}><MdClose /></li>
                   {detailAdress.map((address, idx) => 
                     <li key={idx} className="text-ellipsis cursor-pointer"
@@ -419,7 +435,7 @@ function SideMenu (props) {
           </UserSearchArea>
           {(user && selectedFriend )&&
             <>
-              <UserSearchLine/>
+              <UserSearchLine myColorHex={myColor}/>
               <UserFastSearch>
                 <ul>
                   {friendDetailAdress.map((fav, idx) => 
@@ -430,8 +446,8 @@ function SideMenu (props) {
             </>
           }
         </UserSearchWrapper>
-        <FindButton type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </FindButton>
-        <DetailListWrapper user={user}>
+        <FindButton myColorHex={myColor} type="button" onClick={() => { setMyAdress(adressValue); setFriendAdress(friendAdressValue); }}> 약속장소 찾기 </FindButton>
+        <DetailListWrapper myColorHex={myColor} user={user}>
           {searchData && 
             searchData.map((data, index) => (
               <li key={index} style={{ margin: '1rem' }}>
@@ -439,6 +455,13 @@ function SideMenu (props) {
                 <h2>{data.road_address_name}</h2>
                 <h2>{data.address_name}</h2>
                 <h3>{data.phone}</h3>
+                <IconGroup>
+                  <CopyToClipboard text={data.place_name} onCopy={() => alert("클립보드에 복사되었습니다.")}>
+                    <button type="button"><TbLink /></button>
+                  </CopyToClipboard>
+
+                  <SiKakaotalk />
+                </IconGroup>
               </li>
             ))
           }
@@ -447,14 +470,15 @@ function SideMenu (props) {
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
       </MenuSlideButton>
-      <ContentsSearch>
+      <ContentsSearch myColorHex={myColor}>
         <MdSearch onClick={() => setContentsSearch(contentsValue)}/>
         <label htmlFor="content-search"/>
         <input id="content-search" style={{
           flex: 1,
           border: "none",
           outline: "none",
-          paddingLeft: "1rem"
+          paddingLeft: "1rem",
+          letterSpacing: "-1px"
         }}
           placeholder="검색할 키워드를 입력해주세요."
           value={contentsValue} onChange={e => setContentsValue(e.target.value)}
@@ -464,6 +488,7 @@ function SideMenu (props) {
         />
       </ContentsSearch>
     </SideMenuWrapper>
+
   );
 }
 

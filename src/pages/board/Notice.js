@@ -6,6 +6,7 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { useSelector } from 'react-redux';
 import { selectNotice } from '../../features/post/postSlice';
 import { useNavigate } from 'react-router-dom';
+import { selectColor } from '../../features/color/colorSlice';
 
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet } {
@@ -27,7 +28,6 @@ const Wrapper = styled.div`
     letter-spacing: -0.125rem;
   }
 `;
-
 const StyleDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -42,7 +42,7 @@ const StyleDiv = styled.div`
     width: 4rem;
     height: 4rem;
     margin-right: .9375rem;
-    color:#1f44a0;
+    color: ${props => props.myColorHex};
   }
 `;
 const Search = styled.div`
@@ -84,6 +84,7 @@ function Notice(props) {
 
   const data = useSelector(selectNotice);
   const navigate = useNavigate();
+  const myColor = useSelector(selectColor);
   
   useEffect(() => {
     setPostData(data);
@@ -102,8 +103,7 @@ function Notice(props) {
   return (
     <Wrapper>
       <h3>공지사항</h3>
-
-      <StyleDiv>
+      <StyleDiv myColorHex={myColor}>
         <AiFillPlusSquare className="writeIcon cursor-pointer" onClick={() => {navigate("/board/post-write"); }}/>
         <Search>
           <AiOutlineSearch className="search-icon" onClick={handleSearch}/>

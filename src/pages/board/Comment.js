@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addComment, removeComment } from "../../features/post/postSlice";
 import { selectUser } from "../../features/user/userSlice";
 import { RiCloseFill } from "react-icons/ri";
-
-
+import { selectColor } from "../../features/color/colorSlice";
 
 // 댓글 CSS
 const Wrapper = styled.div`
@@ -37,12 +36,35 @@ const CommentInput = styled.input`
   }
   border: none;
   outline: none;
+  color: ${props => props.myColorHex.mainColor};
+  font-weight:bold;
+}
+`;
+
+const InputWrap = styled.div`
+  display: flex;
   border: 1px solid #efefef;
   border-radius: 50px;
-  padding: 15px 20px;
+  padding: 0 2rem;
   margin-bottom: 10px;
   height: 50px;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  align-items: center;
+    justify-content: space-between;
+`;
+const CommentInput = styled.input`
+  border: none;
+  outline: none;
+`;
+const CommentButton = styled.button`
+  border: none;
+  background: none;  
+  font-weight: bold;
+  letter-spacing: -0.05rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  color: ${props => props.myColorHex.mainColor};
 `;
 const CommentWarp = styled.li`
   display: flex;
@@ -92,6 +114,7 @@ function Comment(props) {
   const dispatch = useDispatch();
   const loggedInUser = useSelector(selectUser);
   const [authority, setAuthority] = useState('anonymous');
+  const myColor = useSelector(selectColor);
   
 
 
@@ -104,53 +127,53 @@ function Comment(props) {
     console.log(authority);
   }, [loggedInUser]);
 
+  console.log(data);
 
 
   const handleSubmit = () => {
-    let commentArr;
-    if (loggedInUser) {
-      commentArr = {
-        id: data.length + 1,
-        commentUserProfileImg: data.userProfileImg,
-        commentsUserNickname : loggedInUser.nickname,
-        commentsUserId : loggedInUser.id,
-        comment
+    if(comment) {
+      let commentArr;
+      if (loggedInUser) {
+        commentArr = {
+          id: data.length + 1,
+          commentUserProfileImg: loggedInUser.userProfileImg,
+          commentsUserNickname : loggedInUser.nickname,
+          commentsUserId : loggedInUser.id,
+          comment
+        }
+      } else {
+        commentArr = {
+          id: data.length + 1,
+          commentUserProfileImg: "/images/user05.png",
+          commentsUserNickname : "익명",
+          commentsUserId : null,
+          comment
+        }
       }
-    } else {
-      commentArr = {
-        id: data.length + 1,
-        commentUserProfileImg: "/images/user05.png",
-        commentsUserNickname : "익명",
-        commentsUserId : null,
-        comment
-      }
-    }
-    dispatch(addComment({ id: postId, comment: commentArr, listName}));
-    setComment('');
+      dispatch(addComment({ id: postId, comment: commentArr, listName}));
+      setComment('');
+    } 
   };
-console.log(listName);
+
   return (
-    <Wrapper>
+    <Wrapper myColorHex={myColor}>
       <p className="comment-title">전체댓글 <span>{data.length}</span></p>  
-      <CommentInput 
-        type="text" 
-        placeholder="댓글을 작성하세요."
-        value={comment} 
-        onChange={e => setComment(e.target.value)}
-        onKeyUp={ e => {if (e.key === 'Enter' && comment) handleSubmit();} }
-        spellCheck="false" 
-        autoComplete="off"
-      />
+      <InputWrap>
+        <CommentInput 
+          type="text" 
+          placeholder="댓글을 작성하세요."
+          value={comment} 
+          onChange={e => setComment(e.target.value)}
+          onKeyUp={ e => {if (e.key === 'Enter' ) handleSubmit();} }
+          spellCheck="false" 
+          autoComplete="off"
+        />
+        <CommentButton myColorHex={myColor} type="button" onClick={handleSubmit}>게시하기</CommentButton>
+      </InputWrap>
       <ul>
         {data.map( (comment) => {
           return (
-            <CommentWarp key={comment.id}>
-              {/* <img src={comment.commentUserProfileImg} className="comment-item-image"/>
-              <div>
-                <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
-                <p className="comment-item-text">{comment.comment}</p>
-              </div> */}
-
+            <CommentWarp key={comment.id}>            
               <CommentListItem>
                 <img src={comment.commentUserProfileImg} className="comment-item-image"/>
                 <div>
@@ -158,23 +181,16 @@ console.log(listName);
                   <p className="comment-item-text">{comment.comment}</p>
                 </div>
               </CommentListItem>
-              {/* <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/> */}
-
-
               {
-            authority === 'admin'
-            ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
-            : (authority === 'user' && comment.userId === loggedInUser.id) && (
-              <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
-            )
-          }
-
-
-
+                authority === 'admin'
+                ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+                : (authority === 'user' && comment.userId === loggedInUser.id) && (
+                  <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+                )
+              }
             </CommentWarp>                   
           );
-        })}
-        
+        })}        
       </ul>
     </Wrapper>    
   );

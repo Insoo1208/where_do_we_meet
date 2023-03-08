@@ -6,6 +6,7 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { useSelector } from 'react-redux';
 import { selectReview } from '../../features/post/postSlice';
 import { useNavigate } from 'react-router-dom';
+import { selectColor } from '../../features/color/colorSlice';
 
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet } {
@@ -13,7 +14,7 @@ const Wrapper = styled.div`
   }
   padding: 3.125rem;
   flex: 1;
-
+  
   h3 {
     @media ${({ theme }) => theme.device.tablet } {
       margin-bottom: 1.5rem;
@@ -27,6 +28,7 @@ const Wrapper = styled.div`
     letter-spacing: -0.125rem;
   }
 `;
+
 const StyleDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -41,9 +43,10 @@ const StyleDiv = styled.div`
     width: 4rem;
     height: 4rem;
     margin-right: .9375rem;
-    color:#1f44a0;
+    color: ${props => props.myColorHex};
   }
 `;
+
 const Search = styled.div`
   display: flex;
   border-radius: 3.125rem;
@@ -80,9 +83,9 @@ const PostList = styled.div`
 function Review(props) {
   const [searchValue, setSearchValue] = useState('');
   const [postData, setPostData] = useState([]);
-
   const data = useSelector(selectReview);
   const navigate = useNavigate();
+  const myColor = useSelector(selectColor);
 
   useEffect(() => {
     setPostData(data);
@@ -101,7 +104,7 @@ function Review(props) {
   return (
     <Wrapper>
       <h3>카페리뷰</h3>
-      <StyleDiv>
+      <StyleDiv myColorHex={myColor}>
         <AiFillPlusSquare className="writeIcon cursor-pointer" onClick={() => {navigate("/board/post-write"); }}/>
         <Search>
           <AiOutlineSearch className="search-icon" onClick={handleSearch}/>
