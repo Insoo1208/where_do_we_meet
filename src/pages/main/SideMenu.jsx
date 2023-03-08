@@ -436,7 +436,7 @@ function SideMenu (props) {
           {(user && selectedFriend )&&
             <>
               <UserSearchLine myColorHex={myColor}/>
-              <UserFastSearch>
+              <UserFastSearch myColorHex={myColor}>
                 <ul>
                   {friendDetailAdress.map((fav, idx) => 
                     <li key={idx} onClick={() => setFriendAdressValue(fav.adress)}>{fav.title}</li>
