@@ -8,10 +8,16 @@ import { selectReview } from '../../features/post/postSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
+  @media ${({ theme }) => theme.device.tablet } {
+    padding: 2rem;    
+  }
   padding: 3.125rem;
   flex: 1;
 
   h3 {
+    @media ${({ theme }) => theme.device.tablet } {
+      margin-bottom: 1.5rem;
+    }
     font-size: 1.625rem;
     padding-bottom: .9375rem;
     margin-bottom: 3.125rem;
@@ -25,7 +31,7 @@ const StyleDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 
   .writeIcon{
     display: flex;
@@ -36,9 +42,6 @@ const StyleDiv = styled.div`
     height: 4rem;
     margin-right: .9375rem;
     color:#1f44a0;
-    @media ${({ theme }) => theme.device.tablet } {
-      width: 1rem;  
-    }
   }
 `;
 const Search = styled.div`

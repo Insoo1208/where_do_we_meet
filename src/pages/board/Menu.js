@@ -6,11 +6,13 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet } {
-    background-color: yellow;
     width: 100%;
     padding: 1.125rem;
     display: flex;
     align-items: center;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    border-bottom: .0625rem solid #cbcbcb;
   }
     width: 300px;
     height: auto;
@@ -19,7 +21,9 @@ const Wrapper = styled.div`
     
     h3{
       @media ${({ theme }) => theme.device.tablet } {
-        
+        white-space: nowrap;
+        margin-bottom: 0;
+        font-size: 1.6rem;
       }
       font-size: 1.875rem;
       margin-bottom: 30px;
@@ -30,9 +34,16 @@ const Wrapper = styled.div`
     ul {
       @media ${({ theme }) => theme.device.tablet } {
         display: flex;
+        white-space: nowrap;
+        flex-wrap: nowrap;
       }
     }
     ul li {
+      @media ${({ theme }) => theme.device.tablet } {
+        margin-bottom: 0;
+        margin-left :1rem;
+          
+      }
       font-size: 1rem;
       height: 3.125rem;
       line-height: 2.875rem;
@@ -45,17 +56,6 @@ const Wrapper = styled.div`
 
     
 `;
-// const MediaTest = styled.div`
-//   @media ${({ theme }) => theme.device.tablet } {
-//     width: 50px;
-//     height: 50px;
-//     background-color: skyblue;
-//   }
-//   width: 100px;
-//   height: 100px;
-//   background-color: pink;
-//   color: ${({theme}) => theme.gray100};
-// `;
 
 
 function Menu(props) {
@@ -63,7 +63,6 @@ function Menu(props) {
 
   return (
     <Wrapper>
-      {/* <MediaTest>게시판!</MediaTest> */}
       <h3>게시판</h3>
       <ul>
         <li className="cursor-pointer" onClick={() => {navigate("/board");}}>카페리뷰</li>

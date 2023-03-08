@@ -18,6 +18,9 @@ const SideMenuWrapper = styled.div`
       transform: translateX(0px);
     `
     : css`
+      @media ${({ theme }) => theme.device.tablet } {
+        transform: translateX(-300px);
+      }
       transform: translateX(-400px);
     `
   }
@@ -25,6 +28,9 @@ const SideMenuWrapper = styled.div`
 `;
 
 const SideMenuBg = styled.div`
+  @media ${({ theme }) => theme.device.tablet } {
+    width: 300px;
+  }
   width: 450px;
   height: calc(100vh - 75px);
   /* background-color: ${props => props.theme.mainLight}; */
@@ -70,7 +76,6 @@ const UserSearchArea = styled.div`
   align-items: center;
   width: 100%;
   height: 54px;
-  
   .user-name {
     position: relative;
     width: 3.375rem;
@@ -93,7 +98,7 @@ const InputArea = styled.div`
   justify-content: space-evenly;
   align-items: center;
   background-color: #fff;
-  border: .125rem solid ${props => props.theme.main} ;
+  border: 2px solid ${props => props.theme.main} ;
   border-radius: .5rem;
   padding: .25rem;
 
@@ -103,6 +108,10 @@ const InputArea = styled.div`
   }
 
   input {
+    @media ${({ theme }) => theme.device.tablet } {
+      width: 100%;
+
+    }
     width: 240px;
     height: 40px;
     border: none;
@@ -194,7 +203,11 @@ const DetailListWrapper = styled.ul`
   }
 `;
 
-const DropDown = styled.ul`
+const DropDown = styled.ul` 
+  @media ${({ theme }) => theme.device.tablet } {
+    width: 100%;
+    left: 0;
+  }
   position: absolute;
   top: 3.5rem;
   left: 1.5rem;
@@ -211,6 +224,10 @@ const DropDown = styled.ul`
   padding: .5rem;
 
   li {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 0.92rem;
+      padding: 0 1rem 1rem ;
+    }
     width: 100%;
     height: 100%;
     font-size: 1rem;
@@ -240,6 +257,9 @@ const FindButton = styled.button`
 `;
 
 const ContentsSearch = styled.div`
+  @media ${({ theme }) => theme.device.tablet } {
+    width: 250px;
+  }
   position: absolute;
   top: 16px;
   left: calc(100% + 1rem);

@@ -9,6 +9,9 @@ import { selectUser } from "../../features/user/userSlice";
 
 
 const PostWarp = styled.div`
+  @media ${({ theme }) => theme.device.tablet } {
+    padding: 2rem;    
+  }
   display: flex;  
   border-bottom:.0625rem solid #f3f3f3;
   padding: 3.125rem;
@@ -22,21 +25,31 @@ const PostWarp = styled.div`
     flex: 1;
     margin: .3125rem 0 0 .625rem;
     position: relative;
+    
   }
   .post-item-name {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 1.1rem;   
+    }
     font-size: 1rem;
     font-weight: bold;
     margin-bottom: .625rem;
     display:flex;
   }
   .post-item-name span {
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 1rem;   
+    }
     color:#adadad;
     font-weight: normal;
     font-size: .875rem;
     margin-left: .3125rem;
   }
   .post-item-text {
-
+    @media ${({ theme }) => theme.device.tablet } {
+      font-size: 1rem;
+    }
+    
     font-size: .875rem;
     line-height: 1.3;
     margin-bottom: 2.5rem;

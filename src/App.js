@@ -78,6 +78,9 @@ const GlobalStyle = createGlobalStyle`
     @media ${deviceTheme.device.mobileL} {
       font-size: 12px;
     }
+    @media ${deviceTheme.device.mobileM} {
+      font-size: 11px;
+    }
   }
   
 `;
