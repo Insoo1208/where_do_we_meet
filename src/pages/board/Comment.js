@@ -144,13 +144,7 @@ function Comment(props) {
       <ul>
         {data.map( (comment) => {
           return (
-            <CommentWarp key={comment.id}>
-              {/* <img src={comment.commentUserProfileImg} className="comment-item-image"/>
-              <div>
-                <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
-                <p className="comment-item-text">{comment.comment}</p>
-              </div> */}
-
+            <CommentWarp key={comment.id}>            
               <CommentListItem>
                 <img src={comment.commentUserProfileImg} className="comment-item-image"/>
                 <div>
@@ -158,23 +152,16 @@ function Comment(props) {
                   <p className="comment-item-text">{comment.comment}</p>
                 </div>
               </CommentListItem>
-              {/* <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/> */}
-
-
               {
-            authority === 'admin'
-            ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
-            : (authority === 'user' && comment.userId === loggedInUser.id) && (
-              <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
-            )
-          }
-
-
-
+                authority === 'admin'
+                ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+                : (authority === 'user' && comment.userId === loggedInUser.id) && (
+                  <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+                )
+              }
             </CommentWarp>                   
           );
-        })}
-        
+        })}        
       </ul>
     </Wrapper>    
   );
