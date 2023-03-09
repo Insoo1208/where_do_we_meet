@@ -32,6 +32,7 @@ const Wrapper = styled.div`
 `;
 
 const CommentInput = styled.input`
+  flex: 1;
   @media ${({ theme }) => theme.device.tablet } {
       font-size: 0.98rem;
       margin: 0;
