@@ -98,43 +98,34 @@ function SignIn() {
   const dispatch = useDispatch();
   const myColor = useSelector(selectColor);
 
-  const data = useRef();
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
+      if (response.status === 200) {
+        const checkedUser = response.data.find(user => user.id === loginInfo.id);
+        if (checkedUser) {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
-        if (response.status === 200) {
-          data.current =  response.data;
+        if (checkedUser.password === loginInfo.pw) {
+          dispatch(userLogIn(checkedUser));
+          navigate('/');
+        } else {
+            alert("아이디 혹은 패스워드가 올바르지 않습니다.");
+            setLoginInfo({id: '', pw: ''});
+          }
+
+        } else {
+          alert("아이디 혹은 패스워드가 올바르지 않습니다.");
+          setLoginInfo({id: '', pw: ''});
         }
-        else throw new Error(`api error: ${response.status} ${response.statusText}`);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
-
+      } else throw new Error(`api error: ${response.status} ${response.statusText}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleEyeChange = () => {
     setEyeOpen(!eyeOpen);
   }
-
-  const handleLogin = () => {
-    const checkedUser = data.current.find(user => user.id === loginInfo.id);
-    if (checkedUser) {
-      if (checkedUser.password === loginInfo.pw) {
-        dispatch(userLogIn(checkedUser));
-        navigate('/');
-      } else {
-        alert("아이디 혹은 패스워드가 올바르지 않습니다.");
-        setLoginInfo({id: '', pw: ''});
-      }
-    } else {
-      alert("아이디 혹은 패스워드가 올바르지 않습니다.");
-      setLoginInfo({id: '', pw: ''});
-    };
-  };
 
   return (
     <section style={{ padding: '150px 0' }}>
