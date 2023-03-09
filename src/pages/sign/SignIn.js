@@ -8,6 +8,9 @@ import { selectColor } from "../../features/color/colorSlice";
 import axios from "axios";
 
 const Wrapper = styled.div`
+  @media ${({ theme }) => theme.device.tablet} {
+    width : 400px;
+  }
   width: 500px;
   margin: 0 auto;
   display: flex;
@@ -16,7 +19,7 @@ const Wrapper = styled.div`
   color: ${props => props.theme.gray700};
 
   h1 {
-    font-size: 40px;
+    font-size: 2.5rem;
     font-weight: 700;
     padding: 1rem 2rem 1.5rem;
     color: ${props => props.theme.gray800};

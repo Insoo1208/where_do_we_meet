@@ -6,6 +6,9 @@ import styled from "styled-components";
 import { selectColor } from "../../features/color/colorSlice";
 
 const Wrapper = styled.div`
+  @media ${({ theme }) => theme.device.tablet} {
+    width : 400px;
+  }
   width: 500px;
   margin: 0 auto;
   display: flex;
@@ -13,7 +16,7 @@ const Wrapper = styled.div`
   align-items: center;
 
   h1 {
-    font-size: 40px;
+    font-size: 2.5rem;
     font-weight: 700;
     padding: 1rem 2rem 1.5rem;
     cursor: default;

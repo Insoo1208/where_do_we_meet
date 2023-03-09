@@ -1,7 +1,7 @@
-import styled, { css } from "styled-components";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdCheckBoxOutlineBlank as CheckBoxBlank, MdCheckBox as CheckedBox } from "react-icons/md";
 import { IoMdEye as Eye, IoMdEyeOff as EyeOff } from "react-icons/io";
 import  CenterModal  from "../../components/CenterModal";
@@ -15,6 +15,9 @@ import { selectColor } from "../../features/color/colorSlice";
 
 
 const Wrapper = styled.div`
+  @media ${({ theme }) => theme.device.tablet} {
+    width : 400px;
+  }
   width: 500px;
   margin: 0 auto;
   align-items: center;
@@ -34,7 +37,7 @@ const Wrapper = styled.div`
   
   h1 {
     text-align: center;
-    font-size: 40px;
+    font-size: 2.5rem;
     font-weight: 700;
     padding: 1rem 2rem 1.5rem;
     cursor: default;
@@ -76,6 +79,13 @@ const Wrapper = styled.div`
     }
   }
 
+  h2.essential::after {
+    content: "(필수)";
+    font-size: 1rem;
+    padding-left: .1125rem;
+    color: #e75d5d;
+  }
+
   .user-name {  
     display: flex;
     justify-content: space-between;
@@ -102,6 +112,13 @@ const Wrapper = styled.div`
 `;
 
 const StyledInput = styled.input`
+@media ${({ theme }) => theme.device.tablet} {
+  font-size: 12px;
+  ::placeholder {
+    letter-spacing: -0.055rem;
+  }
+}
+  
   display: block;
   padding-left: .7rem;
   width: 100%;
@@ -143,11 +160,6 @@ const StyledButton = styled.button`
       background-color: ${ props => props.myColorHex.mainLight };
     }
   }
-`;
-
-const StyledLink = styled(Link)`
-  padding: .5rem;
-  color: black;
 `;
 
 const Error = styled.div`
@@ -286,7 +298,7 @@ function SignUp(props) {
     <section style={{ padding: '150px 0' }}>
       <Wrapper myColorHex={myColor}>
         <h1>Sign Up</h1>
-        <h2>E-MAIL</h2>
+        <h2 className="essential">E-MAIL</h2>
         {/* 
           이메일 유효성검사
           1. 이메일 양식에 유효한 input 데이터인지 확인 [O]
@@ -319,7 +331,7 @@ function SignUp(props) {
           emailDuplicationCheck &&
           <Error>이미 가입한 이메일 입니다.</Error>
         }
-        <h2>ID</h2>
+        <h2 className="essential">ID</h2>
         <div className="input-check">
           <label htmlFor="signUnId"/>
           <StyledInput name="userId" myColorHex={myColor} type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={signUpInputValues.userId} autoComplete="off" spellCheck="false"
@@ -342,7 +354,7 @@ function SignUp(props) {
           idDuplicationCheck &&
             <Error>아이디가 중복되었습니다.</Error>
         }
-        <h2>PASSWORD
+        <h2 className="essential">PASSWORD
           <button
                 type="button"
                 onClick={() => {
@@ -398,7 +410,7 @@ function SignUp(props) {
           !passwordCheckResult && signUpInputValues.userPasswordCheck && 
             <Error>비밀번호를 다시 확인해 주세요!</Error> 
         }
-        <h2>NAME</h2>
+        <h2 className="essential">NAME</h2>
         <div className="input-check" style={{ marginBottom: '1rem' }}>
           <div className="user-name" >
             <label htmlFor="userLastName" style={{display:'none'}} />
@@ -433,7 +445,7 @@ function SignUp(props) {
           !nameCheck.test(signUpInputValues.userFirstName) && signUpInputValues.userFirstName &&
           <Error>이름을 한글로 정확히 입력해 주세요</Error> 
         }
-        <h2>ADDRESS</h2>
+        <h2 className="essential">ADDRESS</h2>
         <div className="zip-wrapper">
           <label htmlFor="searchAddress"/>
           <StyledInput myColorHex={myColor} className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={signUpInputValues.zonecode}
@@ -466,7 +478,7 @@ function SignUp(props) {
           } 
         />
 
-        <h2>NICKNAME</h2>
+        <h2 className="essential">NICKNAME</h2>
         <div className="input-check">
           <label htmlFor="userNickname"/>
           <StyledInput name="userNickname" myColorHex={myColor} id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={signUpInputValues.userNickname}
@@ -487,7 +499,7 @@ function SignUp(props) {
           <Error>닉네임은 한글, 영문, 숫자만 가능하며 2-10자리 입니다.</Error>
         }
         
-        <h2>REFERRAL CODE<span>(선택)</span></h2>
+        <h2>REFERRAL CODE</h2>
         <label htmlFor="recomenderId"></label>
         <StyledInput name="recomenderId" myColorHex={myColor} id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={signUpInputValues.recomenderId}
           onChange={handleInputChange}
