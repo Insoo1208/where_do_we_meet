@@ -17,10 +17,7 @@ import { selectColor } from "../../features/color/colorSlice";
 const Wrapper = styled.div`
   width: 500px;
   margin: 0 auto;
-  /* display: flex;
-  flex-direction: column; */
   align-items: center;
-  /* background-color: ${props => props.theme.background}; */
 
   div.input-check {
     position: relative;
@@ -80,7 +77,6 @@ const Wrapper = styled.div`
   }
 
   .user-name {  
-    /* width: 100%; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -130,16 +126,22 @@ const StyledButton = styled.button`
   border-radius: 0.5rem;
   border: none;
   cursor: pointer;
-
+  
   &.btn-zip {
     color: #fff;
     background-color: #4a4c4e;
     font-weight: bold;
+    :hover {
+      background-color: ${ props => props.myColorHex.mainLight };
+    }
   }
   &.btn-submit {
     color: #fff;
-    background-color: ${props => props.myColorHex.mainColor};
+    background-color: ${ props => props.myColorHex.mainColor };
     font-weight:bold;
+    :hover {
+      background-color: ${ props => props.myColorHex.mainLight };
+    }
   }
 `;
 
@@ -155,22 +157,7 @@ const Error = styled.div`
 `;
 
 function SignUp(props) {
-  // useState
-  // const [userEmail, setUserEmail] = useState('');
-  // const [userId, setUserId] = useState('');
-  // const [userPassword, setUserPassword] = useState('');
-  // const [userPasswordCheck, setUserPasswordCheck] = useState('');
-  // const [userLastName, setUserLastName] = useState('');
-  // const [userFirstName, setUserFirstName] = useState('');
-  // const [postcodeValue, setpostcodeValue] = useState({
-  //   zonecode: '',
-  //   address: '',
-  // });
-  // const [detailAddress, setDetailAddress] = useState('');
-  // const [userNickname, setUserNickname] = useState('');
-  // const [recomenderId, setRecomenderId] = useState('');
   
-
   const [openPostcode, setOpenPostcode] = useState(false);
   const [inputType, setInputType] = useState('password');
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
@@ -570,6 +557,3 @@ export default SignUp;
 //   -확인 누르면 메인화면
 // 2)데이터 전송하기[회원가입데이터, 추천회원, 포인트 관리 필요][X]
 // (회원가입데이터필수적으로 보내기(post방식으로), 선택적으로 포인트 증정)
-
-// 데이터가 보내지는지 알 수 없으므로
-// 일단 로컬데이터로 저장시켜보기
