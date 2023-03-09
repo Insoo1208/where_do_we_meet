@@ -53,8 +53,6 @@ const Wrapper = styled.div`
       border-radius: 50px;
       margin-bottom: .3125rem;
     }
-
-    
 `;
 
 

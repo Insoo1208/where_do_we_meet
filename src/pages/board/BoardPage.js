@@ -9,17 +9,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { selectColor } from '../../features/color/colorSlice';
 
 const Wrapper = styled.div`
-  padding: 50px;
+  @media ${({ theme }) => theme.device.tablet } {
+    padding: 2rem;    
+  }
+  padding: 3.125rem;
   flex: 1;
 
   h3 {
-    font-size: 26px;
-    padding-bottom: 15px;
-    margin-bottom: 50px;
+    @media ${({ theme }) => theme.device.tablet } {
+      margin-bottom: 1.5rem;
+    }
+    font-size: 1.625rem;
+    padding-bottom: .9375rem;
+    margin-bottom: 3.125rem;
     font-weight: 600;
-    letter-spacing: -1px;
+    letter-spacing: -0.0625rem;
     color: #333;
-    letter-spacing: -2px;
+    letter-spacing: -0.125rem;
   }
 `;
 
@@ -34,8 +40,8 @@ const StyleDiv = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    width: 64px;
-    height: 64px;
+    min-width: 64px;
+    min-height: 64px;
     margin-right: 15px;
     color: ${props => props.myColorHex.mainColor};
   }
@@ -57,6 +63,7 @@ const Search = styled.div`
     margin-right: 5px;
   }
 `;
+
 const SearchInput = styled.input`
   outline: none;
   border:none;
@@ -68,6 +75,7 @@ const SearchInput = styled.input`
     letter-spacing: -1px;
   }
 `;
+
 const PostList = styled.div`
   background-color: #fff;
   border:1px solid #efefef;
