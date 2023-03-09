@@ -135,10 +135,10 @@ function CenterModal({
   const [localVisible, setLocalVisible] = useState(visible);
   const myColor = useSelector(selectColor);
 
-  useEffect(() => {
-    disableScroll();
-    return () => enableScroll();
-  }, []);
+  // useEffect(() => {
+  //   disableScroll();
+  //   return () => enableScroll();
+  // }, []);
 
   useEffect(() => {
     if (localVisible && !visible) {
