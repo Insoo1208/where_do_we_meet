@@ -131,6 +131,8 @@ function BoardPage() {
           <AiOutlineSearch className="search-icon cursor-pointer" onClick={handleSearch}/>
           <SearchInput type="text" placeholder="게시물 검색" value={searchValue} onChange={e => setSearchValue(e.target.value)}
             onKeyUp={ e => {if (e.key === "Enter") handleSearch();}}
+            autoComplete="off"
+            spellCheck="false"
           />
         </Search>
       </StyleDiv>
