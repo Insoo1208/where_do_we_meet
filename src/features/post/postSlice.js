@@ -196,7 +196,6 @@ const postSlice = createSlice({
       targetPost.comments.push(comment);
     },
     removeComment: (state, { payload : { postId, commentId, listName } }) => {
-      console.log(postId, commentId);
       let targetPost;
       let targetCommentIndex;
       switch (listName) {

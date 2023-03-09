@@ -18,7 +18,6 @@ const colorSlice = createSlice({
       for (const num of color[1]) {
         mainLightHex += `${num.toString(16)}`;
       };
-      console.log(mainColorHex, mainLightHex);
       state.mainColor = mainColorHex;
       state.mainLight = mainLightHex;
     },
