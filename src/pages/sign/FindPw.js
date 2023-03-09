@@ -84,34 +84,25 @@ function FindPw () {
   const navigate = useNavigate();
   const myColor = useSelector(selectColor);
 
-  const data = useRef();
+  const handleFind = async () => {
+    try {
+      const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
+      if (response.status === 200) {
+        let target;
+        if (idChecked) target = response.data.find(user => user.id === value);
+        else target = response.data.find(user => user.email === value);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
-        if (response.status === 200) {
-          data.current = response.data;
+        if (target) {
+          alert(`회원님의 비밀번호는 ${target.password}입니다.`);
+          navigate('/signin');
+        } else {
+          alert('일치하는 정보가 없습니다.');
+          setValue('');
         }
-        else throw new Error(`api error: ${response.status} ${response.statusText}`);
-      } catch (error) {
-        console.error(error);
       }
-    };
-    fetchData();
-  }, []);
-
-  const handleFind = () => {
-    let target;
-    if (idChecked) target = data.current.find(user => user.id === value);
-    else target = data.current.find(user => user.email === value);
-
-    if (target) {
-      alert(`고객님의 비밀번호는 ${target.password}입니다.`);
-      navigate('/signin');
-    } else {
-      alert('일치하는 정보가 없습니다.');
-      setValue('');
+      else throw new Error(`api error: ${response.status} ${response.statusText}`);
+    } catch (error) {
+      console.error(error);
     }
   };
   

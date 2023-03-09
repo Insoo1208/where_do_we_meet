@@ -69,37 +69,28 @@ function FindId () {
   const [value, setValue] = useState('');
 
   const navigate = useNavigate();
-  const data = useRef();
 
   const myColor = useSelector(selectColor);
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
-        if (response.status === 200) {
-          data.current = response.data;
+  const handleFind = async () => {
+    try {
+      const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
+      if (response.status === 200) {
+        const target = response.data.find(user => user.email === value);
+        if (target) {
+          alert(`고객님의 아이디는 ${target.id}입니다.`);
+          navigate('/signin');
+        } else {
+          alert('일치하는 정보가 없습니다.');
+          setValue('');
         }
-        else throw new Error(`api error: ${response.status} ${response.statusText}`);
-      } catch (error) {
-        console.error(error);
       }
-    };
-    fetchData();
-  }, []);
-
-  const handleFind = () => {
-    const target = data.current.find(user => user.email === value);
-    if (target) {
-      alert(`고객님의 아이디는 ${target.id}입니다.`);
-      navigate('/signin');
-    } else {
-      alert('일치하는 정보가 없습니다.');
-      setValue('');
+      else throw new Error(`api error: ${response.status} ${response.statusText}`);
+    } catch (error) {
+      console.error(error);
     }
   };
-  
+
   return (
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
