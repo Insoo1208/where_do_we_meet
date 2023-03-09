@@ -124,6 +124,7 @@ function FindPw () {
         <label htmlFor="findPW"/>
         <StyledInput myColorHex={myColor} type='text' id="findPW" value={value} onChange={e => setValue(e.target.value)}
           autoComplete="off"
+          spellCheck="false"
           onKeyUp={e => { if(e.key === 'Enter' && value) handleFind(); }}
         ></StyledInput>
         <StyledButton myColorHex={myColor}  onClick={handleFind}>찾기</StyledButton>
