@@ -104,6 +104,7 @@ function FindId () {
         <StyledInput myColorHex={myColor} type='text' id="findID" value={value} onChange={e => setValue(e.target.value)}
           onKeyUp={e => { if(e.key === 'Enter' && value) handleFind(); }}
           autoComplete="off"
+          spellCheck="false"
         ></StyledInput>
         <StyledButton myColorHex={myColor} onClick={handleFind}>찾기</StyledButton>
         <p className="cursor-pointer" onClick={() => { navigate('/signin'); }}>돌아가기</p>
