@@ -281,7 +281,7 @@ const IconGroup = styled.div`
     column-gap: 10px;
 
     svg {
-      font-size: 1.2rem;
+      font-size: 1.2rem;      
     }
     button {
       width: auto;
@@ -290,6 +290,7 @@ const IconGroup = styled.div`
       background: inherit;
       display: flex;
       padding: 0;
+      cursor: pointer;
     }
 
 `;
