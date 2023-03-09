@@ -113,8 +113,8 @@ function BoardPage() {
   }, [data, titleParams]);
 
   const handleSearch = () => {
-    if (searchValue === '') return setPostData([...data]);
-    const searchData = data.filter(post => post.content.toLowerCase().includes(searchValue.toLowerCase()));
+    if (searchValue === '') return setPostData([...data[titleParams.listName]]);
+    const searchData = data[titleParams.listName].filter(post => post.content.toLowerCase().includes(searchValue.toLowerCase()));
     if (searchData.length < 1) {
       return alert('검색 결과가 없습니다.');
     } else {
