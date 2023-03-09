@@ -26,7 +26,7 @@ const Wrapper = styled.div`
     @media ${({ theme }) => theme.device.tablet } {
       font-size: 0.98rem;
     }
-    color: #1f44a0 ;
+    color: ${props => props.myColorHex.mainColor};
     font-weight:bold;
   }
 `;
