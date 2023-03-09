@@ -64,6 +64,7 @@ const CommentButton = styled.button`
   cursor: pointer;
   outline: none;
   color: ${props => props.myColorHex.mainColor};
+  min-width: 65px;
 `;
 
 const CommentWrapper = styled.li`
