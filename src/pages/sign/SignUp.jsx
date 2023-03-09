@@ -176,8 +176,6 @@ function SignUp(props) {
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
   const [showModal, setShowModal] = useState(false); // 모달
-  const handleClose = () => setShowModal(false); // 닫기
-  const handleOpen = () => setShowModal(true); // 열기
 
   const navigate = useNavigate();
 
