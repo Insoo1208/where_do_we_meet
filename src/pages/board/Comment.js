@@ -67,7 +67,7 @@ const CommentButton = styled.button`
   color: ${props => props.myColorHex.mainColor};
 
   svg {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 `;
 
