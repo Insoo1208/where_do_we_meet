@@ -107,7 +107,7 @@ function UserInfo() {
     try {
       const response = await axios({
         method: 'post',
-        url: 'https://colormind.io/api/',
+        url: 'http://colormind.io/api/',
         data: {
           model : "default",
         },
