@@ -34,18 +34,21 @@ const StyledUl = styled.ul`
   @media ${({ theme }) => theme.device.tablet } {
     flex: 1;
     margin-left: 1rem;
+    column-gap: .75rem;
   }
-  width: 50%;
+  min-width: 50%;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  column-gap: 15px;
+  justify-content: flex-end;
+  align-items: center;
+  column-gap: 2rem;
+  padding: 0 1.25rem;
 `;
 
 const SubMenu = styled.li`
   @media ${({ theme }) => theme.device.tablet } {
   }
-  flex: 1;
+  width: auto;
   text-align: center;
   white-space: nowrap;
 `;
