@@ -96,7 +96,6 @@ function SignIn() {
   const [loginInfo, setLoginInfo] = useState({id: '', pw: ''});
   const [eyeOpen, setEyeOpen] = useState(false);
 
-  const pwInput = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const myColor = useSelector(selectColor);
@@ -127,7 +126,8 @@ function SignIn() {
   };
 
   const handleEyeChange = () => {
-    setEyeOpen(!eyeOpen);
+    console.log('Clicked');
+    setEyeOpen(eyeOpen => !eyeOpen);
   }
 
   return (
@@ -143,11 +143,10 @@ function SignIn() {
           {eyeOpen
             ?
             <PwWrapper>
-              <StyledInput myColorHex={myColor} type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
+              <StyledInput myColorHex={myColor} type='text' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
               value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
               autoComplete="off"
               onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
-              ref={pwInput}
               />
               <IoEye onClick={handleEyeChange}/>
             </PwWrapper>
@@ -157,7 +156,6 @@ function SignIn() {
               value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
               autoComplete="off"
               onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
-              ref={pwInput}
               />
               <IoEyeOff onClick={handleEyeChange}/>
             </PwWrapper>
