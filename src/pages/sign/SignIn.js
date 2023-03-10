@@ -126,7 +126,6 @@ function SignIn() {
   };
 
   const handleEyeChange = () => {
-    console.log('Clicked');
     setEyeOpen(eyeOpen => !eyeOpen);
   }
 
