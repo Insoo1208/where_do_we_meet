@@ -44,7 +44,7 @@
     "detailAdress": "detail-adress",
     "favorites": [{"title": "집3", "adress": "인천시 중구 인현동"}],
     "friends": [
-      "insoo", "id0003"
+      "insoo", "id0003", "id0001"
     ],
     "authority": "user",
     "point": 0
