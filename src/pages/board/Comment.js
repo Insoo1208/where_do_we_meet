@@ -5,6 +5,7 @@ import { addComment, removeComment } from "../../features/post/postSlice";
 import { selectUser } from "../../features/user/userSlice";
 import { RiCloseFill } from "react-icons/ri";
 import { selectColor } from "../../features/color/colorSlice";
+import { FaCommentMedical } from "react-icons/fa";
 
 // 댓글 CSS
 const Wrapper = styled.div`
@@ -26,12 +27,13 @@ const Wrapper = styled.div`
     @media ${({ theme }) => theme.device.tablet } {
       font-size: 0.98rem;
     }
-    color: #1f44a0 ;
+    color: ${props => props.myColorHex.mainColor};
     font-weight:bold;
   }
 `;
 
 const CommentInput = styled.input`
+  flex: 1;
   @media ${({ theme }) => theme.device.tablet } {
       font-size: 0.98rem;
       margin: 0;
@@ -63,6 +65,10 @@ const CommentButton = styled.button`
   cursor: pointer;
   outline: none;
   color: ${props => props.myColorHex.mainColor};
+
+  svg {
+    font-size: 1.3rem;
+  }
 `;
 
 const CommentWrapper = styled.li`
@@ -168,7 +174,9 @@ function Comment(props) {
           spellCheck="false" 
           autoComplete="off"
         />
-        <CommentButton myColorHex={myColor} type="button" onClick={handleSubmit}>게시하기</CommentButton>
+        <CommentButton myColorHex={myColor} type="button" onClick={handleSubmit}>
+          <FaCommentMedical />
+        </CommentButton>
       </InputWrap>
       <ul>
         {data.map(targetComment => {

@@ -6,6 +6,9 @@ import styled from "styled-components";
 import { selectColor } from "../../features/color/colorSlice";
 
 const Wrapper = styled.div`
+  @media ${({ theme }) => theme.device.tablet} {
+    width : 400px;
+  }
   width: 500px;
   margin: 0 auto;
   display: flex;
@@ -13,7 +16,7 @@ const Wrapper = styled.div`
   align-items: center;
 
   h1 {
-    font-size: 40px;
+    font-size: 2.5rem;
     font-weight: 700;
     padding: 1rem 2rem 1.5rem;
     cursor: default;
@@ -69,37 +72,28 @@ function FindId () {
   const [value, setValue] = useState('');
 
   const navigate = useNavigate();
-  const data = useRef();
 
   const myColor = useSelector(selectColor);
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
-        if (response.status === 200) {
-          data.current = response.data;
+  const handleFind = async () => {
+    try {
+      const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
+      if (response.status === 200) {
+        const target = response.data.find(user => user.email === value);
+        if (target) {
+          alert(`고객님의 아이디는 ${target.id}입니다.`);
+          navigate('/signin');
+        } else {
+          alert('일치하는 정보가 없습니다.');
+          setValue('');
         }
-        else throw new Error(`api error: ${response.status} ${response.statusText}`);
-      } catch (error) {
-        console.error(error);
       }
-    };
-    fetchData();
-  }, []);
-
-  const handleFind = () => {
-    const target = data.current.find(user => user.email === value);
-    if (target) {
-      alert(`고객님의 아이디는 ${target.id}입니다.`);
-      navigate('/signin');
-    } else {
-      alert('일치하는 정보가 없습니다.');
-      setValue('');
+      else throw new Error(`api error: ${response.status} ${response.statusText}`);
+    } catch (error) {
+      console.error(error);
     }
   };
-  
+
   return (
     <section style={{ padding: '150px 0' }}>
       <Wrapper>
@@ -113,6 +107,7 @@ function FindId () {
         <StyledInput myColorHex={myColor} type='text' id="findID" value={value} onChange={e => setValue(e.target.value)}
           onKeyUp={e => { if(e.key === 'Enter' && value) handleFind(); }}
           autoComplete="off"
+          spellCheck="false"
         ></StyledInput>
         <StyledButton myColorHex={myColor} onClick={handleFind}>찾기</StyledButton>
         <p className="cursor-pointer" onClick={() => { navigate('/signin'); }}>돌아가기</p>

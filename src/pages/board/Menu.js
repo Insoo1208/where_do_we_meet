@@ -42,19 +42,16 @@ const Wrapper = styled.div`
       @media ${({ theme }) => theme.device.tablet } {
         margin-bottom: 0;
         margin-left :1rem;
-          
       }
       font-size: 1rem;
       height: 3.125rem;
       line-height: 2.875rem;
       border-bottom: .0625rem solid #cbcbcb;
-      padding: 0 1.5625rem;
+      padding: 0 1.25rem;
       background: #fff;
       border-radius: 50px;
       margin-bottom: .3125rem;
     }
-
-    
 `;
 
 

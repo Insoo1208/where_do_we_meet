@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled, { css, keyframes } from "styled-components";
 import Button from "../components/Button";
+import { selectColor } from '../features/color/colorSlice';
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -61,7 +63,7 @@ const Background = styled.div`
 const ModalContainer = styled.div`
   width: ${({ size }) => modalSizes[size].width};
   height: ${({ height }) => height};
-  background: gray;
+  background: #fff;
   box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.15);
   border-radius: 6px;
   color: white;
@@ -71,6 +73,7 @@ const ModalContainer = styled.div`
     display: flex;
     align-items: center;
     padding: 0.75rem;
+    background-color: ${props => props.myColorHex.mainColor};
   }
 
   hr {
@@ -82,6 +85,7 @@ const ModalContainer = styled.div`
     padding: 1.25rem;
     font-size: 1rem;
     line-height: 1.125rem;
+    color: ${props => props.theme.gray800};
   }
 
   .footer {
@@ -109,11 +113,11 @@ const ButtonGroup = styled.div`
 const ModalButton = styled(Button)`
   border-radius: 20px;
 
+
   & + & {
     margin-left: 0.625rem;
   }
 `; 
-
 
 // 모달
 function CenterModal({
@@ -129,6 +133,12 @@ function CenterModal({
 }) {
   const [animate, setAnimate] = useState(false);
   const [localVisible, setLocalVisible] = useState(visible);
+  const myColor = useSelector(selectColor);
+
+  // useEffect(() => {
+  //   disableScroll();
+  //   return () => enableScroll();
+  // }, []);
 
   useEffect(() => {
     if (localVisible && !visible) {
@@ -139,12 +149,55 @@ function CenterModal({
     }
     setLocalVisible(visible);
   }, [localVisible, visible]);
-
+  
   if (!localVisible && !animate) return null;
+
+  // // left: 37, up: 38, right: 39, down: 40,
+  // // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+  // var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+  // function preventDefault(e) {
+  //   e.preventDefault();
+  // }
+
+  // function preventDefaultForScrollKeys(e) {
+  //   if (keys[e.keyCode]) {
+  //     preventDefault(e);
+  //     return false;
+  //   }
+  // }
+
+  // // modern Chrome requires { passive: false } when adding event
+  // var supportsPassive = false;
+  // try {
+  //   window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
+  //     get: function () { supportsPassive = true; }
+  //   }));
+  // } catch(e) {}
+
+  // var wheelOpt = supportsPassive ? { passive: false } : false;
+  // var wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
+
+  // // call this to Disable
+  // function disableScroll() {
+  //   window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
+  //   window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
+  //   window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
+  //   window.addEventListener('keydown', preventDefaultForScrollKeys, false);
+  // }
+
+  // // call this to Enable
+  // function enableScroll() {
+  //   window.removeEventListener('DOMMouseScroll', preventDefault, false);
+  //   window.removeEventListener(wheelEvent, preventDefault, wheelOpt);
+  //   window.removeEventListener('touchmove', preventDefault, wheelOpt);
+  //   window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
+  // }
+
 
   return (
     <Background disappear={!visible}>
-      <ModalContainer disappear={!visible} size={size} height={height}>
+      <ModalContainer myColorHex={myColor} disappear={!visible} size={size} height={height}>
         <div className='header'>
           <span className='modal-title'>{title}</span>
         </div>
@@ -152,8 +205,8 @@ function CenterModal({
         <div className='body'>{children}</div>
         <div className='footer'>
           <ButtonGroup>
-            <ModalButton color="#ff0000" size="medium" outline onClick={onCancel}>{cancelText}</ModalButton>
-            <ModalButton size="medium" outline onClick={onConfirm}>{confirmText}</ModalButton>
+            <ModalButton size="medium" outline onClick={onCancel}>{cancelText}</ModalButton>
+            <ModalButton color={myColor.mainColor} size="medium" outline onClick={onConfirm}>{confirmText}</ModalButton>
           </ButtonGroup>
         </div>
       </ModalContainer>

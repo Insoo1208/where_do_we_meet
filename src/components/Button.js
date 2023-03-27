@@ -77,7 +77,6 @@ const Button = ({
   outline,
   ...rest
 }) => {
-  // console.log(rest);
   return <StyledButton color={color} size={size} outline={outline} {...rest} />;
 };
 

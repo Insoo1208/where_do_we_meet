@@ -37,14 +37,14 @@
     "lastName": "Cha", 
     "id": "id0002",
     "password": "pw0002!!",
-    "email": "email2@naver.com",
+    "email": "jaekyoungcha@naver.com",
     "nickname": "차차💕",
     "userProfileImg": "/images/user03.png",
     "adress": "인천시 중구 인현동",
     "detailAdress": "detail-adress",
     "favorites": [{"title": "집3", "adress": "인천시 중구 인현동"}],
     "friends": [
-      "insoo", "id0003"
+      "insoo", "id0003", "id0001"
     ],
     "authority": "user",
     "point": 0

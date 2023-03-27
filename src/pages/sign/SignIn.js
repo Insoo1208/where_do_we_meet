@@ -8,6 +8,9 @@ import { selectColor } from "../../features/color/colorSlice";
 import axios from "axios";
 
 const Wrapper = styled.div`
+  @media ${({ theme }) => theme.device.tablet} {
+    width : 400px;
+  }
   width: 500px;
   margin: 0 auto;
   display: flex;
@@ -16,7 +19,7 @@ const Wrapper = styled.div`
   color: ${props => props.theme.gray700};
 
   h1 {
-    font-size: 40px;
+    font-size: 2.5rem;
     font-weight: 700;
     padding: 1rem 2rem 1.5rem;
     color: ${props => props.theme.gray800};
@@ -93,48 +96,38 @@ function SignIn() {
   const [loginInfo, setLoginInfo] = useState({id: '', pw: ''});
   const [eyeOpen, setEyeOpen] = useState(false);
 
-  const pwInput = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const myColor = useSelector(selectColor);
 
-  const data = useRef();
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
+      if (response.status === 200) {
+        const checkedUser = response.data.find(user => user.id === loginInfo.id);
+        if (checkedUser) {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
-        if (response.status === 200) {
-          data.current =  response.data;
+        if (checkedUser.password === loginInfo.pw) {
+          dispatch(userLogIn(checkedUser));
+          navigate('/');
+        } else {
+            alert("아이디 혹은 패스워드가 올바르지 않습니다.");
+            setLoginInfo({id: '', pw: ''});
+          }
+
+        } else {
+          alert("아이디 혹은 패스워드가 올바르지 않습니다.");
+          setLoginInfo({id: '', pw: ''});
         }
-        else throw new Error(`api error: ${response.status} ${response.statusText}`);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
-
+      } else throw new Error(`api error: ${response.status} ${response.statusText}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleEyeChange = () => {
-    setEyeOpen(!eyeOpen);
+    setEyeOpen(eyeOpen => !eyeOpen);
   }
-
-  const handleLogin = () => {
-    const checkedUser = data.current.find(user => user.id === loginInfo.id);
-    if (checkedUser) {
-      if (checkedUser.password === loginInfo.pw) {
-        dispatch(userLogIn(checkedUser));
-        navigate('/');
-      } else {
-        alert("아이디 혹은 패스워드가 올바르지 않습니다.");
-        setLoginInfo({id: '', pw: ''});
-      }
-    } else {
-      alert("아이디 혹은 패스워드가 올바르지 않습니다.");
-      setLoginInfo({id: '', pw: ''});
-    };
-  };
 
   return (
     <section style={{ padding: '150px 0' }}>
@@ -153,7 +146,6 @@ function SignIn() {
               value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
               autoComplete="off"
               onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
-              ref={pwInput}
               />
               <IoEye onClick={handleEyeChange}/>
             </PwWrapper>
@@ -163,7 +155,6 @@ function SignIn() {
               value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
               autoComplete="off"
               onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
-              ref={pwInput}
               />
               <IoEyeOff onClick={handleEyeChange}/>
             </PwWrapper>

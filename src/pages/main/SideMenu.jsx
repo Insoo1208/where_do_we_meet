@@ -281,13 +281,16 @@ const IconGroup = styled.div`
     column-gap: 10px;
 
     svg {
-      font-size: 1rem;
+      font-size: 1.2rem;      
     }
     button {
       width: auto;
       height: auto;
       border: none;
       background: inherit;
+      display: flex;
+      padding: 0;
+      cursor: pointer;
     }
 
 `;

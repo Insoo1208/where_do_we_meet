@@ -78,10 +78,8 @@ function UserInfo() {
     {main: '#f78b33', light: '#ffbc85'},
     {main: '#ffb539', light: '#f8c963'},
     {main: '#ffcb16', light: '#ffe073'},
-    {main: '#ffc705', light: '#ffed73'},
     {main: '#adcd1d', light: '#d3f182'},
     {main: '#74c723', light: '#b1ef74'},
-    {main: '#91da4a', light: '#c2e2a3'},
     {main: '#0b9c00', light: '#84d77e'},
     {main: '#42c566', light: '#9ae5af'},
     {main: '#46d698', light: '#7af2be'},
@@ -99,7 +97,7 @@ function UserInfo() {
     {main: '#2c2c2c', light: '#7a7a7a'},
     {main: '#5c5c5c', light: '#aaaaaa'},
     {main: '#909090', light: '#d4d4d4'},
-    {main: '#dadada', light: '#eaeaea'}
+    {main: '#bdbdbd', light: '#eaeaea'}
   ];
   const myColor = useSelector(selectColor);
   const dispatch = useDispatch();
