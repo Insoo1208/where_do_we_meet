@@ -111,12 +111,7 @@ const postSlice = createSlice({
           break;
       }
     },
-    increment: (state, {payload : { listName, id}}) => { 
-      // const targetPost = state.review.find((post) => {
-      //   return post.id === id;       
-      // });
-      // targetPost.like++;
-
+    increment: (state, {payload : { listName, id}}) => {
       let targetPost;
       switch (listName) {
         case "review":
@@ -147,7 +142,7 @@ const postSlice = createSlice({
       switch (listName) {
         case "review":
           targetPost = state.review.findIndex((post) => post.id === id);
-          state.review.splice(targetPost, 1);            
+          state.review.splice(targetPost, 1);
           break;
 
         case "notice":
@@ -166,11 +161,6 @@ const postSlice = createSlice({
       }
     },
     addComment: (state, { payload : { id, comment, listName } }) => {
-      // const targetPost = state.review.find((post) => {
-      //   return post.id === id;       
-      // });
-      // targetPost.comments.push(comment);
-
       let targetPost;
       switch (listName) {
         case "review":
@@ -223,7 +213,7 @@ const postSlice = createSlice({
         case "review":
           targetPost = state.review.find((post) => {
             return post.id === id;
-          });                    
+          });
           break;
         case "notice":
           targetPost = state.notice.find((post) => {

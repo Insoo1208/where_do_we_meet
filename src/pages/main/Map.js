@@ -18,7 +18,6 @@ function Map (props) {
   const [markers, setMarkers] = useState([]);
   // 위도, 경도 담을 객체
   const [geodata, setGeodata] = useState({x: [], y: []});
-  
   // 지도를 나타낼 div
   const mapRef = useRef();
   
@@ -118,7 +117,7 @@ function Map (props) {
         );
       geoX.push(response.data.documents[0].x);
       geoY.push(response.data.documents[0].y);
-      setGeodata(geodata => ({ ...geodata, x: geoX, y: geoY } ));
+      setGeodata(geodata => ({ ...geodata, x: geoX, y: geoY }));
     } catch (error) {
       console.error(error);
     }
@@ -172,8 +171,8 @@ function Map (props) {
   };
 
   return (
-      <MapWrapper ref={mapRef} />
-    );
+    <MapWrapper ref={mapRef} />
+  );
   }
   
   export default Map;

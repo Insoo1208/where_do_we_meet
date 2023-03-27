@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment, removeComment } from "../../features/post/postSlice";
@@ -115,16 +115,17 @@ function Comment(props) {
   const { data, postId, listName } = props;
   const dispatch = useDispatch();
   const loggedInUser = useSelector(selectUser);
-  const [authority, setAuthority] = useState('anonymous');
+  // const [authority, setAuthority] = useState('anonymous');
+  const authority = useRef('anonymous');
+
+
   const myColor = useSelector(selectColor);
   
-
-
   useEffect(() => {
     if (loggedInUser) {
-      if (loggedInUser.authority === 'admin') setAuthority('admin');
-      else if(loggedInUser.authority === 'user') setAuthority('user');
-    } else setAuthority('anonymous');
+      if (loggedInUser.authority === 'admin') authority.current = 'admin';
+      else if (loggedInUser.authority === 'user') authority.current = 'user';
+    } else authority.current = 'anonymous';
 
   }, [loggedInUser]);
 
@@ -170,21 +171,21 @@ function Comment(props) {
         <CommentButton myColorHex={myColor} type="button" onClick={handleSubmit}>게시하기</CommentButton>
       </InputWrap>
       <ul>
-        {data.map( (comment) => {
+        {data.map(targetComment => {
           return (
-            <CommentWrapper key={comment.id}>            
+            <CommentWrapper key={targetComment.id}>
               <CommentListItem>
-                <img src={comment.commentUserProfileImg} className="comment-item-image"/>
+                <img src={targetComment.commentUserProfileImg} className="comment-item-image"/>
                 <div>
-                  <p className="comment-item-name">{comment.commentsUserNickname} <span>{comment.commentsUserId && `@ ${comment.commentsUserId}`}</span></p>
-                  <p className="comment-item-text">{comment.comment}</p>
+                  <p className="comment-item-name">{targetComment.commentsUserNickname} <span>{targetComment.commentsUserId && `@ ${targetComment.commentsUserId}`}</span></p>
+                  <p className="comment-item-text">{targetComment.comment}</p>
                 </div>
               </CommentListItem>
               {
-                authority === 'admin'
-                ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
-                : (authority === 'user' && comment.userId === loggedInUser.id) && (
-                  <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: comment.id, listName }))}/>
+                authority.current === 'admin'
+                ? <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: targetComment.id, listName }))}/>
+                  : (authority.current === 'user' && targetComment.commentsUserId === loggedInUser.id) && (
+                  <RiCloseFill className="cursor-pointer" onClick={() => dispatch(removeComment({ postId: postId, commentId: targetComment.id, listName }))}/>
                 )
               }
             </CommentWrapper>                   

@@ -117,6 +117,7 @@ function UserInfo() {
           'Content-Type': 'text/plain;charset=UTF-8'
         }
       });
+      console.log(response.data.result);
       dispatch(changeColor(response.data.result));
     } catch (error) {
       console.error(error);
