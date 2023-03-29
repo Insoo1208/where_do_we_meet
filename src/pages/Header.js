@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet, Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -84,26 +84,19 @@ function Header () {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector(selectUser);
+  // const user = useSelector(selectUser);
   const myColor = useSelector(selectColor);
 
   useEffect(() => {
-    // onAuthStateChanged(auth, user => {
-    //   if (user) {
-    //     console.log(user.auth.displayName);
-    //     setCurUser(user.auth.displayName);
-    //   } else {
-    //     console.log(user);
-    //     setCurUser(null);
-    //   }
-    // });
-    const user = auth.currentUser;
-    if (user) {
-      setCurUser('user001');
-    } else {
-      setCurUser(null);
-    };
-
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        console.log(user);
+        setCurUser(user);
+      } else {
+        console.log(user);
+        setCurUser(null);
+      };
+    });
   }, []);
 
   const closeTooltip = () => {
@@ -131,7 +124,7 @@ function Header () {
             {curUser
               ? 
               <>
-                <li>{curUser}님 환영합니다.</li>
+                <li>{curUser.auth.displayName ?? `User-${curUser.uid.slice(0, 6)}`}님 환영합니다.</li>
                 <SubMenu><StyledNavLink to='/theme' onClick={closeTooltip}>내 정보</StyledNavLink></SubMenu>
                 <SubMenu><StyledNavLink to='/' onClick={handleLogOut}>로그아웃</StyledNavLink></SubMenu>
               </>
