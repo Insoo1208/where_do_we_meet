@@ -6,6 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLogIn } from "../../features/user/userSlice";
 import { selectColor } from "../../features/color/colorSlice";
 import axios from "axios";
+import Loading from "../../components/Loading";
+
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "../../firebase"
+
 
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
@@ -93,8 +98,9 @@ const StyledLink = styled(Link)`
 
 
 function SignIn() {
-  const [loginInfo, setLoginInfo] = useState({id: '', pw: ''});
+  const [loginInfo, setLoginInfo] = useState({ id: '', pw: '' });
   const [eyeOpen, setEyeOpen] = useState(false);
+  const [apiLoading, setApiLoading] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -102,26 +108,14 @@ function SignIn() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get('https://my-json-server.typicode.com/insoo1208/where_do_we_meet_data/userInfo');
-      if (response.status === 200) {
-        const checkedUser = response.data.find(user => user.id === loginInfo.id);
-        if (checkedUser) {
-
-        if (checkedUser.password === loginInfo.pw) {
-          dispatch(userLogIn(checkedUser));
-          navigate('/');
-        } else {
-            alert("아이디 혹은 패스워드가 올바르지 않습니다.");
-            setLoginInfo({id: '', pw: ''});
-          }
-
-        } else {
-          alert("아이디 혹은 패스워드가 올바르지 않습니다.");
-          setLoginInfo({id: '', pw: ''});
-        }
-      } else throw new Error(`api error: ${response.status} ${response.statusText}`);
+      setApiLoading(true);
+      const loggedInUserInfo = await signInWithEmailAndPassword(auth, loginInfo.id, loginInfo.pw);
+      console.log(loggedInUserInfo);
+      setApiLoading(false);
+      navigate(-1);
+      setLoginInfo({ id: '', pw: '' });
     } catch (error) {
-      console.error(error);
+      alert('이메일 혹은 비밀번호가 올바르지 않습니다.');
     }
   };
 
@@ -134,7 +128,7 @@ function SignIn() {
       <Wrapper>
         <h1>Sign In</h1>
         <label htmlFor="signInId" />
-        <StyledInput myColorHex={myColor} type='text' id="signInId" placeholder="아이디를 입력하세요"
+        <StyledInput myColorHex={myColor} type='text' id="signInId" placeholder="이메일을 입력하세요."
           value={loginInfo.id} onChange={e => setLoginInfo({...loginInfo, id: e.target.value})}
           autoComplete="off"
           />
@@ -142,7 +136,7 @@ function SignIn() {
           {eyeOpen
             ?
             <PwWrapper>
-              <StyledInput myColorHex={myColor} type='text' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
+              <StyledInput myColorHex={myColor} type='text' id="signInPw" placeholder="비밀번호는 6자 이상입니다."
               value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
               autoComplete="off"
               onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
@@ -151,7 +145,7 @@ function SignIn() {
             </PwWrapper>
             :
             <PwWrapper>
-              <StyledInput myColorHex={myColor} type='password' id="signInPw" placeholder="영문/숫자/특수기호 포함 12자 이상"
+              <StyledInput myColorHex={myColor} type='password' id="signInPw" placeholder="비밀번호는 6자 이상입니다."
               value={loginInfo.pw} onChange={e => setLoginInfo({...loginInfo, pw: e.target.value})}
               autoComplete="off"
               onKeyUp={e => { if(e.key === 'Enter' && loginInfo.id && loginInfo.pw) handleLogin(); }}
@@ -166,6 +160,7 @@ function SignIn() {
           <li><StyledLink to="/findpw">비밀번호 찾기</StyledLink></li>
         </SpanWrapper>
       </Wrapper>
+      {apiLoading && <Loading />}
     </section>
   );
 }
