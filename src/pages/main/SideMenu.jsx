@@ -238,10 +238,10 @@ const DropDown = styled.ul`
   }
 `;
 
-const SideBar = styled.div`
-  width: 20px;
-  height: 100%;
-  background-color: #fff;
+const BottomBar = styled.div`
+  width: 100%;
+  height: 50px;
+  background-color: lavender;
 `;
 
 const FindButton = styled.button`
@@ -367,6 +367,7 @@ function SideMenu (props) {
 
   return (
     <SideMenuWrapper menuOpened={menuOpened}>
+      
       <SideMenuBg>
         <UserSearchWrapper>
           <UserSearchArea myColorHex={myColor}> 
@@ -491,6 +492,9 @@ function SideMenu (props) {
             ))
           }
         </DetailListWrapper>
+        <BottomBar>
+        여기여여기
+      </BottomBar>
       </SideMenuBg>
       <MenuSlideButton onClick={() => {setMenuOpened(menuOpened => !menuOpened)}}>
         {menuOpened ? <MdChevronLeft /> : <MdChevronRight />}
