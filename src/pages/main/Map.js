@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { MdOutlineLocationSearching, MdOutlineMyLocation } from "react-icons/md";
 
 const { kakao } = window;
 const kakaoApiKey = 'ffa89cfc78225aff2872d03ae1064df0';
@@ -9,6 +10,26 @@ const kakaoApiKey = 'ffa89cfc78225aff2872d03ae1064df0';
 const MapWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 75px);
+`;
+
+const BtnCurrentLocation = styled.div`
+  width: auto;
+  height: auto;
+  position: absolute;
+  right: 50px;
+  bottom: 50px;
+  z-index: 100;
+  padding: 12px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: ${props => props.theme.background};
+  user-select: none;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
+  svg{
+    color: ${props => props.theme.main};
+    font-weight: 700;
+  }
 `;
 
 function Map (props) {
@@ -21,6 +42,8 @@ function Map (props) {
   // 지도를 나타낼 div
   const mapRef = useRef();
   
+  // 현재 위치 표시
+  const [currentLocation, setCurrentLocation] = useState(undefined);
   // 내 주소, 친구 주소, 컨텐츠 검색,  검색 결과
   const { myAdress, friendAdress, contentsSearch, setSearchData } = props;
   
@@ -170,8 +193,60 @@ function Map (props) {
     setMarkers([]);
   };
 
+  // 현재 위치 표시 함수
+  const handleCurrentLocationSearch = () => {
+      if (navigator.geolocation) {
+
+        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+        navigator.geolocation.getCurrentPosition(function(position) {
+            
+            var lat = position.coords.latitude, // 위도
+                lon = position.coords.longitude; // 경도
+            
+            var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+                message = '<div style="padding:5px;">현재위치</div>'; // 인포윈도우에 표시될 내용입니다
+            
+            // 마커와 인포윈도우를 표시합니다
+            displayMarker(locPosition, message);
+          });
+      } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+        
+      var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
+          message = 'geolocation을 사용할수 없어요..'
+      }
+  };
+
+  
+  // 현재위치 마커표시 함수
+  const displayMarker = (locPosition, message) => {
+    
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({  
+      map: map, 
+      position: locPosition
+    }); 
+    var iwContent = message, // 인포윈도우에 표시할 내용
+      iwRemoveable = true;
+    // 인포윈도우를 생성합니다
+    var infowindow = new kakao.maps.InfoWindow({
+      content : iwContent,
+      removable : iwRemoveable
+    });
+    // 인포윈도우를 마커위에 표시합니다 
+    infowindow.open(map, marker);
+    // 지도 중심좌표를 접속위치로 변경합니다
+    map.setCenter(locPosition);      
+  }
+  
+  
+
+    
   return (
-    <MapWrapper ref={mapRef} />
+    <MapWrapper ref={mapRef}>
+      <BtnCurrentLocation onClick={handleCurrentLocationSearch}>
+        <MdOutlineLocationSearching />
+      </BtnCurrentLocation>
+    </MapWrapper>
   );
   }
   

@@ -238,6 +238,12 @@ const DropDown = styled.ul`
   }
 `;
 
+const SideBar = styled.div`
+  width: 20px;
+  height: 100%;
+  background-color: #fff;
+`;
+
 const FindButton = styled.button`
   width: 100%;
   height: 2.5rem;
