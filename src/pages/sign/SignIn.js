@@ -110,13 +110,13 @@ function SignIn() {
     try {
       setApiLoading(true);
       const loggedInUserInfo = await signInWithEmailAndPassword(auth, loginInfo.id, loginInfo.pw);
-      console.log(loggedInUserInfo);
       setApiLoading(false);
       navigate(-1);
-      setLoginInfo({ id: '', pw: '' });
     } catch (error) {
+      setApiLoading(false);
       alert('이메일 혹은 비밀번호가 올바르지 않습니다.');
-    }
+      setLoginInfo({ id: '', pw: '' });
+    };
   };
 
   const handleEyeChange = () => {
