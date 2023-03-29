@@ -14,7 +14,8 @@ import FindPw from "./pages/sign/FindPw";
 import PostWrite from "./pages/board/PostWrite";
 import Free from "./pages/board/Free";
 import BoardPage from "./pages/board/BoardPage";
-import UserInfo from "./pages/sign/UserInfo";
+// import UserInfo from "./pages/sign/UserInfo";
+import UserInfos from "./pages/sign/UserInfos";
 
 import deviceTheme from "./features/mediaquery/deviceTheme";
 
@@ -104,7 +105,8 @@ function App() {
               <Route path="/findid" element={<FindId />} />
               <Route path="/findpw" element={<FindPw />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/theme" element={<UserInfo />} />
+              {/* <Route path="/theme" element={<UserInfo />} /> */}
+              <Route path="/userinfo" element={<UserInfos />} />
               <Route path='*' element={<ErrorPage />} />
             </Route>
           </Routes>
