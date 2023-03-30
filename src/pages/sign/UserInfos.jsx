@@ -173,6 +173,19 @@ const Wrapper = styled.div`
     margin-right: 1rem;
     width: 70%;
   }
+
+  div.line-array {
+    display: flex;
+    column-gap: 1rem;
+
+    div.input-check {
+      flex: 2;
+    }
+    button.btn-zip {
+      flex: 1;
+    }
+  }
+
 `;
 
 const StyledInput = styled.input`
@@ -198,7 +211,33 @@ const StyledInput = styled.input`
     border: 1px solid ${props => props.theme.gray800};
     background-color: ${props => props.theme.gray200};
   }
-  `;
+`;
+
+const StyledInputReadOnly = styled.input`
+@media ${({ theme }) => theme.device.tablet} {
+  font-size: 12px;
+  ::placeholder {
+    letter-spacing: -0.055rem;
+  }
+}
+  
+  display: block;
+  padding-left: .7rem;
+  width: 100%;
+  height: 55px;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #333;
+  outline: none;
+  background-color: ${props => props.theme.gray200};
+  &:focus {
+    border: 1px solid #333;
+  }
+  &:disabled {
+    border: 1px solid ${props => props.theme.gray800};
+    background-color: ${props => props.theme.gray200};
+  }
+`;
 
 const StyledButton = styled.button`
   width: 100%;
@@ -261,8 +300,8 @@ function UserInfos() {
 
   // 회원가입 충족 조건
   const signUpCheck = useRef([
-    { title: "email", check: false },
-    { title: "id", check: false },
+    { title: "email", check: true },
+    { title: "id", check: true },
     { title: "password", check: false },
     { title: "password2", check: false },
     { title: "postcode", check: false },
@@ -335,6 +374,16 @@ function UserInfos() {
     }
   }
 
+  // 링크 복사 기능
+  const handleCopyClipBoard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('클립보드에 링크가 복사되었습니다.');
+    } catch (e) {
+      alert('복사에 실패하였습니다');
+    }
+  };
+
   // 이메일 정규식 검사
   const emailCheck = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
 
@@ -400,8 +449,25 @@ function UserInfos() {
               : <ProfilePlus />
             }
           </div>
+          
+          <h2 className="essential">닉네임</h2>
+          <div className="input-check">
+            <label htmlFor="userNickname"/>
+            <StyledInput name="userNickname" myColorHex={myColor} id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={signUpInputValues.userNickname}
+              onChange={handleInputChange}
+              onBlur={() => {
+                if(nicknameCheck.test(signUpInputValues.userNickname) && signUpInputValues.userNickname) {
+                  signUpCheck.current.find(data => data.title === 'nickname').check = true
+                } 
+              }}
+            />
+          </div>
+          {
+            !nicknameCheck.test(signUpInputValues.userNickname) && signUpInputValues.userNickname &&
+            <Error>닉네임은 한글, 영문, 숫자만 가능하며 2-10자리 입니다.</Error>
+          }
 
-          <h2 className="essential">E-MAIL</h2>
+          <h2>이메일</h2>
           {/* 
             이메일 유효성검사
             1. 이메일 양식에 유효한 input 데이터인지 확인 [O]
@@ -409,22 +475,20 @@ function UserInfos() {
             ----------------------
             3. 유효한 이메일인지 확인 [추후확인]
           */}
-          
-          <div className="input-check">
-            <label htmlFor="signUpEmail"/>
-            <StyledInput name="userEmail" myColorHex={myColor} type="email" id="signUpEmail" placeholder="abc123@email.com" value={signUpInputValues.userEmail} autoComplete="off" spellCheck="false"
-            onChange={handleInputChange}
-            onBlur={() => {
-              if(emailCheck.test(signUpInputValues.userEmail) && !emailDuplicationCheck) {
-              signUpCheck.current.find( data => data.title === 'email').check = true;
-              } else {
-            }}}
-            />
-            { 
-              emailCheck.test(signUpInputValues.userEmail) && !emailDuplicationCheck
-              ? <CheckedBox />
-              : <CheckBoxBlank />
-            }
+          <div className='line-array'>
+            <div className="input-check">
+              <label htmlFor="signUpEmail"/>
+              <StyledInputReadOnly name="userEmail" myColorHex={myColor} type="email" id="signUpEmail" placeholder="abc123@email.com" value={signUpInputValues.userEmail} autoComplete="off" spellCheck="false"
+              // onChange={handleInputChange}
+              onBlur={() => {
+                if(emailCheck.test(signUpInputValues.userEmail) && !emailDuplicationCheck) {
+                signUpCheck.current.find( data => data.title === 'email').check = true;
+                } else {
+              }}}
+              readOnly
+              />
+            </div>
+            <StyledButton myColorHex={myColor} className="btn-zip" onClick="">이메일 수정</StyledButton>
           </div>
           {
             !emailCheck.test(signUpInputValues.userEmail) && signUpInputValues.userEmail &&
@@ -434,30 +498,31 @@ function UserInfos() {
             emailDuplicationCheck &&
             <Error>이미 가입한 이메일 입니다.</Error>
           }
-          <h2 className="essential">ID</h2>
-          <div className="input-check">
-            <label htmlFor="signUnId"/>
-            <StyledInput name="userId" myColorHex={myColor} type='text' id="signUpId" placeholder="영문 소문자 및 숫자 6~10자리를 입력해 주세요" value={signUpInputValues.userId} autoComplete="off" spellCheck="false"
-              onChange={handleInputChange}
-              onBlur={() => {
-                if(idCheck.test(signUpInputValues.userId) && !idDuplicationCheck) {
-                signUpCheck.current.find(data => data.title === 'id').check = true;
-              }}}
-            />
-            { idCheck.test(signUpInputValues.userId) && !idDuplicationCheck
-              ? <CheckedBox />
-              : <CheckBoxBlank />
-            }
+
+          <h2>내 추천코드</h2>
+          <div className='line-array'>
+            <div className="input-check">
+              <label htmlFor="signUnId"/>
+              <StyledInputReadOnly name="userId" myColorHex={myColor} type='text' id="signUpId" placeholder="LtoKUr4QWHTulIFrhUDkGs179kk2" value={signUpInputValues.userId} autoComplete="off" spellCheck="false"
+                onChange={handleInputChange}
+                onBlur={() => {
+                  if(idCheck.test(signUpInputValues.userId) && !idDuplicationCheck) {
+                  signUpCheck.current.find(data => data.title === 'id').check = true;
+                }}}
+                readOnly
+              />
+            </div>
+            <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>코드 복사하기</StyledButton>
           </div>
-          {
-            !idCheck.test(signUpInputValues.userId) && signUpInputValues.userId &&
-            <Error>영문 대소문자와 숫자를 이용하여 6~10자리의 아이디를 만들어 주세요.</Error>
-          }
-          { 
-            idDuplicationCheck &&
-              <Error>아이디가 중복되었습니다.</Error>
-          }
-          <h2 className="essential">PASSWORD
+          {/* <button type='button' onClick={() => {handleCopyClipBoard(content)}}>
+            <img src={ require('./images/btn-linkcopy_brown.png') } />
+            <p className={styles['arrow_box']}>주소 복사하기</p>
+          </button> */}
+
+          <h2>비밀번호</h2>
+          <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>비밀번호 재설정하기</StyledButton>
+
+          <h2>비밀번호 재설정
             <button
                   type="button"
                   onClick={() => {
@@ -484,10 +549,6 @@ function UserInfos() {
                 signUpCheck.current.find(data => data.title === 'password').check = true;
               }}}
               />
-              { passwordCheck.test(signUpInputValues.userPassword) 
-                ? <CheckedBox />
-                : <CheckBoxBlank />
-              }
           </div>
           {
             !passwordCheck.test(signUpInputValues.userPassword) && signUpInputValues.userPassword &&
@@ -504,16 +565,17 @@ function UserInfos() {
                 }
               }}
             />
-            { passwordCheckResult && passwordCheck.test(signUpInputValues.userPassword)
-                ? <CheckedBox />
-                : <CheckBoxBlank />
-            }
           </div>
           {
             !passwordCheckResult && signUpInputValues.userPasswordCheck && 
               <Error>비밀번호를 다시 확인해 주세요!</Error> 
           }
-          <h2 className="essential">NAME</h2>
+          <div className="line-array">
+            <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>취소</StyledButton>
+            <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>비밀번호 변경하기</StyledButton>
+          </div>
+
+          <h2 className="essential">이름</h2>
           <div className="input-check" style={{ marginBottom: '1rem' }}>
             <div className="user-name" >
               <label htmlFor="userLastName" style={{display:'none'}} />
@@ -534,10 +596,6 @@ function UserInfos() {
                   }
                 }}
               />
-            { nameCheck.test(signUpInputValues.userLastName) && nameCheck.test(signUpInputValues.userFirstName)
-                  ? <CheckedBox />
-                  : <CheckBoxBlank />
-            }
             </div>
           </div>
           {
@@ -548,7 +606,7 @@ function UserInfos() {
             !nameCheck.test(signUpInputValues.userFirstName) && signUpInputValues.userFirstName &&
             <Error>이름을 한글로 정확히 입력해 주세요</Error> 
           }
-          <h2 className="essential">ADDRESS</h2>
+          <h2 className="essential">주소</h2>
           <div className="zip-wrapper">
             <label htmlFor="searchAddress"/>
             <StyledInput myColorHex={myColor} className="zip-code" type='text' id="searchAddress" placeholder="우편번호" disabled={true} value={signUpInputValues.zonecode}
@@ -580,29 +638,8 @@ function UserInfos() {
               }}
             } 
           />
-
-          <h2 className="essential">NICKNAME</h2>
-          <div className="input-check">
-            <label htmlFor="userNickname"/>
-            <StyledInput name="userNickname" myColorHex={myColor} id="userNickname" placeholder="2-10자리, 한글, 영문, 숫자만 입력해 주세요" autoComplete="off" spellCheck="false" value={signUpInputValues.userNickname}
-              onChange={handleInputChange}
-              onBlur={() => {
-                if(nicknameCheck.test(signUpInputValues.userNickname) && signUpInputValues.userNickname) {
-                  signUpCheck.current.find(data => data.title === 'nickname').check = true
-                } 
-              }}
-            />
-            { nicknameCheck.test(signUpInputValues.userNickname)
-              ? <CheckedBox />
-              : <CheckBoxBlank />
-            }
-          </div>
-          {
-            !nicknameCheck.test(signUpInputValues.userNickname) && signUpInputValues.userNickname &&
-            <Error>닉네임은 한글, 영문, 숫자만 가능하며 2-10자리 입니다.</Error>
-          }
           
-          <h2>REFERRAL CODE</h2>
+          <h2>추천인 코드</h2>
           <label htmlFor="recomenderId"></label>
           <StyledInput name="recomenderId" myColorHex={myColor} id="recomenderId" placeholder="추천인 아이디를 입력해 주세요 / 입력시, 추천인 가입인 모두 1000p증정" autoComplete="off" spellCheck="false" value={signUpInputValues.recomenderId}
             onChange={handleInputChange}
@@ -637,7 +674,7 @@ function UserInfos() {
                 setShowModal(true);
               }
             }}
-          >가입하기</StyledButton>
+          >저장하기</StyledButton>
 
           <CenterModal
           title="회원가입 알림"
@@ -652,7 +689,7 @@ function UserInfos() {
           }}
           visible={showModal}
         >
-          {signUpInputValues.userLastName + signUpInputValues.userFirstName}님 회원가입을 축하드립니다!
+          {signUpInputValues.userLastName + signUpInputValues.userFirstName}님의 정보가 저장되었습니다.
         </CenterModal>
         </Wrapper>
       </section>
