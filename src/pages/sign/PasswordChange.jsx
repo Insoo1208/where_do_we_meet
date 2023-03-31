@@ -289,10 +289,6 @@ function PasswordChange(props) {
     console.log('성공');
   };
 
-  const handlePp = () => {
-    console.log('ㅇㅇㅇㅇ');
-  };
-
   // 유저데이터
   const { userInfo } = userData;
 
@@ -337,7 +333,7 @@ function PasswordChange(props) {
       }
       <div className="line-array">
         <StyledButton myColorHex={myColor} className="btn-zip" onClick={handleClickChangeBtn}>취소</StyledButton>
-        <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => console.log('eee')}>비밀번호 변경하기</StyledButton>
+        <StyledButton myColorHex={myColor} className="btn-zip" onClick={handlePasswordSuccess}>비밀번호 변경하기</StyledButton>
       </div>
     </>
   );

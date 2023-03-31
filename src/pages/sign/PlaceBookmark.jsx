@@ -21,7 +21,9 @@ const Wrapper = styled.div`
   align-items: center;
 
   div.place-wrap {
-    box-shadow: 5px 5px 5px rgba(0);
+    padding: 20px;
+    margin-bottom: 1rem;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     background-color: #ffffff;
   }
 
@@ -101,7 +103,6 @@ const Wrapper = styled.div`
       margin-right: 1rem;
       width: 70%;
     }
-    
   }
   
   .zip-wrapper {
@@ -113,16 +114,11 @@ const Wrapper = styled.div`
     width: 70%;
   }
 
-  div.line-array {
-    display: flex;
-    column-gap: 1rem;
-
-    div.input-check {
-      flex: 2;
-    }
-    button.btn-zip {
-      flex: 1;
-    }
+  div.input-check {
+    flex: 2;
+  }
+  button.btn-zip {
+    flex: 1;
   }
 `;
 
@@ -140,17 +136,45 @@ const StyledInput = styled.input`
   height: 55px;
   margin-bottom: 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #333;
+  border: none;
+  border-bottom: 1px solid #ccc;
   outline: none;
   &:focus {
     border: 2px solid ${props => props.myColorHex.mainColor};
+  }
+  &:disabled {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: ${props => props.theme.gray200};
+  }
+`;
+
+const StyledInputReadOnly = styled.input`
+@media ${({ theme }) => theme.device.tablet} {
+  font-size: 12px;
+  ::placeholder {
+    letter-spacing: -0.055rem;
+  }
+}
+  
+  display: block;
+  padding-left: .7rem;
+  width: 100%;
+  height: 55px;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  background-color: ${props => props.theme.gray200};
+  &:focus {
+    border: 1px solid #333;
   }
   &:disabled {
     border: 1px solid ${props => props.theme.gray800};
     background-color: ${props => props.theme.gray200};
   }
 `;
-
 
 const StyledButton = styled.button`
   width: 100%;
