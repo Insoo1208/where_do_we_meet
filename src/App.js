@@ -14,10 +14,12 @@ import FindPw from "./pages/sign/FindPw";
 import PostWrite from "./pages/board/PostWrite";
 import Free from "./pages/board/Free";
 import BoardPage from "./pages/board/BoardPage";
-// import UserInfo from "./pages/sign/UserInfo";
+import UserInfo from "./pages/sign/UserInfo";
 import UserInfos from "./pages/sign/UserInfos";
 
 import deviceTheme from "./features/mediaquery/deviceTheme";
+import Mypages from "./pages/sign/Mypages";
+import PlaceBookmark from "./pages/sign/PlaceBookmark";
 
 const theme = {
   gray100: '#f1f1f1',
@@ -105,8 +107,11 @@ function App() {
               <Route path="/findid" element={<FindId />} />
               <Route path="/findpw" element={<FindPw />} />
               <Route path="/signup" element={<SignUp />} />
-              {/* <Route path="/theme" element={<UserInfo />} /> */}
-              <Route path="/userinfo" element={<UserInfos />} />
+              <Route path="/mypages" element={<Mypages />} >
+                <Route path="/mypages/userinfos" element={<UserInfos />} />
+                <Route path="/mypages/bookmark" element={<PlaceBookmark />} />
+                <Route path="/mypages/theme" element={<UserInfo />} />
+              </Route>
               <Route path='*' element={<ErrorPage />} />
             </Route>
           </Routes>

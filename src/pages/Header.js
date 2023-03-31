@@ -125,7 +125,7 @@ function Header () {
               ? 
               <>
                 <li>{curUser.auth.displayName ?? `User-${curUser.uid.slice(0, 6)}`}님 환영합니다.</li>
-                <SubMenu><StyledNavLink to='/userinfo' onClick={closeTooltip}>내 정보</StyledNavLink></SubMenu>
+                <SubMenu><StyledNavLink to='/mypages/userinfos' onClick={closeTooltip}>마이페이지</StyledNavLink></SubMenu>
                 <SubMenu><StyledNavLink to='/' onClick={handleLogOut}>로그아웃</StyledNavLink></SubMenu>
               </>
               :

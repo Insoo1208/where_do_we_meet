@@ -15,8 +15,7 @@ import { changeColor, chooseColor } from '../../features/color/colorSlice';
 import userData from "../../data.json";
 import { useSelector } from "react-redux";
 import { selectColor } from "../../features/color/colorSlice";
-
-import UserInfo from "./UserInfo";
+import PasswordChange from './PasswordChange';
 
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
@@ -273,6 +272,7 @@ const Error = styled.div`
 
 function UserInfos() {
   const [openPostcode, setOpenPostcode] = useState(false);
+  const [openPasswordChange, setOpenPasswordChange] = useState(false);
   const [inputType, setInputType] = useState('password');
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
@@ -302,8 +302,8 @@ function UserInfos() {
   const signUpCheck = useRef([
     { title: "email", check: true },
     { title: "id", check: true },
-    { title: "password", check: false },
-    { title: "password2", check: false },
+    { title: "password", check: true },
+    { title: "password2", check: true },
     { title: "postcode", check: false },
     { title: "detailaddress", check: true},
     { title: "lastname", check: false },
@@ -333,6 +333,10 @@ function UserInfos() {
     }
   },[signUpInputValues.zonecode, signUpInputValues.address]);
 
+  // 비밀번호 재설정하기
+  const handleClickChangeBtn = () => {
+    setOpenPasswordChange(openPasswordChange => !openPasswordChange);
+  };
 
   // 우편번호 검색
   const handleClickZipBtn = () => {
@@ -425,9 +429,9 @@ function UserInfos() {
   
   return (
     <>
-      <section style={{ padding: '150px 0' }}>
+      <section style={{ padding: '150px 0', flex: 1 }}>
         <Wrapper myColorHex={myColor}>
-          <h1>내 정보</h1>
+          <h1>개인정보 수정하기</h1>
           <div className="profile-wrap">
             <div className="profile">
               {imgFile
@@ -488,7 +492,6 @@ function UserInfos() {
               readOnly
               />
             </div>
-            <StyledButton myColorHex={myColor} className="btn-zip" onClick="">이메일 수정</StyledButton>
           </div>
           {
             !emailCheck.test(signUpInputValues.userEmail) && signUpInputValues.userEmail &&
@@ -520,60 +523,14 @@ function UserInfos() {
           </button> */}
 
           <h2>비밀번호</h2>
-          <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>비밀번호 재설정하기</StyledButton>
-
-          <h2>비밀번호 재설정
-            <button
-                  type="button"
-                  onClick={() => {
-                    if(inputType !== 'text') {
-                      setInputType('text');
-                    } else {
-                      setInputType('password')
-                    }
-                  }}
-                >
-                  {
-                    inputType !== 'text' 
-                      ? <EyeOff />
-                      : <Eye />
-                  }
-            </button>
-          </h2>
-          <div className="input-check">
-            <label htmlFor="signUpPw"/>
-            <StyledInput name="userPassword" myColorHex={myColor} type={inputType} id="signUpPw" placeholder="반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요."  value={signUpInputValues.userPassword} autoComplete="off"
-              onChange={handleInputChange}
-              onBlur={() => {
-                if(passwordCheck.test(signUpInputValues.userPassword)) {
-                signUpCheck.current.find(data => data.title === 'password').check = true;
-              }}}
+          <StyledButton myColorHex={myColor} className="btn-zip" onClick={handleClickChangeBtn}>비밀번호 재설정하기</StyledButton>
+          {
+            openPasswordChange&&
+              <PasswordChange 
+                handleClickChangeBtn={handleClickChangeBtn}
+                signUpCheck={signUpCheck}
               />
-          </div>
-          {
-            !passwordCheck.test(signUpInputValues.userPassword) && signUpInputValues.userPassword &&
-            <Error>반드시 영문, 숫자, 특수문자(@$!%*#?&) 포함 8자 이상을 입력해 주세요.</Error>
-          }    
-          <div className="input-check">
-            <label htmlFor="signUpPwCheck"/>
-            <StyledInput name="userPasswordCheck" myColorHex={myColor} type={inputType} id="signUpPwCheck" placeholder="비밀번호를 다시 입력해 주세요" value={signUpInputValues.userPasswordCheck} autoComplete="off"
-              onChange = {handleInputChange}
-
-              onBlur= {() => {
-                if(passwordCheckResult && passwordCheck.test(signUpInputValues.userPassword)) {
-                  signUpCheck.current.find(data => data.title === 'password2').check = true;
-                }
-              }}
-            />
-          </div>
-          {
-            !passwordCheckResult && signUpInputValues.userPasswordCheck && 
-              <Error>비밀번호를 다시 확인해 주세요!</Error> 
           }
-          <div className="line-array">
-            <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>취소</StyledButton>
-            <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>비밀번호 변경하기</StyledButton>
-          </div>
 
           <h2 className="essential">이름</h2>
           <div className="input-check" style={{ marginBottom: '1rem' }}>
@@ -669,9 +626,11 @@ function UserInfos() {
 
               if (signUpCheck.current.find(data => data.check === false)) {
                 alert(`필수 입력값을 확인해 주세요`);
+                console.log(signUpCheck);
               } else {
                 console.log('성공');
                 setShowModal(true);
+                console.log(signUpCheck);
               }
             }}
           >저장하기</StyledButton>
@@ -693,9 +652,6 @@ function UserInfos() {
         </CenterModal>
         </Wrapper>
       </section>
-
-      <hr />
-      <UserInfo />
 
     </>
     
