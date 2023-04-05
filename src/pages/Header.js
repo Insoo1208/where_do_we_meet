@@ -110,7 +110,7 @@ function Header () {
   };
 
   const handleLogOut = () => {
-    dispatch(userLogOut());
+    // dispatch(userLogOut());
     auth.signOut();
     dispatch(resetColor());
     closeTooltip();
