@@ -17,6 +17,9 @@ import { useSelector } from "react-redux";
 import { selectColor } from "../../features/color/colorSlice";
 import PasswordChange from './PasswordChange';
 
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase";
+
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
     width : 400px;
@@ -280,6 +283,11 @@ function UserInfos() {
   const [profile, setProfile] = useState('');
   const [imgFile, setImgFile] = useState(null);
 
+  const [curUser, setCurUser] = useState({
+    email: '',
+    uid: '',
+  });
+
   const navigate = useNavigate();
   const imgRef = useRef(null);
 
@@ -311,6 +319,41 @@ function UserInfos() {
     { title: "nickname", check: false },
     { title: "recomender", check: true}
   ]);
+
+  // firebase에서 user정보 불러오기
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        console.log(user);
+        setCurUser(user);
+      } else {
+        console.log(user);
+        setCurUser(null);
+      };
+    });
+  }, []);
+
+  // 회원정보를 처음 들어온 회원
+  // 회원정보를 이전에 저장하고 다시 들어온 회원
+
+  // useEffect (() => {
+  //   const userDB = async () => {
+  //     // Initialize Firebase
+  //     const app = initializeApp(firebaseConfig);
+  //     const db = getAuth(app);
+  //     console.log(db);
+  //     // const querySelectSnapshot = await getDoc(doc(db, "RecipeDB", docId)); 
+  //     // // console.log(querySelectSnapshot.exists());
+  //     // // console.log(querySelectSnapshot.data());
+  //     // const recipeItemCall = querySelectSnapshot.data();
+  //     // // console.log(recipeSelectItem.title);
+  //     // setRecipeItem(recipeItemCall);
+  //   }
+  //   userDB();
+  //   // const foundRecipe = data.find((item) => {
+  //   //   return item.id == docId;
+  //   // })
+  // }, []);
 
   useEffect(() => {
     // 비밀번호 재확인
@@ -482,45 +525,23 @@ function UserInfos() {
           <div className='line-array'>
             <div className="input-check">
               <label htmlFor="signUpEmail"/>
-              <StyledInputReadOnly name="userEmail" myColorHex={myColor} type="email" id="signUpEmail" placeholder="abc123@email.com" value={signUpInputValues.userEmail} autoComplete="off" spellCheck="false"
-              // onChange={handleInputChange}
-              onBlur={() => {
-                if(emailCheck.test(signUpInputValues.userEmail) && !emailDuplicationCheck) {
-                signUpCheck.current.find( data => data.title === 'email').check = true;
-                } else {
-              }}}
+              <StyledInputReadOnly name="userEmail" myColorHex={myColor} type="email" id="signUpEmail" value={curUser.email} autoComplete="off" spellCheck="false"
               readOnly
               />
             </div>
           </div>
-          {
-            !emailCheck.test(signUpInputValues.userEmail) && signUpInputValues.userEmail &&
-            <Error>이메일 양식을 확인해 주세요.</Error>
-          }
-          {
-            emailDuplicationCheck &&
-            <Error>이미 가입한 이메일 입니다.</Error>
-          }
 
           <h2>내 추천코드</h2>
           <div className='line-array'>
             <div className="input-check">
               <label htmlFor="signUnId"/>
-              <StyledInputReadOnly name="userId" myColorHex={myColor} type='text' id="signUpId" placeholder="LtoKUr4QWHTulIFrhUDkGs179kk2" value={signUpInputValues.userId} autoComplete="off" spellCheck="false"
+              <StyledInputReadOnly name="userId" myColorHex={myColor} type='text' id="signUpId" value={curUser.uid} autoComplete="off" spellCheck="false"
                 onChange={handleInputChange}
-                onBlur={() => {
-                  if(idCheck.test(signUpInputValues.userId) && !idDuplicationCheck) {
-                  signUpCheck.current.find(data => data.title === 'id').check = true;
-                }}}
                 readOnly
               />
             </div>
             <StyledButton myColorHex={myColor} className="btn-zip" onClick={() => {handleCopyClipBoard('sisisisisi')}}>코드 복사하기</StyledButton>
           </div>
-          {/* <button type='button' onClick={() => {handleCopyClipBoard(content)}}>
-            <img src={ require('./images/btn-linkcopy_brown.png') } />
-            <p className={styles['arrow_box']}>주소 복사하기</p>
-          </button> */}
 
           <h2>비밀번호</h2>
           <StyledButton myColorHex={myColor} className="btn-zip" onClick={handleClickChangeBtn}>비밀번호 재설정하기</StyledButton>

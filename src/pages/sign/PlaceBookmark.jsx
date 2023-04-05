@@ -261,34 +261,39 @@ function PlaceBookmark () {
   }
 
   // 우편번호 검색
-  const handleClickZipBtn = () => {
+  const handleClickZipBtn = (e, index) => {
+      console.log(index);
       setOpenPostcode(openPostcode => !openPostcode);
     };
 
+    const handleInputChangee = (e) => {
+      const { name, value } = e.target;
+      const inputValue = value;
+      setBookmarkInputValues(bookmarkInputValues => ({
+        ...bookmarkInputValues,
+        [name]: inputValue
+      }));
+    };
 
+    const handleInputChange = (e, index) => {
+      const { name, value } = e.target;
+      const inputValue = value;
+      setBookmarkInputValues(bookmarkInputValues.findIndex((bookmarkInputValue) => {
+        
+      }))
+    };
 
-  // input onChange 함수 하나로 묶기
-  const handleInputChange = (e, index) => {
-    const { name, value } = e.target;
-    const inputValue = value;
-    // bookmarkInputValues의 index 에 키값을 찾는다
-    // 해당 키값에 inputValue를 넣어준다
-    
-    console.log(index);
-    console.log(inputValue);
-    // 현재 입력 중인 input 박스의 키값을 찾는다
-    // 객체를 찾고
-    // 해당 input에 적은 inputValue값을 
-    const bookmarkInputValuesCopy = bookmarkInputValues;
-    bookmarkInputValuesCopy[index]
+  function handleInputPlacename(e, index) {
+    const bookmarkInputValuesCopy = JSON.parse(JSON.stringify(bookmarkInputValues));
+    bookmarkInputValuesCopy[index].placename = e.target.value;  
+    setBookmarkInputValues(bookmarkInputValuesCopy);
+  }
+  function handleInputAdressDetail(e, index) {
+    const bookmarkInputValuesCopy = JSON.parse(JSON.stringify(bookmarkInputValues));
+    bookmarkInputValuesCopy[index].detailAddress = e.target.value;  
+    setBookmarkInputValues(bookmarkInputValuesCopy);
+  }
 
-
-
-    // setBookmarkInputValues(bookmarkInputValues => [{
-    //   ...bookmarkInputValuesCopy,
-    //   [name]: inputValue
-    // }]);
-  };
   const handleSelectAddress = (data, index) => {
     const bookmarkInputValuesCopy = bookmarkInputValues[index]
       setBookmarkInputValues(bookmarkInputValues => [{
@@ -330,7 +335,7 @@ function PlaceBookmark () {
                 autoComplete="off" 
                 spellCheck="false" 
                 value={item.placename}
-                onChange={e => handleInputChange(e, index)}
+                onChange={e => handleInputPlacename(e, index)}
                 onBlur={() => {
                   if(placenameCheck.test(item.placename) && item.placename) {
                     signUpCheck.current.find(data => data.title === 'placename').check = true
@@ -352,7 +357,7 @@ function PlaceBookmark () {
                     disabled={true} 
                     value={item.zonecode} 
                   />
-                  <StyledButton myColorHex={myColor} className="btn-zip" onClick={handleClickZipBtn}>우편번호 검색</StyledButton>
+                  <StyledButton myColorHex={myColor} className="btn-zip" onClick={e => handleClickZipBtn(e, index)}>우편번호 검색</StyledButton>
                   <br />
                 </div>
                 {
@@ -373,7 +378,7 @@ function PlaceBookmark () {
                 />
                 <label htmlFor="detailAddress"/>
                 <StyledInput name="detailAddress" myColorHex={myColor} id="detailAddress" placeholder="상세 주소" autoComplete="off" value={item.detailAddress}
-                  onChange={e => handleInputChange(e, index)}
+                  onChange={e => handleInputAdressDetail(e, index)}
                   onBlur={() =>
                     { if(detailAddressCheck.test(item.detailAddress) && item.detailAddress) { 
                       signUpCheck.current.find(data => data.title === 'detailaddress').check = false;
