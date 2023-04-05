@@ -92,6 +92,7 @@ function Header () {
       // console.log(user);
       if (user && user.emailVerified) {
         setCurUser(user);
+        console.log(auth.currentUser);
         // dispatch(userLogIn(user));
       } else {
         setCurUser(null);
