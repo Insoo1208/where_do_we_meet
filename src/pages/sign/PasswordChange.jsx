@@ -16,6 +16,9 @@ import userData from "../../data.json";
 import { useSelector } from "react-redux";
 import { selectColor } from "../../features/color/colorSlice";
 
+import { onAuthStateChanged, updatePassword } from "firebase/auth";
+import { auth, db } from "../../firebase";
+
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
     width : 400px;
@@ -248,16 +251,10 @@ const Error = styled.div`
 `;
 
 function PasswordChange(props) {
-  const { handleClickChangeBtn, signUpCheck } = props;
+  const { handleClickChangeBtn, signUpCheck, handlePasswordChange, setSignUpInputValues, signUpInputValues } = props;
 
   const [inputType, setInputType] = useState('password');
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
-
-  // useState 객체 묶기
-  const [signUpInputValues, setSignUpInputValues] = useState({
-    userPassword: '',
-    userPasswordCheck: '',
-  });
 
   useEffect(() => {
     // 비밀번호 재확인
@@ -285,9 +282,6 @@ function PasswordChange(props) {
     }));
   };
 
-  const handlePasswordSuccess = (e) => {
-    console.log('성공');
-  };
 
   // 유저데이터
   const { userInfo } = userData;
@@ -333,7 +327,7 @@ function PasswordChange(props) {
       }
       <div className="line-array">
         <StyledButton myColorHex={myColor} className="btn-zip" onClick={handleClickChangeBtn}>취소</StyledButton>
-        <StyledButton myColorHex={myColor} className="btn-zip" onClick={handlePasswordSuccess}>비밀번호 변경하기</StyledButton>
+        <StyledButton myColorHex={myColor} className="btn-zip" onClick={handlePasswordChange}>비밀번호 변경하기</StyledButton>
       </div>
     </>
   );

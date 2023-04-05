@@ -17,8 +17,10 @@ import { useSelector } from "react-redux";
 import { selectColor } from "../../features/color/colorSlice";
 import PasswordChange from './PasswordChange';
 
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../firebase";
+import { onAuthStateChanged, updateProfile, updatePassword } from "firebase/auth";
+import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, listAll, getDownloadURL,} from "firebase/storage";
+import { auth, db, storage } from "../../firebase";
 
 const Wrapper = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
@@ -282,19 +284,22 @@ function UserInfos() {
   const [showModal, setShowModal] = useState(false); // 모달
   const [profile, setProfile] = useState('');
   const [imgFile, setImgFile] = useState(null);
+  const [imageList, setImageList] = useState([]);
 
   const [curUser, setCurUser] = useState({
     email: '',
     uid: '',
   });
 
+  const [images, setImages] = useState(null);
+
   const navigate = useNavigate();
   const imgRef = useRef(null);
 
   // useState 객체 묶기
   const [signUpInputValues, setSignUpInputValues] = useState({
-    userEmail: '',
-    userId: '',
+    email: '',
+    uid: '',
     userPassword: '',
     userPasswordCheck: '',
     userLastName: '',
@@ -418,6 +423,7 @@ function UserInfos() {
       reader.onloadend = () => {
         setImgFile(reader.result);
       };
+      console.log(file);
     }
   }
 
@@ -429,6 +435,48 @@ function UserInfos() {
     } catch (e) {
       alert('복사에 실패하였습니다');
     }
+  };
+
+  // 비밀번호 변경하기
+  const handlePasswordChange = async (e) => {
+    try {
+      await updatePassword(auth.currentUser, signUpInputValues.userPassword)
+      alert('비밀번호가 변경되었습니다.')
+      setOpenPasswordChange(openPasswordChange => !openPasswordChange);
+      e.preventDefault();
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  // 저장한 내용을 firestore에 저장하기
+  const handleSubmit = async () => {
+    try {
+      await updateProfile(auth.currentUser, { 
+        displayName: signUpInputValues.nickname
+      });
+      await setDoc(doc(db, "userInfo", auth.currentUser.uid), {
+        userLastName: signUpInputValues.userLastName,
+        userFirstName: signUpInputValues.userFirstName,
+        zonecode: signUpInputValues.zonecode,
+        address: signUpInputValues.address,
+        detailAddress: signUpInputValues.detailAddress,
+        userNickname: signUpInputValues.userNickname,
+        recomenderId: signUpInputValues.recomenderId,
+      });
+      upload();
+      alert('정보가 변경되었습니다.');
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  // 이미지 업로드
+  const upload = () => {
+    if (imgFile === null) return;
+    const imageRef = ref(storage, `images/${auth.currentUser.uid}`);
+    // `images === 참조값이름(폴더이름), / 뒤에는 파일이름 어떻게 지을지
+    uploadBytes(imageRef, images)
   };
 
   // 이메일 정규식 검사
@@ -487,7 +535,8 @@ function UserInfos() {
                 ref={imgRef}
                 required
                 accept='image/*'
-                onChange={handleChangeFile}
+                // onChange={handleChangeFile}
+                onChange={e => setImages(e.target.files[0])}
                 style={{display:"none"}} 
               />
             </div>
@@ -550,6 +599,9 @@ function UserInfos() {
               <PasswordChange 
                 handleClickChangeBtn={handleClickChangeBtn}
                 signUpCheck={signUpCheck}
+                handlePasswordChange={handlePasswordChange}
+                setSignUpInputValues={setSignUpInputValues}
+                signUpInputValues={signUpInputValues}
               />
           }
 
@@ -652,6 +704,7 @@ function UserInfos() {
                 console.log('성공');
                 setShowModal(true);
                 console.log(signUpCheck);
+                handleSubmit();
               }
             }}
           >저장하기</StyledButton>
