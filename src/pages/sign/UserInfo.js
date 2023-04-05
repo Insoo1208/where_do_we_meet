@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router';
 import styled from "styled-components";
 import { changeColor, chooseColor, selectColor } from '../../features/color/colorSlice';
+import { auth } from "../../firebase";
 
 const Wrapper = styled.div`
   width: 500px;
@@ -145,8 +146,6 @@ function UserInfo() {
         
       </Wrapper>
     </section>
-    
-    
   );
 }
 

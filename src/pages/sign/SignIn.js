@@ -110,11 +110,14 @@ function SignIn() {
     try {
       setApiLoading(true);
       const loggedInUserInfo = await signInWithEmailAndPassword(auth, loginInfo.id, loginInfo.pw);
+      if (!loggedInUserInfo.user.emailVerified) throw new Error ('이메일 인증이 필요합니다.');
+      // dispatch(userLogIn(loggedInUserInfo.user));
       setApiLoading(false);
-      navigate(-1);
+      navigate('/');
     } catch (error) {
+      auth.signOut();
       setApiLoading(false);
-      alert('이메일 혹은 비밀번호가 올바르지 않습니다.');
+      alert(error || '이메일 혹은 비밀번호가 올바르지 않습니다.');
       setLoginInfo({ id: '', pw: '' });
     };
   };
