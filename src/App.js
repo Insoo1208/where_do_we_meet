@@ -15,8 +15,10 @@ import PostWrite from "./pages/board/PostWrite";
 import Free from "./pages/board/Free";
 import BoardPage from "./pages/board/BoardPage";
 import UserInfo from "./pages/sign/UserInfo";
+import NotVer from "./pages/sign/NotVer";
 
 import deviceTheme from "./features/mediaquery/deviceTheme";
+import MyPage from "./pages/sign/MyPage";
 
 const theme = {
   gray100: '#f1f1f1',
@@ -104,7 +106,9 @@ function App() {
               <Route path="/findid" element={<FindId />} />
               <Route path="/findpw" element={<FindPw />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/theme" element={<UserInfo />} />
+              {/* <Route path="/theme" element={<UserInfo />} />
+              <Route path="/email-verify" element={<NotVer />} /> */}
+              <Route path='mypage' element={<UserInfo />} />
               <Route path='*' element={<ErrorPage />} />
             </Route>
           </Routes>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet, Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { resetColor, selectColor } from '../features/color/colorSlice';
-import { selectUser, userLogOut } from '../features/user/userSlice';
+import { selectUser, userLogIn, userLogOut } from '../features/user/userSlice';
 import Tooltip from './main/Tooltip';
 import { BsQuestionCircle } from 'react-icons/bs';
 
@@ -84,26 +84,32 @@ function Header () {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const user = useSelector(selectUser);
+  const user = useSelector(selectUser);
   const myColor = useSelector(selectColor);
 
   useEffect(() => {
     onAuthStateChanged(auth, user => {
-      if (user) {
-        console.log(user);
+      // console.log(user);
+      if (user && user.emailVerified) {
         setCurUser(user);
+        // dispatch(userLogIn(user));
       } else {
-        console.log(user);
         setCurUser(null);
-      };
+        // dispatch(userLogOut());
+      }
     });
   }, []);
+
+  // useEffect(() => {
+  //   console.log(user);
+  // }, [user]);
 
   const closeTooltip = () => {
     if (showTooltips) setShowTooltips(false);
   };
 
   const handleLogOut = () => {
+    dispatch(userLogOut());
     auth.signOut();
     dispatch(resetColor());
     closeTooltip();
@@ -125,7 +131,9 @@ function Header () {
               ? 
               <>
                 <li>{curUser.auth.displayName ?? `User-${curUser.uid.slice(0, 6)}`}님 환영합니다.</li>
-                <SubMenu><StyledNavLink to='/theme' onClick={closeTooltip}>내 정보</StyledNavLink></SubMenu>
+                <SubMenu>
+                  <StyledNavLink to='/mypage' onClick={closeTooltip}>내 정보</StyledNavLink>
+                </SubMenu>
                 <SubMenu><StyledNavLink to='/' onClick={handleLogOut}>로그아웃</StyledNavLink></SubMenu>
               </>
               :

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth"
 import { auth } from "../../firebase"
 
 import { selectColor } from "../../features/color/colorSlice";
@@ -97,9 +97,9 @@ const SignUp = () => {
         auth, inputValue.id, inputValue.pw
       );
       setApiLoading(false);
-      setInputValue({ id: '', pw: '', pwCheck: '' });
-      alert('회원가입 성공!');
-      navigate(-1);
+      sendEmailVerification(auth.currentUser);
+      alert(`회원가입 성공!\n${inputValue.id}주소로 인증 확인 메일을 보내드렸습니다.\n이메일 인증이 되어야 우리 어디서 만나?의 기능을 사용할 수 있습니다.`);
+      navigate('/signin');
     } catch (error) {
       setApiLoading(false);
       switch (error.code) {
