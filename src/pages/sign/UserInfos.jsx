@@ -18,7 +18,7 @@ import { selectColor } from "../../features/color/colorSlice";
 import PasswordChange from './PasswordChange';
 
 import { onAuthStateChanged, updateProfile, updatePassword } from "firebase/auth";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, listAll, getDownloadURL,} from "firebase/storage";
 import { auth, db, storage } from "../../firebase";
 
@@ -49,6 +49,10 @@ const Wrapper = styled.div`
       cursor: pointer;
       background-color: ${ props => props.myColorHex.mainLight };
 
+      img {
+        width: 100%;
+      }
+
       svg {
         position: absolute;
         top: 50%;
@@ -59,28 +63,7 @@ const Wrapper = styled.div`
         color: white;
       }
     }
-    /* label.profile-button::before {
-      position: absolute;
-      content: "";
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%);
-      width: 68px;
-      height: 4px;
-      border-radius: 4px;
-      background-color: #fff;
-    }
-    label.profile-button::after {
-      position: absolute;
-      content: "";
-      top: 50%;
-      left: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 68px;
-      border-radius: 4px;
-      background-color: #fff;
-    } */
+
     svg {
       position: absolute;
       bottom: 0px;
@@ -282,19 +265,19 @@ function UserInfos() {
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
   const [showModal, setShowModal] = useState(false); // 모달
-  const [profile, setProfile] = useState('');
-  const [imgFile, setImgFile] = useState(null);
-  const [imageList, setImageList] = useState([]);
+
 
   const [curUser, setCurUser] = useState({
     email: '',
     uid: '',
+    photoURL: '',
   });
+  console.log(curUser);
 
   const [images, setImages] = useState(null);
 
   const navigate = useNavigate();
-  const imgRef = useRef(null);
+
 
   // useState 객체 묶기
   const [signUpInputValues, setSignUpInputValues] = useState({
@@ -302,26 +285,29 @@ function UserInfos() {
     uid: '',
     userPassword: '',
     userPasswordCheck: '',
-    userLastName: '',
-    userFirstName: '',
-    zonecode: '',
-    address: '',
-    detailAddress: '',
-    userNickname: '',
+      userLastName: '',
+      userFirstName: '',
+      zonecode: '',
+      address: '',
+      detailAddress: '',
+      userNickname: '',
     recomenderId: '',
+    photoURL: '',
   });
 
   // 회원가입 충족 조건
+  // TODO: 이전에 회원정보를 한 번 이상 저장한 회원의 경우 저장된 데이터 값을 input 박스로 불러오는데 불러온 값에 대해서는 check가 true로 바뀌지 않는다
   const signUpCheck = useRef([
+    { title: "photoURL", check: true },
     { title: "email", check: true },
     { title: "id", check: true },
     { title: "password", check: true },
     { title: "password2", check: true },
-    { title: "postcode", check: false },
+    { title: "postcode", check: true },
     { title: "detailaddress", check: true},
-    { title: "lastname", check: false },
-    { title: "firstname", check: false },
-    { title: "nickname", check: false },
+    { title: "lastname", check: true },
+    { title: "firstname", check: true },
+    { title: "nickname", check: true },
     { title: "recomender", check: true}
   ]);
 
@@ -341,24 +327,16 @@ function UserInfos() {
   // 회원정보를 처음 들어온 회원
   // 회원정보를 이전에 저장하고 다시 들어온 회원
 
-  // useEffect (() => {
-  //   const userDB = async () => {
-  //     // Initialize Firebase
-  //     const app = initializeApp(firebaseConfig);
-  //     const db = getAuth(app);
-  //     console.log(db);
-  //     // const querySelectSnapshot = await getDoc(doc(db, "RecipeDB", docId)); 
-  //     // // console.log(querySelectSnapshot.exists());
-  //     // // console.log(querySelectSnapshot.data());
-  //     // const recipeItemCall = querySelectSnapshot.data();
-  //     // // console.log(recipeSelectItem.title);
-  //     // setRecipeItem(recipeItemCall);
-  //   }
-  //   userDB();
-  //   // const foundRecipe = data.find((item) => {
-  //   //   return item.id == docId;
-  //   // })
-  // }, []);
+  useEffect (() => {
+    const userDB = async () => {
+      const querySelectSnapshot = await getDoc(doc(db, "userInfo", curUser.uid));
+      const userItemCall = querySelectSnapshot.data();
+      if(userItemCall) {
+        setSignUpInputValues(userItemCall);
+      }
+    }
+    userDB();
+  }, [curUser]);
 
   useEffect(() => {
     // 비밀번호 재확인
@@ -411,21 +389,38 @@ function UserInfos() {
     }));
   };
 
-  // 프로필 이미지 등록
-  const handleChangeFile = (event) => {
-    console.log(event.target.files.length)
-    setProfile(event.target.files);
-    
-    if (event.target.files[0]) {
-      const file = event.target.files[0];
+
+  const [imgFile, setImgFile] = useState(null);
+  console.log(imgFile);
+
+    // const handleUploadImage = () => {
+    //   if (!imgFile) return alert('이미지 파일을 선택해주세요.');
+  
+    //   const imgRef = ref(storage, `images/${auth.currentUser.uid}`);
+    //   uploadBytes(imgRef, imgFile).then(console.log('done'));
+    // };
+  
+    // 프로필 보여주기 (미리보기)
+    const handelImageChange = e => {
+      const file = e.target.files[0];
+      // storage에 올리기 위한 저장
+      setImgFile(file);
+
+      console.log('이미지 교체');
+      console.log(file);
+  
+      // 미리보기
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImgFile(reader.result);
-      };
-      console.log(file);
-    }
-  }
+  
+      return new Promise(resolve => {
+        reader.onload = () => {
+          setSignUpInputValues({ ...signUpInputValues, photoURL: reader.result });
+          setImgFile(reader.result);
+          resolve();
+        };
+      });
+    };
 
   // 링크 복사 기능
   const handleCopyClipBoard = async (text) => {
@@ -452,8 +447,11 @@ function UserInfos() {
   // 저장한 내용을 firestore에 저장하기
   const handleSubmit = async () => {
     try {
+      const imgRef = ref(storage, `images/${auth.currentUser.uid}`);
+      const downloadURL = await getDownloadURL(imgRef);
       await updateProfile(auth.currentUser, { 
-        displayName: signUpInputValues.nickname
+        displayName: signUpInputValues.nickname,
+        photoURL: downloadURL
       });
       await setDoc(doc(db, "userInfo", auth.currentUser.uid), {
         userLastName: signUpInputValues.userLastName,
@@ -464,20 +462,15 @@ function UserInfos() {
         userNickname: signUpInputValues.userNickname,
         recomenderId: signUpInputValues.recomenderId,
       });
-      upload();
+      await uploadBytes(imgRef, imgFile).then(console.log('done'));
       alert('정보가 변경되었습니다.');
     } catch (error) {
       alert(error);
     }
   };
 
-  // 이미지 업로드
-  const upload = () => {
-    if (imgFile === null) return;
-    const imageRef = ref(storage, `images/${auth.currentUser.uid}`);
-    // `images === 참조값이름(폴더이름), / 뒤에는 파일이름 어떻게 지을지
-    uploadBytes(imageRef, images)
-  };
+
+
 
   // 이메일 정규식 검사
   const emailCheck = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
@@ -525,26 +518,38 @@ function UserInfos() {
           <h1>개인정보 수정하기</h1>
           <div className="profile-wrap">
             <div className="profile">
-              {imgFile
-                ? <img src={imgFile} alt="프로필 이미지"/>
-                : <label className="profile-button" htmlFor="file"><ProfileImg /></label>
-              }
-              <input
-                type="file" 
-                id="file"
-                ref={imgRef}
-                required
-                accept='image/*'
-                // onChange={handleChangeFile}
-                onChange={e => setImages(e.target.files[0])}
-                style={{display:"none"}} 
-              />
+              <label
+                className="profile-button" htmlFor="file"
+              >
+                {/* curUser.photoURL이 없는 경우 */}
+                {/* curUser.photoURL이 있는 경우 */}
+                {/* curUser.photoURL이 있는데 다른 사진으로 바꾸는 경우 */}
+                {curUser.photoURL
+                  ? imgFile 
+                    ? <img src={imgFile} alt="프로필 이미지"/>
+                    : <img src={curUser.photoURL} alt="profile image"/>
+                  : <ProfileImg />
+                }
+                <input
+                  type="file" 
+                  id="file"
+                  // required
+                  accept='image/*'
+                  onChange={handelImageChange}
+                  // onChange={e => setImages(e.target.files[0])}
+                  style={{display:"none"}} 
+                  onBlur={() => {
+                    if( curUser.photoURL ) {
+                        signUpCheck.current.find(data => data.title === 'photoURL').check = true;
+                      }
+                  }}
+                />
+              </label>
             </div>
-            {imgFile
-              ? <div style={{ display: "none" }}></div>
-              : <ProfilePlus />
-            }
+            <ProfilePlus />
+            
           </div>
+
           
           <h2 className="essential">닉네임</h2>
           <div className="input-check">
