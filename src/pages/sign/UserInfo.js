@@ -124,9 +124,9 @@ function UserInfo() {
   }
 
   return (
-    <section style={{ padding: '150px 0' }}>
+    <section style={{ padding: '150px 0', flex: 1 }}>
       <Wrapper>
-        <h1>Change Theme</h1>
+        <h1>테마색상 설정하기</h1>
         
         <StyledUl>
           { colors.map((color, index) => { 
