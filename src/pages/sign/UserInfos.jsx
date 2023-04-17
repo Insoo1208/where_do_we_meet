@@ -265,7 +265,9 @@ function UserInfos() {
   const [passwordCheckResult, setPasswordCheckResult] = useState(false);
 
   const [showModal, setShowModal] = useState(false); // 모달
-
+  
+  const [imgFile, setImgFile] = useState(null);
+  console.log(imgFile);
 
   const [curUser, setCurUser] = useState({
     email: '',
@@ -273,8 +275,6 @@ function UserInfos() {
     photoURL: '',
   });
   console.log(curUser);
-
-  const [images, setImages] = useState(null);
 
   const navigate = useNavigate();
 
@@ -390,8 +390,7 @@ function UserInfos() {
   };
 
 
-  const [imgFile, setImgFile] = useState(null);
-  console.log(imgFile);
+
 
     // const handleUploadImage = () => {
     //   if (!imgFile) return alert('이미지 파일을 선택해주세요.');
@@ -400,27 +399,23 @@ function UserInfos() {
     //   uploadBytes(imgRef, imgFile).then(console.log('done'));
     // };
   
-    // 프로필 보여주기 (미리보기)
-    const handelImageChange = e => {
+  // 프로필 보여주기 (미리보기)
+  const handelImageChange = e => {
+    if(e.target.files[0]) {
       const file = e.target.files[0];
-      // storage에 올리기 위한 저장
       setImgFile(file);
-
-      console.log('이미지 교체');
-      console.log(file);
-  
-      // 미리보기
       const reader = new FileReader();
       reader.readAsDataURL(file);
-  
+      console.log(file);
+      console.log(imgFile);
       return new Promise(resolve => {
         reader.onload = () => {
           setSignUpInputValues({ ...signUpInputValues, photoURL: reader.result });
-          setImgFile(reader.result);
           resolve();
         };
       });
-    };
+    }
+  };
 
   // 링크 복사 기능
   const handleCopyClipBoard = async (text) => {
@@ -449,10 +444,12 @@ function UserInfos() {
     try {
       const imgRef = ref(storage, `images/${auth.currentUser.uid}`);
       const downloadURL = await getDownloadURL(imgRef);
-      await updateProfile(auth.currentUser, { 
-        displayName: signUpInputValues.nickname,
-        photoURL: downloadURL
-      });
+      if(curUser.photoURL) {
+        await updateProfile(auth.currentUser, { 
+          displayName: signUpInputValues.nickname,
+          photoURL: downloadURL
+        });
+      }
       await setDoc(doc(db, "userInfo", auth.currentUser.uid), {
         userLastName: signUpInputValues.userLastName,
         userFirstName: signUpInputValues.userFirstName,
@@ -525,10 +522,12 @@ function UserInfos() {
                 {/* curUser.photoURL이 있는 경우 */}
                 {/* curUser.photoURL이 있는데 다른 사진으로 바꾸는 경우 */}
                 {curUser.photoURL
-                  ? imgFile 
+                  ? imgFile
                     ? <img src={imgFile} alt="프로필 이미지"/>
                     : <img src={curUser.photoURL} alt="profile image"/>
-                  : <ProfileImg />
+                  : imgFile 
+                    ? <img src={imgFile} alt="프로필 이미지"/> 
+                    : <ProfileImg />
                 }
                 <input
                   type="file" 
